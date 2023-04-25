@@ -1,0 +1,50 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+      "next/core-web-vitals",
+        "plugin:react/recommended",
+        "airbnb",
+        "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true,
+            "tsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "prettier"
+    ],
+    "settings": {
+  "import/resolver": {
+    "node": {
+      "extensions": [".js", ".jsx", ".ts", ".tsx"]
+    },
+    "caseSensitive": false
+  }
+},
+    "rules": {
+       "jsx-a11y/label-has-associated-control": [ 2, {
+      "labelComponents": ["CustomInputLabel"],
+      "labelAttributes": ["label"],
+      "controlComponents": ["CustomInput"],
+      "depth": 3,
+    }],
+        "no-console": "off",
+        "prettier/prettier": "error",
+        "react/jsx-filename-extension": [
+      1,
+      
+      {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    ]
+    }
+}
