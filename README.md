@@ -7,7 +7,13 @@ This is a ERP/E-commerce project with VITE, REACT & TAURI
 
 ## Getting Started
 
-First, run the development server:
+First, install dependencies:
+
+```bash
+npm run i
+```
+
+After, run the development server:
 
 ```bash
 npm run dev

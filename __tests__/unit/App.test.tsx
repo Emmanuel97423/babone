@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import App from '../src/App';
+import App from '../../src/App';
 import { mockWindows, mockIPC } from '@tauri-apps/api/mocks';
 import { invoke } from '@tauri-apps/api/tauri';
 
@@ -30,10 +30,8 @@ describe('App', () => {
   describe('invokes tauri command', () => {
     it('mocked windows', () => {
       mockWindows('main', 'second', 'third');
-
       expect(window).toHaveProperty('__TAURI_METADATA__');
     });
-
     it('Greet invoke tauri command', () => {
       mockIPC((cmd: string, args: Record<string, unknown>) => {
         if (cmd === 'greet') {
