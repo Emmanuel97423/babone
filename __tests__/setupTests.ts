@@ -8,14 +8,14 @@ import { randomFillSync } from "crypto";
 expect.extend(matchers);
 
 // jsdom doesn't come with a WebCrypto implementation
-beforeAll(() => {
-  //@ts-ignore
-  window.crypto = {
-    getRandomValues: function (buffer: Uint8Array): Uint8Array {
-      return randomFillSync(buffer);
-    },
-  };
-});
+// beforeAll(() => {
+//   //@ts-ignore
+//   window.crypto = {
+//     getRandomValues: function (buffer: Uint8Array): Uint8Array {
+//       return randomFillSync(buffer);
+//     },
+//   };
+// });
 
 afterEach(() => {
   clearMocks()
