@@ -1,7 +1,20 @@
-# Tauri + React + Typescript
+This is a ERP/E-commerce project with VITE, REACT & TAURI
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+## Requirements
 
-## Recommended IDE Setup
+- Node.js version 16.18.1
+- npm version 8.19.2
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
+
+Open [http://localhost:1420](http://localhost:1420) with your browser to see the result.
