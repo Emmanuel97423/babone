@@ -1,52 +1,66 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import { invoke } from '@tauri-apps/api/tauri';
+import { Link } from 'react-router-dom';
 import './App.css';
+// import TopNav from './components/header/TopNav';
+
+interface ButtonProps {
+  title: string;
+  description: string;
+  icon: string;
+  link: string;
+}
+
+const data = [
+  {
+    id: 1,
+    title: 'GESTION COMMERCIALE',
+    description:
+      'Gérer vos ventes, produits, clients, commandes, ecriture comptable...',
+    icon: 'fas fa-shopping-cart',
+    link: '/erp'
+  },
+  {
+    id: 2,
+    title: 'E-COMMERCE',
+    description: 'Gérer vos ventes en ligne, produits, clients...',
+    icon: 'fas fa-shopping-cart',
+    link: '/'
+  }
+];
 
 const App: React.FC = () => {
-  const [greetMsg, setGreetMsg] = useState('');
-  const [name, setName] = useState('');
-
-  async function greet() {
-    setGreetMsg(`You've been greeted from Tauri ${name}`);
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    // setGreetMsg(await invoke('greet', { name }));
-  }
+  const Card: React.FC<ButtonProps> = ({ title, description, icon, link }) => {
+    return (
+      <div className="shadow-2xl">
+        <Link to={link}>
+          <button className="btn glass w-64 h-64 flex-auto ">
+            <h2 className="card-title">{title}</h2>
+            <p>{description}</p>
+          </button>
+        </Link>
+      </div>
+    );
+  };
 
   return (
-    <div className="container">
-      <h1>Welcome to Tauri!</h1>
-
-      <div className="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <div className="row">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            greet();
-          }}
-        >
-          <input
-            id="greet-input"
-            onChange={(e) => setName(e.currentTarget.value)}
-            placeholder="Enter a name..."
+    <div
+      id="App"
+      className="h-screen  mx-auto flex flex-col justify-center items-center"
+    >
+      {/* <TopNav /> */}
+      <h1 data-testid="title-app" className="uppercase text-4xl translate-y-52">
+        Babone project
+      </h1>
+      <div className="h-screen space-x-12 flex justify-center items-center">
+        {data.map((data) => (
+          <Card
+            key={data.id}
+            title={data.title}
+            description={data.description}
+            icon={data.icon}
+            link={data.link}
           />
-          <button type="submit">Greet</button>
-        </form>
+        ))}
       </div>
-      <p>{greetMsg}</p>
     </div>
   );
 };
