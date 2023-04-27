@@ -6,6 +6,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from './error-page';
 import Home from './pages/Home';
 import Erp from './pages/Erp';
+import ProductListPage from './pages/Erp/ProductManagement';
+import DashboardErp from './pages/Erp/DashboardErp';
 
 const router = createBrowserRouter([
   {
@@ -15,15 +17,19 @@ const router = createBrowserRouter([
   },
   {
     path: '/erp',
-    element: <Erp />
-    // errorElement: <ErrorPage />
+    element: <Erp />,
+    errorElement: <ErrorPage />,
 
-    // children: [
-    //   {
-    //     path: 'erp',
-    //     element: <Erp />
-    //   }
-    // ]
+    children: [
+      {
+        path: '/erp/dashboard',
+        element: <DashboardErp />
+      },
+      {
+        path: '/erp/products-management',
+        element: <ProductListPage />
+      }
+    ]
   }
 ]);
 
