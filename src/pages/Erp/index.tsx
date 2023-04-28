@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { MouseEventHandler, useState } from 'react';
 import { BsArrowLeftCircleFill, BsChevronDoubleLeft } from 'react-icons/bs';
 import { AiOutlineSearch, AiOutlinePlusCircle } from 'react-icons/ai';
 import { RiDashboardLine } from 'react-icons/ri';
 import { FaFish } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
+import { MdPointOfSale } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 const Erp: React.FC = () => {
   const [open, setOpen] = useState(true);
-  const [openSubMenu, setOpenSubMenu] = useState(false);
+  const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
 
   interface SubMenuItems {
     title: string;
@@ -22,6 +23,7 @@ const Erp: React.FC = () => {
     icon: any;
     spacing?: boolean | undefined;
     subMenu?: boolean | undefined;
+    subMenuOpen?: number | undefined | unknown;
     subMenuItems?: SubMenuItems[] | undefined;
   }
   const menus: MenuItems[] = [
@@ -38,7 +40,20 @@ const Erp: React.FC = () => {
       subMenuItems: [
         {
           title: 'Ajouter un produits',
-          link: '/erp/products-management/add',
+          link: '/erp/products-management',
+          icon: <AiOutlinePlusCircle />
+        }
+      ]
+    },
+    {
+      title: 'Commandes',
+      link: '/erp/orders',
+      icon: <MdPointOfSale />,
+      subMenu: true,
+      subMenuItems: [
+        {
+          title: 'Ajouter une commande',
+          link: '/erp/OrderPage',
           icon: <AiOutlinePlusCircle />
         }
       ]
@@ -49,6 +64,12 @@ const Erp: React.FC = () => {
     setOpen(!open);
   };
 
+  const handleOpenSubMenu = (
+    index: number
+  ): MouseEventHandler<HTMLAnchorElement> => {
+    return () => setOpenSubMenu(openSubMenu === index ? null : index);
+  };
+
   return (
     <div className="flex">
       <div
@@ -57,7 +78,7 @@ const Erp: React.FC = () => {
         }`}
       >
         <BsArrowLeftCircleFill
-          className={`bg-primary text-3xl text-secondary absolute rounded-full -right-3 top-9 cursor-pointer ease-in-out duration-1 ${
+          className={`bg-primary text-3xl text-secondary absolute z-40 rounded-full -right-3 top-9 cursor-pointer ease-in-out duration-1 ${
             !open && ' rotate-180'
           }`}
           onClick={handleOpen}
@@ -91,35 +112,36 @@ const Erp: React.FC = () => {
             }`}
           />
         </div>
-        <ul className="pt-2">
+        <ul className={`pt-2`}>
           {menus.map((menu, index) => (
             <>
-              <li
-                key={index}
-                className={`text-grey-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-accent/50  rounded-md ${
-                  menu.spacing ? 'mt-9' : 'mt-2'
-                }`}
-              >
-                <span className="text-2xl block float-left">{menu.icon}</span>
-                <span
-                  className={`text-base font-medium flex-1 ease-in-out duration-100 ${
-                    !open && 'hidden'
-                  }`}
+              <Link to={menu.link} onClick={handleOpenSubMenu(index)}>
+                <li
+                  className={`text-grey-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-accent/50   rounded-md ${
+                    menu.spacing ? 'mt-9' : 'mt-2'
+                  } ${openSubMenu === index && 'bg-accent/50'}`}
                 >
-                  {menu.title}
-                </span>
-
-                {menu.subMenu && (
-                  <IoIosArrowDown
-                    className={`text-2xl block float-right cursor-pointer ${
-                      open && 'rotate-180'
+                  <span className="text-2xl block float-left">{menu.icon}</span>
+                  <span
+                    className={`text-base font-medium flex-1 ease-in-out duration-100 ${
+                      !open && 'hidden'
                     }`}
-                  />
-                )}
-              </li>
+                  >
+                    {menu.title}
+                  </span>
+
+                  {menu.subMenu && open && (
+                    <IoIosArrowDown
+                      className={`text-2xl block float-right cursor-pointer ${
+                        openSubMenu === index && 'rotate-180'
+                      }`}
+                    />
+                  )}
+                </li>
+              </Link>
               {
                 // Sub menu
-                menu.subMenu && (
+                menu.subMenu && openSubMenu === index && open && (
                   <ul>
                     {menu.subMenuItems?.map((subMenu, index) => (
                       <li

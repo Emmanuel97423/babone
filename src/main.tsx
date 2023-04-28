@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Erp from './pages/Erp';
 import ProductListPage from './pages/Erp/ProductManagement';
 import DashboardErp from './pages/Erp/DashboardErp';
+import OrderPage from './pages/Erp/Order';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: '/erp/products-management',
         element: <ProductListPage />
+      },
+      {
+        path: '/erp/orders',
+        element: <OrderPage />
       }
     ]
   }
