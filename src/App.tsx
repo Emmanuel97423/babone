@@ -16,7 +16,7 @@ const data = [
     description:
       'Gérer vos ventes, produits, clients, commandes, ecriture comptable...',
     icon: 'fas fa-shopping-cart',
-    link: '/erp/dashboardErp'
+    link: '/erp'
   },
   {
     id: 2,
