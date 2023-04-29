@@ -1,7 +1,7 @@
 import { coreModuleName } from "@reduxjs/toolkit/dist/query/core/module";
 import { reactHooksModuleName } from "@reduxjs/toolkit/dist/query/react/module";
 import { Api, BaseQueryFn, EndpointDefinitions, createApi , fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Products } from "../../interfaces/Product";
+import { Products } from "../../types/interfaces/Product";
 export const  apiSlice = createApi({
 
     reducerPath: "/api",
