@@ -1,4 +1,36 @@
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createServer, Model, Factory } from 'miragejs';
+import { faker } from '@faker-js/faker';
+import { Products } from '../../../types/interfaces/Product';
+
 const ProductListPage: React.FC = () => {
+  const [productsState, setProducts] = useState<Products>([]);
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then((res) => res.json())
+      .then((data) => setProducts(data.products));
+  }, []);
+  console.log('products:', productsState);
+
+  const productsList: JSX.Element[] = Array.isArray(productsState)
+    ? productsState.map((product: any, index: number) => {
+        return (
+          <tr key={index} className="hover">
+            <th className=" pl-4 ">{index}</th>
+            <td>{product.name}</td>
+            <td>{product.category}</td>
+            <td>{product.stock}</td>
+            <td>{product.ean}</td>
+            <td>
+              <button className="btn btn-secondary">Gérer</button>
+            </td>
+          </tr>
+        );
+      })
+    : [];
+
   return (
     <>
       <div className="">
@@ -14,38 +46,16 @@ const ProductListPage: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th className=" pl-4 ">1</th>
-              <td>Moulinet Stella 20000</td>
-              <td>Moulinet</td>
-              <td>5</td>
-              <td>123456789752145</td>
-              <td>
-                <button className="btn btn-secondary">Gérer</button>
-              </td>
-            </tr>
-            <tr>
-              <th className=" pl-4 ">1</th>
-              <td>Moulinet Stella 20000</td>
-              <td>Moulinet</td>
-              <td>5</td>
-              <td>123456789752145</td>
-              <td>
-                <button className="btn btn-secondary">Gérer</button>
-              </td>
-            </tr>
+            {productsState.length > 0 ? (
+              productsList
+            ) : (
+              <tr className="h-screen ">
+                <td colSpan={6} className="text-center">
+                  <progress className=" progress progress-primary w-56"></progress>
+                </td>
+              </tr>
+            )}
           </tbody>
-          {/* <tfoot>
-            <tr>
-              <th></th>
-              <th>Name</th>
-              <th>Job</th>
-              <th>company</th>
-              <th>location</th>
-              <th>Last Login</th>
-              <th>Favorite Color</th>
-            </tr>
-          </tfoot> */}
         </table>
       </div>
     </>

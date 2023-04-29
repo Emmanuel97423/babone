@@ -27,6 +27,7 @@
     "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@tailwindcss/typography": "^0.5.9",
     "@tauri-apps/cli": "^1.2.3",
     "@testing-library/dom": "^9.2.0",
@@ -53,6 +54,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "global-jsdom": "^8.8.0",
     "jsdom": "^21.1.1",
+    "miragejs": "^0.1.47",
     "postcss": "^8.4.23",
     "prettier": "^2.8.8",
     "tailwindcss": "^3.3.2",

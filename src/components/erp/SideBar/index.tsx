@@ -53,7 +53,7 @@ const SideBar: React.FC = () => {
       subMenuItems: [
         {
           title: 'Ajouter une commande',
-          link: '/erp/OrderPage',
+          link: '/erp',
           icon: <AiOutlinePlusCircle />
         }
       ]

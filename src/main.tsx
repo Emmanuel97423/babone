@@ -10,6 +10,9 @@ import ProductListPage from './pages/Erp/ProductManagement';
 import DashboardErp from './pages/Erp/DashboardErp';
 import OrderPage from './pages/Erp/Order';
 import AddProduct from './pages/Erp/ProductManagement/Add';
+import { setupMockServer } from './__mock__/api/server';
+
+setupMockServer();
 
 const router = createBrowserRouter([
   {
