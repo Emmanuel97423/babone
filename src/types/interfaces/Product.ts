@@ -30,7 +30,7 @@ export interface ProductVariant {
 export interface Option {
   id: string;
   name: string;
-  value: string;
+  value: string | number;
 }
 
 export interface Products extends Array<Product> {}

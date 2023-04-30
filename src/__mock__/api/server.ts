@@ -4,17 +4,13 @@ import { faker } from '@faker-js/faker';
 import {fakeProduct} from '../data/fake'
 
 
-// const productsMock: Products = Factory.extend<Product>(fakeProduct);
-
-
-
 export const  setupMockServer =  ():void => {
   createServer({
   models: {
-    product: Model
+    product: Model,
   },
   factories: {
-    product: Factory.extend({
+    product: Factory.extend<Product>({
       id() {
         return faker.datatype.uuid();
       },
@@ -83,8 +79,8 @@ export const  setupMockServer =  ():void => {
     this.namespace = 'api';
     this.get(
       '/products',
-      (schema, request) => {
-        return schema.products.all();
+      (schema) => {
+        return schema.db.products;
       },
       { timing: 4000 }
     );

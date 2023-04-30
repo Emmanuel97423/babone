@@ -10,7 +10,7 @@ const ProductListPage: React.FC = () => {
   useEffect(() => {
     fetch('/api/products')
       .then((res) => res.json())
-      .then((data) => setProducts(data.products));
+      .then((data) => setProducts(data));
   }, []);
   console.log('products:', productsState);
 
@@ -46,7 +46,7 @@ const ProductListPage: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {productsState.length > 0 ? (
+            {productsState ? (
               productsList
             ) : (
               <tr className="h-screen ">
