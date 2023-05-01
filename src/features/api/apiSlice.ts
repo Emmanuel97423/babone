@@ -23,10 +23,17 @@ export const  apiSlice = createApi({
         }),    
         getProduct: builder.query<Product, void>({
             query:(id)=>({
-                url:"/products/:id",
+                url:`/products/${id}`,
                 method:"GET"
             })
         }),  
+         getProductVariant: builder.query<Product, void>({
+            query:(variantId)=>({
+                url:`/products/variants/${variantId}`,
+                method:"GET"
+            })
+        }),  
+
 
 
 
@@ -36,4 +43,5 @@ export const  apiSlice = createApi({
 export const {
     useGetProductListQuery,
     useGetProductQuery,
+    useGetProductVariantQuery,
 } = apiSlice;

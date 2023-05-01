@@ -1,18 +1,24 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Product, Products } from '../../../types/interfaces/Product';
+import {
+  Product,
+  Products,
+  ProductVariant
+} from '../../../types/interfaces/Product';
 import { RootState, AppDispatch } from '../../../store/store';
-
-import { ProductModel } from '../../../models/product';
 
 import {
   selectAllProducts,
   fetchProducts
 } from '../../../features/product/productSlice';
 
+import ProductVariantComponent from '../../../components/erp/Product/ProductVariantsList';
+
 interface Props {
   product: Product;
   index: number;
+  variantId?: string;
 }
 
 const ProductListPage: React.FC = () => {
@@ -25,6 +31,7 @@ const ProductListPage: React.FC = () => {
   const error: string | undefined = useSelector(
     (state: any) => state.products.error
   );
+
   useEffect(() => {
     if (productStatus === 'idle') {
       dispatch(fetchProducts());
@@ -32,22 +39,27 @@ const ProductListPage: React.FC = () => {
   }, [dispatch, productStatus]);
 
   let ProductsList: React.FC<Props> = ({ product, index }) => {
-    const productsListModel = new ProductModel(product);
-    console.log('productsListModel:', productsListModel);
+    // const productsListModel = new ProductModel(product);
 
     return (
-      <tr key={index} className="hover">
+      <tr key={index}>
         <th className=" pl-4 ">{index + 1}</th>
         <td>{product.name}</td>
         <td>{product.category}</td>
         <td>{product.stock}</td>
         <td>{product.ean}</td>
         <td>
-          <button className="btn btn-secondary">Gérer</button>
+          <Link
+            to={`/erp/products-management/update/${product.id}`}
+            className="btn btn-secondary"
+          >
+            Gérer
+          </Link>
         </td>
       </tr>
     );
   };
+
   ProductsList = React.memo(ProductsList);
 
   let content;
@@ -70,7 +82,7 @@ const ProductListPage: React.FC = () => {
   }
 
   return (
-    <div className="">
+    <div>
       <table className=" table table-compact w-full ">
         <thead>
           <tr>

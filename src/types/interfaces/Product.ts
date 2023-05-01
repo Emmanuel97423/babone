@@ -14,6 +14,7 @@ export interface Product {
   images: string[];
   stock?: number;
   variants?: ProductVariant[];
+  variantIds?: string[];
 }
 
 export interface ProductVariant {

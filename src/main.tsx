@@ -15,6 +15,7 @@ import ProductListPage from './pages/Erp/ProductManagement';
 import DashboardErp from './pages/Erp/DashboardErp';
 import OrderPage from './pages/Erp/Order';
 import AddProduct from './pages/Erp/ProductManagement/Add';
+import UpdateProduct from './pages/Erp/ProductManagement/Update';
 import { setupMockServer } from './__mock__/api/server';
 
 setupMockServer();
@@ -37,12 +38,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/erp/products-management',
-        element: <ProductListPage />,
-        children: []
+        element: <ProductListPage />
       },
       {
         path: '/erp/products-management/add',
         element: <AddProduct />
+      },
+      {
+        path: '/erp/products-management/update/:id',
+        element: <UpdateProduct />
       },
       {
         path: '/erp/orders',

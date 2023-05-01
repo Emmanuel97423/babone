@@ -37,7 +37,9 @@ export default {
 
           warning: '#FBBD23',
 
-          error: '#F87272'
+          error: '#F87272',
+
+          'table-grey': '#262B36'
         }
       }
     ]

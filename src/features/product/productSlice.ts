@@ -23,13 +23,14 @@ export const fetchProducts = createAsyncThunk('product/fetchProducts', async () 
   return data
 })
 
+export const fetchProduct = createAsyncThunk('product/fetchProduct', async (id:string) => {
+  const response = await fetch(`http://127.0.0.1:1420/api/products/${id}`)
+  const data = await response.json()
+  return data
+})
 
 
-
-
-
-
-
+    
 
 const productSlice = createSlice({
     name: "products",

@@ -111,17 +111,18 @@ export const  setupMockServer =  ():void => {
     this.get(
       '/products/:id',
       (schema, request) => {
+        console.log('schema:', schema)
         const id = request.params.id;
+
         return schema.db.products.find(id);
       }
     );
     this.get(
-      '/products/:id/variants/:variantId',
+      '/products/variants/:variantId',
       (schema, request) => {
-        const id = request.params.id;
         const variantId = request.params.variantId;
-        const product = schema.db.products.find(id);
-        return product.variants.find(variantId);
+        // const product = schema.db.products.find(id);
+        return schema.db.variants.find(variantId);
       }
     );
   },

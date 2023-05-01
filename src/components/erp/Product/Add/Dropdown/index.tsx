@@ -5,9 +5,10 @@ interface Option {
 
 interface Props {
   options: Option[];
+  placeholder?: string;
 }
 
-const Dropdown: React.FC<Props> = ({ options }) => {
+const Dropdown: React.FC<Props> = ({ options, placeholder }) => {
   const sampleOption = [
     { value: 'Moulinets', label: 'Moulinets' },
     { value: 'Cannes', label: 'Cannes' }
@@ -19,7 +20,7 @@ const Dropdown: React.FC<Props> = ({ options }) => {
       </label> */}
       <input
         type="text"
-        placeholder="Catégorie"
+        placeholder={placeholder ? placeholder : 'Catégorie'}
         className="input input-bordered w-full max-w-xs hover:input-accent "
       />
       <ul
