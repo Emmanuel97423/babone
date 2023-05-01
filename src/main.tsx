@@ -3,6 +3,11 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './styles.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { store } from './store/store';
+// import { extendedApiSlice } from './features/product/productSlice';
+import { fetchProducts } from './features/product/productSlice';
+
+import { Provider } from 'react-redux';
 import ErrorPage from './error-page';
 import Home from './pages/Home';
 import Erp from './pages/Erp';
@@ -47,8 +52,13 @@ const router = createBrowserRouter([
   }
 ]);
 
+// store.dispatch(fetchProducts());
+// store.dispatch(extendedApiSlice.endpoints.getProductsList.initiate(undefined));
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );

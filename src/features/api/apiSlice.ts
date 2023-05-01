@@ -1,11 +1,11 @@
 import { coreModuleName } from "@reduxjs/toolkit/dist/query/core/module";
 import { reactHooksModuleName } from "@reduxjs/toolkit/dist/query/react/module";
 import { Api, BaseQueryFn, EndpointDefinitions, createApi , fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Products } from "../../types/interfaces/Product";
+import { Products, Product, ProductVariant } from "../../types/interfaces/Product";
 export const  apiSlice = createApi({
 
-    reducerPath: "/api",
-    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:1420" }),
+    reducerPath: "api",
+    baseQuery: fetchBaseQuery({ baseUrl: "http://127.0.0.1:1420/api" }),
 //     prepareHeaders: (headers, { getState }) => {
 //     const token = getState().auth.token;
 //     if (token) {
@@ -13,17 +13,27 @@ export const  apiSlice = createApi({
 //     }
 //     return headers;
 //   },
-    tagTypes: ["Product"],
+    tagTypes: ["Products"],
     endpoints: (builder) => ({
         getProductList: builder.query<Products[], void>({
             query:()=>({
                 url:"/products",
                 method:"GET"
             })
-        }),          
+        }),    
+        getProduct: builder.query<Product, void>({
+            query:(id)=>({
+                url:"/products/:id",
+                method:"GET"
+            })
+        }),  
+
+
+
 })
-})
+});
 
 export const {
-    useGetProductListQuery
+    useGetProductListQuery,
+    useGetProductQuery,
 } = apiSlice;

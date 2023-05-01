@@ -24,7 +24,7 @@ export interface ProductVariant {
   price: number;
   stock: number;
   images: string[];
-  options:Option[];
+  options?:Option[];
 }
 
 export interface Option {
