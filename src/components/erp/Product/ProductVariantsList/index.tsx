@@ -32,16 +32,18 @@ const ProductVariantComponent: React.FC<Props> = ({ variantId, index }) => {
     );
   } else if (productVariant) {
     content = (
-      <tr key={index} className="hover ">
-        <th className=" pl-4 ">{index + 1}</th>
-        <td>{productVariant?.name}</td>
-        <td></td>
-        <td>{productVariant?.stock}</td>
-        <td>{productVariant?.ean}</td>
-        <td>
-          <button className="btn btn-secondary">Gérer</button>
-        </td>
-      </tr>
+      <>
+        <tr key={index} className="hover ">
+          <th className=" pl-4 ">{index + 1}</th>
+          <td>{productVariant?.name}</td>
+          <td></td>
+          <td>{productVariant?.stock}</td>
+          <td>{productVariant?.ean}</td>
+          <td>
+            <button className="btn btn-secondary">Gérer</button>
+          </td>
+        </tr>
+      </>
     );
   }
 

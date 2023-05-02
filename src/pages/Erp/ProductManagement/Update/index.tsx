@@ -115,6 +115,12 @@ const UpdateProduct = () => {
                       : 'No variants'}
                   </tbody>
                 </table>
+                <div className="w-full flex justify-between items-center mt-10 px-6 text-base font-semibold">
+                  <p className="cursor-pointer ">Ajouter une variante</p>
+
+                  <p className="cursor-pointer">Gérer les stock</p>
+                  <p className="cursor-pointer">Modifier le suivi des stocks</p>
+                </div>
               </div>
             </div>
             <input

@@ -3,8 +3,9 @@ import { Product,ProductVariant,Option, Products } from '../../types/interfaces/
 import { faker } from '@faker-js/faker';
 import {fakeProduct} from '../data/fake'
 
-const apiUrl = 'http://127.0.0.1:1420/api'
 export const  setupMockServer =  ():void => {
+const apiUrl = 'http://127.0.0.1:1420/api'
+
   createServer({
   models: {
     product: Model.extend({
