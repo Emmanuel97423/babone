@@ -7,13 +7,12 @@ import {
   ProductVariant
 } from '../../../types/interfaces/Product';
 import { RootState, AppDispatch } from '../../../store/store';
-
 import {
   selectAllProducts,
   fetchProducts
 } from '../../../features/product/productSlice';
-
 import ProductVariantComponent from '../../../components/erp/Product/ProductVariantsList';
+import Spinner from '../../../components/Spinner';
 
 interface Props {
   product: Product;
@@ -68,7 +67,7 @@ const ProductListPage: React.FC = () => {
     content = (
       <tr className="h-screen ">
         <td colSpan={6} className="text-center">
-          <progress className=" progress progress-primary w-56"></progress>
+          <Spinner />
         </td>
       </tr>
     );

@@ -3,10 +3,10 @@ import SideBar from '../../components/erp/SideBar';
 const Erp: React.FC = () => {
   return (
     <div className="flex ">
-      <>
+      <div>
         <SideBar />
-      </>
-      <div className="overflow-x-auto w-full ">
+      </div>
+      <div className="overflow-x-auto overflow-y-auto  w-full h-screen">
         <Outlet />
       </div>
     </div>

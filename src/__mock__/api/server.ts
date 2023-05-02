@@ -3,7 +3,7 @@ import { Product,ProductVariant,Option, Products } from '../../types/interfaces/
 import { faker } from '@faker-js/faker';
 import {fakeProduct} from '../data/fake'
 
-
+const apiUrl = 'http://127.0.0.1:1420/api'
 export const  setupMockServer =  ():void => {
   createServer({
   models: {
@@ -100,30 +100,32 @@ export const  setupMockServer =  ():void => {
 
   },
   routes() {
-    this.namespace = 'api';
+    // this.namespace = '/api';
     this.get(
-      '/products',
+       `${apiUrl}/products`,
       (schema) => {
         return schema.db.products;
       },
-      { timing: 4000 }
+      { timing: 3000 }
     );
     this.get(
-      '/products/:id',
+      `${apiUrl}/products/:id`,
       (schema, request) => {
         console.log('schema:', schema)
         const id = request.params.id;
 
         return schema.db.products.find(id);
-      }
+      },
+      { timing: 3000 }
     );
     this.get(
-      '/products/variants/:variantId',
+      `${apiUrl}/products/variants/:variantId`,
       (schema, request) => {
         const variantId = request.params.variantId;
         // const product = schema.db.products.find(id);
         return schema.db.variants.find(variantId);
-      }
+      },
+      { timing: 2000 }
     );
   },
   seeds(server) {

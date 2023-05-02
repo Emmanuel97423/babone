@@ -1,5 +1,7 @@
 import { createSlice, createEntityAdapter, createSelector, createAsyncThunk, EntityState } from "@reduxjs/toolkit";
-import { Products, Product } from "../../types/interfaces/Product";
+import type { Products, Product } from "../../types/interfaces/Product";
+import type { PayloadAction } from '@reduxjs/toolkit'
+import type { RootState } from '../../store/store';
 
 interface ProductsState extends EntityState<Product> {
   status: "idle" | "loading" | "failed" | "success";
@@ -23,13 +25,6 @@ export const fetchProducts = createAsyncThunk('product/fetchProducts', async () 
   return data
 })
 
-export const fetchProduct = createAsyncThunk('product/fetchProduct', async (id:string) => {
-  const response = await fetch(`http://127.0.0.1:1420/api/products/${id}`)
-  const data = await response.json()
-  return data
-})
-
-
     
 
 const productSlice = createSlice({
@@ -39,7 +34,7 @@ const productSlice = createSlice({
        
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchProducts.fulfilled, (state, action) => {
+        builder.addCase(fetchProducts.fulfilled, (state, action:PayloadAction<Products>) => {
             state.status = "success";
             productsAdapter.setAll(state , action.payload)
         })
@@ -59,7 +54,7 @@ const productSlice = createSlice({
 export default productSlice.reducer;
 
 export const { selectAll: selectAllProducts, selectById: selectProductById } = productsAdapter.getSelectors(
-    (state:any) => state.products
+    (state:RootState) => state.products
 );
 
 

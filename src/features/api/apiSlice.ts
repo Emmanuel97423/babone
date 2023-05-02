@@ -1,7 +1,12 @@
 import { coreModuleName } from "@reduxjs/toolkit/dist/query/core/module";
 import { reactHooksModuleName } from "@reduxjs/toolkit/dist/query/react/module";
 import { Api, BaseQueryFn, EndpointDefinitions, createApi , fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Products, Product, ProductVariant } from "../../types/interfaces/Product";
+import type { Products, Product, ProductVariant } from "../../types/interfaces/Product";
+
+
+
+
+
 export const  apiSlice = createApi({
 
     reducerPath: "api",
@@ -27,7 +32,7 @@ export const  apiSlice = createApi({
                 method:"GET"
             })
         }),  
-         getProductVariant: builder.query<Product, void>({
+         getProductVariant: builder.query<Product, string>({
             query:(variantId)=>({
                 url:`/products/variants/${variantId}`,
                 method:"GET"
