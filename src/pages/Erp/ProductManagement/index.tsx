@@ -11,7 +11,7 @@ import {
   selectAllProducts,
   fetchProducts
 } from '../../../features/product/productSlice';
-import ProductVariantComponent from '../../../components/erp/Product/ProductVariantsList';
+import ProductVariantComponent from '../../../components/erp/List/ProductVariantsList';
 import Spinner from '../../../components/Spinner';
 
 interface Props {

@@ -1,19 +1,21 @@
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Dropdown from '../../../../components/erp/Product/Add/Dropdown';
-import Modal from '../../../../components/erp/Product/Add/Modal';
-import ProductVariantComponent from '../../../../components/erp/Product/ProductVariantsList';
+import ProductVariantList from '../../../../components/erp/List/ProductVariantsList';
 import Spinner from '../../../../components/Spinner';
-
+import ModalVariant from '../../../../components/erp/modal/ModalAddVariant';
+import ModalBaseVariant from '../../../../components/erp/modal/ModalUpdateBaseVariant';
+import ModalUpdateStock from '../../../../components/erp/modal/ModalUpdateStock';
 import { useGetProductQuery } from '../../../../features/api/apiSlice';
-const UpdateProduct = () => {
+import type { Product } from '../../../../types/interfaces/Product';
+
+const UpdateProduct: React.FC = () => {
   const { id } = useParams<{ id: any }>();
   const { data: product, error, isLoading } = useGetProductQuery(id);
 
   let content;
 
   if (isLoading) {
-    console.log('isLoading:', isLoading);
     content = (
       <div className="w-full h-full flex justify-center items-center ">
         <Spinner />
@@ -27,6 +29,7 @@ const UpdateProduct = () => {
       </div>
     );
   } else if (product) {
+    console.log('product:', product);
     content = (
       <div className=" p-4 flex flex-col justify-center items-center z-40  relative">
         <h1 className="text-3xl font-bold">
@@ -97,7 +100,7 @@ const UpdateProduct = () => {
                     <tr>
                       <th></th>
                       <th>Nom</th>
-                      <th></th>
+                      <th>Prix</th>
                       <th>Stock</th>
                       <th>Code bar</th>
                       <th></th>
@@ -106,7 +109,7 @@ const UpdateProduct = () => {
                   <tbody className="w-full">
                     {product
                       ? product.variantIds?.map((variantId, index) => (
-                          <ProductVariantComponent
+                          <ProductVariantList
                             key={index}
                             index={index}
                             variantId={variantId}
@@ -116,10 +119,18 @@ const UpdateProduct = () => {
                   </tbody>
                 </table>
                 <div className="w-full flex justify-between items-center mt-10 px-6 text-base font-semibold">
-                  <p className="cursor-pointer ">Ajouter une variante</p>
-
-                  <p className="cursor-pointer">Gérer les stock</p>
-                  <p className="cursor-pointer">Modifier le suivi des stocks</p>
+                  <label
+                    className="cursor-pointer"
+                    htmlFor="my-modal-add-variant"
+                  >
+                    Ajouter une variante
+                  </label>
+                  <label
+                    className="cursor-pointer"
+                    htmlFor="modal-update-stock"
+                  >
+                    Gérer les stocks
+                  </label>
                 </div>
               </div>
             </div>
@@ -146,7 +157,19 @@ const UpdateProduct = () => {
         </div>
 
         {/* modal */}
-        <Modal />
+        <ModalBaseVariant />
+        <ModalVariant />
+        <ModalUpdateStock
+          id={product.id}
+          storeId={''}
+          sku={''}
+          name={''}
+          category={''}
+          description={''}
+          price={0}
+          images={[]}
+          variantIds={product.variantIds}
+        />
       </div>
     );
   }

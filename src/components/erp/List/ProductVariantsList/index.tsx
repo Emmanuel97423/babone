@@ -1,13 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useGetProductVariantQuery } from '../../../../features/api/apiSlice';
-import Spinner from '../../../../components/Spinner';
+import Spinner from '../../../Spinner';
 interface Props {
   variantId: string;
   index: number;
 }
 
-const ProductVariantComponent: React.FC<Props> = ({ variantId, index }) => {
-  const dispatch = useDispatch();
+const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
   const {
     data: productVariant,
     error,
@@ -36,7 +35,7 @@ const ProductVariantComponent: React.FC<Props> = ({ variantId, index }) => {
         <tr key={index} className="hover ">
           <th className=" pl-4 ">{index + 1}</th>
           <td>{productVariant?.name}</td>
-          <td></td>
+          <td>{(productVariant?.price).toFixed(2)} €</td>
           <td>{productVariant?.stock}</td>
           <td>{productVariant?.ean}</td>
           <td>
@@ -50,4 +49,4 @@ const ProductVariantComponent: React.FC<Props> = ({ variantId, index }) => {
   return <>{content}</>;
 };
 
-export default ProductVariantComponent;
+export default ProductVariantList;

@@ -6,7 +6,6 @@ import type { Products, Product, ProductVariant } from "../../types/interfaces/P
 
 
 
-
 export const  apiSlice = createApi({
 
     reducerPath: "api",
