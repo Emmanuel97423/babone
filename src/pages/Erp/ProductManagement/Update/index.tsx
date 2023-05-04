@@ -6,7 +6,7 @@ import Spinner from '../../../../components/Spinner';
 import ModalVariant from '../../../../components/erp/modal/ModalAddVariant';
 import ModalBaseVariant from '../../../../components/erp/modal/ModalUpdateBaseVariant';
 import ModalUpdateStock from '../../../../components/erp/modal/ModalUpdateStock';
-import { useGetProductQuery } from '../../../../features/api/apiSlice';
+import { useGetProductQuery } from '@/features/api/apiSlice';
 import type { Product } from '../../../../types/interfaces/Product';
 
 const UpdateProduct: React.FC = () => {

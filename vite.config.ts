@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
@@ -28,9 +29,11 @@ test: {
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
   },
-  alias: {
+  resolve: {
+    alias: {
     // Configurations des alias
-    '@': '/src', // Chemin vers le dossier src
-    '~': '/public', // Chemin vers le dossier public
+   '@': path.resolve(__dirname, 'src'),
+      '~': path.resolve(__dirname, 'public'),
   },
+  }
 }));
