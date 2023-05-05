@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Product } from '../../../../types/interfaces/Product';
 import { useGetProductVariantQuery } from '../../../../features/api/apiSlice';
 import Spinner from '../../../../components/Spinner';
@@ -16,6 +16,10 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
   const [motifCode, setMotifCode] = useState<number>(0);
   const [value, setValue] = useState<number | undefined | any>(undefined);
   const [isDamageSelected, setIsDamageSelected] = useState<boolean>(false);
+  const [stockValue, setStockValue] = useState<number | undefined | any>(0);
+  const [stockAjustement, setStockAjustement] = useState<
+    number | undefined | any
+  >(0);
 
   const motifs: Motif[] = [
     { motif: 'Inventaire reçu', code: 1 },
@@ -32,23 +36,10 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
     isLoading
   } = useGetProductVariantQuery(variantId);
 
-  // const makeNegative: () => void = () => {
-  //   if (value) {
-  //     setValue(-value);
-  //   }
-  // };
-  // const makePositive: () => void = () => {
-  //   if (value) {
-  //     setValue(+value);
-  //   }
-  // };
-
-  // const changeMotifValue: (e: React.ChangeEvent<HTMLInputElement>) => void = (
-  //   e
-  // ) => {
-  //   console.log('e:', e.target.value);
-  //   setValue(parseInt(e.target.value));
-  // };
+  useEffect(() => {
+    if (productVariant) setStockValue(productVariant?.stock);
+  }, [productVariant]);
+  const currentStock = productVariant?.stock;
 
   const motifOnChange: (e: React.ChangeEvent<HTMLSelectElement>) => void = (
     e
@@ -66,20 +57,43 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
       setIsDamageSelected(false);
     }
   };
-  const inputValueOnchange: (e: React.ChangeEvent<HTMLInputElement>) => void = (
+  const ajustementOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void = (
     e
   ) => {
-    console.log('isDamageSelected:', isDamageSelected);
-    console.log('motifCode:', motifCode);
-
     if (motifCode === 3) {
       setIsDamageSelected(true);
-      setValue(-parseInt(e.target.value));
+      setStockAjustement(-parseInt(e.target.value));
     } else {
-      setValue(parseInt(e.target.value));
       setIsDamageSelected(false);
+      setStockAjustement(parseInt(e.target.value));
     }
-    console.log('value', value);
+    if (motifCode === 1) {
+      if (currentStock) {
+        setStockValue(currentStock + parseInt(e.target.value));
+      }
+    }
+  };
+
+  const nouveauOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void = (
+    e
+  ) => {
+    if (motifCode === 3) {
+      setIsDamageSelected(true);
+      setStockValue(-parseInt(e.target.value));
+    } else {
+      setIsDamageSelected(false);
+      setStockValue(parseInt(e.target.value));
+    }
+
+    if (motifCode === 1) {
+      if (currentStock) {
+        setStockAjustement(parseInt(e.target.value) - currentStock);
+        if (parseInt(e.target.value) < currentStock) {
+          setStockValue(currentStock);
+          setStockAjustement(0);
+        }
+      }
+    }
   };
 
   let content;
@@ -123,20 +137,23 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
           <td>
             <input
               type="number"
-              value={isDamageSelected ? -value : value}
+              value={isDamageSelected ? -stockAjustement : stockAjustement}
               placeholder="0"
-              className="input input-bordered w-18 disabled"
-              disabled={motifCode === 0}
-              onChange={inputValueOnchange}
+              className="input input-bordered w-20 disabled"
+              disabled={motifCode === 0 || motifCode === 2}
+              onChange={ajustementOnChange}
+              min="0"
             />
           </td>
           <td>
             <input
-              type="string"
+              type="number"
+              value={isDamageSelected ? -stockValue : stockValue}
+              // placeholder={10}
+              className="input input-bordered w-20 disabled"
+              disabled={motifCode === 0}
+              onChange={nouveauOnChange}
               min="0"
-              placeholder="0"
-              className="input input-bordered w-16 "
-              disabled={motifCode === 0 || motifCode === 1}
             />
           </td>
         </tr>
