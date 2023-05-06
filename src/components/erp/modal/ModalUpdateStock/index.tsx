@@ -39,6 +39,7 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
   useEffect(() => {
     if (productVariant) setStockValue(productVariant?.stock);
   }, [productVariant]);
+
   const currentStock = productVariant?.stock;
 
   const motifOnChange: (e: React.ChangeEvent<HTMLSelectElement>) => void = (
@@ -53,47 +54,59 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
     setMotifCode(code);
     if (code === 3) {
       setIsDamageSelected(true);
-    } else {
+    } else if (code === 2) {
+      setStockAjustement(0);
       setIsDamageSelected(false);
     }
+    // else if (code !== 3) {
+    //   setIsDamageSelected(false);
+    // }
   };
-  const ajustementOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void = (
+  const ajustementOnBlur: (e: React.ChangeEvent<HTMLInputElement>) => void = (
     e
   ) => {
-    if (motifCode === 3) {
-      setIsDamageSelected(true);
-      setStockAjustement(-parseInt(e.target.value));
-    } else {
-      setIsDamageSelected(false);
-      setStockAjustement(parseInt(e.target.value));
-    }
-    if (motifCode === 1) {
+    if (motifCode === 1 || motifCode === 6) {
       if (currentStock) {
         setStockValue(currentStock + parseInt(e.target.value));
+        // setStockAjustement(parseInt(e.target.value));
+      }
+    } else if (motifCode === 3 || motifCode === 4 || motifCode === 5) {
+      if (currentStock) {
+        setStockValue(currentStock - parseInt(e.target.value));
+        // setStockAjustement(parseInt(e.target.value));
       }
     }
   };
 
-  const nouveauOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void = (
-    e
-  ) => {
-    if (motifCode === 3) {
-      setIsDamageSelected(true);
-      setStockValue(-parseInt(e.target.value));
-    } else {
-      setIsDamageSelected(false);
-      setStockValue(parseInt(e.target.value));
-    }
-
-    if (motifCode === 1) {
+  const stockOnBlur: (e: React.ChangeEvent<HTMLInputElement>) => void = (e) => {
+    if (motifCode === 1 || motifCode === 6) {
       if (currentStock) {
         setStockAjustement(parseInt(e.target.value) - currentStock);
+        setStockValue(parseInt(e.target.value));
         if (parseInt(e.target.value) < currentStock) {
           setStockValue(currentStock);
           setStockAjustement(0);
         }
       }
+    } else if (motifCode === 3 || motifCode === 4 || motifCode === 5) {
+      if (currentStock) {
+        setStockAjustement(currentStock - parseInt(e.target.value));
+        setStockValue(parseInt(e.target.value));
+        if (parseInt(e.target.value) > currentStock) {
+          setStockValue(currentStock);
+          setStockAjustement(0);
+        }
+      }
     }
+  };
+
+  const updateStock: (e: React.ChangeEvent<HTMLInputElement>) => void = (e) => {
+    setStockValue(parseInt(e.target.value));
+  };
+  const updateAjustement: (e: React.ChangeEvent<HTMLInputElement>) => void = (
+    e
+  ) => {
+    setStockAjustement(parseInt(e.target.value));
   };
 
   let content;
@@ -136,24 +149,26 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
           </td>
           <td>
             <input
-              type="number"
-              value={isDamageSelected ? -stockAjustement : stockAjustement}
+              type="string"
+              value={stockAjustement}
               placeholder="0"
-              className="input input-bordered w-20 disabled"
+              className="input input-bordered w-20  appearance-none"
               disabled={motifCode === 0 || motifCode === 2}
-              onChange={ajustementOnChange}
+              onBlur={ajustementOnBlur}
+              onChange={updateAjustement}
               min="0"
             />
           </td>
           <td>
             <input
-              type="number"
-              value={isDamageSelected ? -stockValue : stockValue}
+              type="string"
+              value={stockValue}
               // placeholder={10}
-              className="input input-bordered w-20 disabled"
+              className="input input-bordered w-20 "
               disabled={motifCode === 0}
-              onChange={nouveauOnChange}
+              onBlur={stockOnBlur}
               min="0"
+              onChange={updateStock}
             />
           </td>
         </tr>
