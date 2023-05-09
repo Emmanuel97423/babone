@@ -14,7 +14,7 @@ interface Motif {
 
 const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
   const [motifCode, setMotifCode] = useState<number>(0);
-  const [value, setValue] = useState<number | undefined | any>(undefined);
+  // const [value, setValue] = useState<number | undefined | any>(undefined);
   const [isDamageSelected, setIsDamageSelected] = useState<boolean>(false);
   const [stockValue, setStockValue] = useState<number | undefined | any>(0);
   const [stockAjustement, setStockAjustement] = useState<
@@ -62,9 +62,12 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
     //   setIsDamageSelected(false);
     // }
   };
-  const ajustementOnBlur: (e: React.ChangeEvent<HTMLInputElement>) => void = (
-    e
-  ) => {
+  const ajustementOnBlur: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    variantId: string
+  ) => void = (e, variantId) => {
+    console.log('variantId:', variantId);
+
     if (motifCode === 1 || motifCode === 6) {
       if (currentStock) {
         setStockValue(currentStock + parseInt(e.target.value));
@@ -154,7 +157,9 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
               placeholder="0"
               className="input input-bordered w-20  appearance-none"
               disabled={motifCode === 0 || motifCode === 2}
-              onBlur={ajustementOnBlur}
+              onBlur={(e) => {
+                ajustementOnBlur(e, productVariant?.id);
+              }}
               onChange={updateAjustement}
               min="0"
             />

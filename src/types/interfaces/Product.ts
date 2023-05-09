@@ -23,7 +23,7 @@ export interface ProductVariant {
   ean?: number;
   name: string;
   price: number;
-  stock: number;
+  stock?: number;
   images: string[];
   options?:Option[];
 }
