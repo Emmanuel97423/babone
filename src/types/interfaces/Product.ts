@@ -23,9 +23,10 @@ export interface ProductVariant {
   ean?: number;
   name: string;
   price: number;
-  stock?: number;
   images: string[];
   options?:Option[];
+  stock?: number;
+  stockId?: string;
 }
 
 export interface Option {

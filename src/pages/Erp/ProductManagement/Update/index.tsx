@@ -29,7 +29,6 @@ const UpdateProduct: React.FC = () => {
       </div>
     );
   } else if (product) {
-    console.log('product:', product);
     content = (
       <div className=" p-4 flex flex-col justify-center items-center z-40  relative">
         <h1 className="text-3xl font-bold">

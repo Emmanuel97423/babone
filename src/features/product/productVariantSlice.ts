@@ -1,10 +1,19 @@
-import { createSlice, createEntityAdapter, createSelector, createAsyncThunk, EntityState } from "@reduxjs/toolkit";
+import { createSlice, createEntityAdapter, createSelector, createAsyncThunk, EntityState,createAction,
+createReducer,
+AsyncThunk,
+AnyAction, } from "@reduxjs/toolkit";
 import { Products, Product, ProductVariant } from "../../types/interfaces/Product";
 import { useGetProductVariantQuery } from '../../features/api/apiSlice'
+
 interface ProductVariantState  {
   status: "idle" | "loading" | "failed" | "success";
   error: string | undefined;
 }
+type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>;
+
+type PendingAction = ReturnType<GenericAsyncThunk["pending"]>;
+type RejectedAction = ReturnType<GenericAsyncThunk["rejected"]>;
+type FulfilledAction = ReturnType<GenericAsyncThunk["fulfilled"]>;
 
 
 const productVariantAdapter = createEntityAdapter<ProductVariant>({
@@ -48,6 +57,7 @@ const productVariantSlice = createSlice({
             state.status = "loading";
         }
         )
+        // builder.addMatcher()
     }
 });
 

@@ -11,24 +11,24 @@ const apiUrl = 'http://127.0.0.1:1420/api'
   models: {
     product: Model.extend({
       variants: hasMany(),
-      stock:belongsTo(),
+      // stock:belongsTo(),
     }),
     variant: Model.extend({
       product: belongsTo(),
-      stock:belongsTo(),
+      // stock:belongsTo(),
       options: hasMany()
     }),
     option: Model.extend({
       variants: belongsTo()
     }),
-    stock: Model.extend({
-      stockAjustment: hasMany(),
-      product:hasMany(),
-      variant:hasMany()
-    }),
-    stockAjustment: Model.extend({
-      stock: belongsTo()
-    })
+    // stock: Model.extend({
+    //   stockAjustment: hasMany(),
+    //   product:hasMany(),
+    //   variant:hasMany()
+    // }),
+    // stockAjustment: Model.extend({
+    //   stock: belongsTo()
+    // })
 
   },
   serializers: {
@@ -44,10 +44,10 @@ const apiUrl = 'http://127.0.0.1:1420/api'
       include: ['variants'],
       embed: true
     }),
-    stock:RestSerializer.extend({
-      include: ['stockAjustment'],
-      embed: true
-    }),
+    // stock:RestSerializer.extend({
+    //   include: ['stockAjustment'],
+    //   embed: true
+    // }),
   },
   factories: {
     product: Factory.extend<Product>({
@@ -99,9 +99,9 @@ const apiUrl = 'http://127.0.0.1:1420/api'
       price() {
         return faker.datatype.number({ min: 1, max: 1000 });
       },
-      // stock() {
-      //   return faker.datatype.number({ min: 1, max: 1000 });
-      // },
+      stock() {
+        return faker.datatype.number({ min: 1, max: 1000 });
+      },
       images() {
         return [faker.image.imageUrl()];
       },
@@ -118,47 +118,47 @@ const apiUrl = 'http://127.0.0.1:1420/api'
         return faker.commerce.productName();
       },
     }),
-    stock: Factory.extend<Stock>({
-      id() {
-        return faker.datatype.uuid();
-      },
-      productId() {
-        return faker.datatype.uuid();
-      },
-      variantId() {
-        return faker.datatype.uuid();
-      },
-      stock() {
-        return faker.datatype.number({ min: 1, max: 1000 });   
-      },
-      createdAt() {
-        return faker.date.past();
-      },
-      updatedAt() {
-        return faker.date.past();
-      }
-  }),
-  stockAjustment: Factory.extend<StockAjustment>({
-    id() {
-      return faker.datatype.uuid();
-    },
-    stockId() {
-      return faker.datatype.uuid();
-    },
-    ajustmentStock() {
-      return faker.datatype.number({ min: 1, max: 1000 });   
-    },
-    motifCode() {
-      return faker.helpers.arrayElement([1, 2, 3,4,5,6]);   
-    },
-    createdAt() {
-      return faker.date.past();
-    },
-    updatedAt() {
-      return faker.date.past();
-    }
+//     stock: Factory.extend<Stock>({
+//       id() {
+//         return faker.datatype.uuid();
+//       },
+//       productId() {
+//         return faker.datatype.uuid();
+//       },
+//       variantId() {
+//         return faker.datatype.uuid();
+//       },
+//       stock() {
+//         return faker.datatype.number({ min: 1, max: 1000 });   
+//       },
+//       createdAt() {
+//         return faker.date.past();
+//       },
+//       updatedAt() {
+//         return faker.date.past();
+//       }
+//   }),
+//   stockAjustment: Factory.extend<StockAjustment>({
+//     id() {
+//       return faker.datatype.uuid();
+//     },
+//     stockId() {
+//       return faker.datatype.uuid();
+//     },
+//     ajustmentStock() {
+//       return faker.datatype.number({ min: 1, max: 1000 });   
+//     },
+//     motifCode() {
+//       return faker.helpers.arrayElement([1, 2, 3,4,5,6]);   
+//     },
+//     createdAt() {
+//       return faker.date.past();
+//     },
+//     updatedAt() {
+//       return faker.date.past();
+//     }
     
-})
+// })
 
   },
   routes() {
@@ -178,45 +178,56 @@ const apiUrl = 'http://127.0.0.1:1420/api'
 
         return schema.db.products.find(id);
       },
-      { timing: 3000 }
+      { timing: 1000 }
     );
     this.get(
       `${apiUrl}/products/variants/:variantId`,
       (schema, request) => {
         const variantId = request.params.variantId;
         // const product = schema.db.products.find(id);
+        
         return schema.db.variants.find(variantId);
       },
-      { timing: 2000 }
+      { timing:1000 }
+    );
+    this.put(
+      `${apiUrl}/products/variants/:variantId`,
+      (schema, request) => {
+        console.log('request:', request.requestBody)
+        const variantId = request.params.variantId;
+        let attrs = JSON.parse(request.requestBody);
+        schema.db.variants.update(variantId, attrs);
+        return schema.db.variants.find(variantId);
+      },
+      { timing:1000 }
     );
     this.get(
-      `${apiUrl}/products/stock/:productId`,
+      `${apiUrl}/products/stock/:stockId`,
       (schema, request) => {
-        const productId = request.params.productId;
-        const product = schema.db.products.find(productId);
-        return schema.db.stock.find(productId);
+        const stockId = request.params.stockId;
+        const stock = schema.db.stocks.find(stockId);
+        return stock;
       },
-      { timing: 2000 }
+      { timing: 1000 }
     );
   },
   seeds(server) {
    const products = server.createList('product', 10);
-  const stock = server.create("stock")
   const options = server.createList('option', 2);
 
   
 
     products.forEach((product) => {
-      server.createList('variant',6, { product, stock });
-       const variants = server.createList('variant', 6, { product, stock });
+      server.createList('variant',6, { product });
+       const variants = server.createList('variant', 6, { product });
+        return variants;
+    //    variants.forEach((variant) => {
+    //   const options = server.createList('option', 2);
 
-       variants.forEach((variant) => {
-      const options = server.createList('option', 2);
-
-      options.forEach((option) => {
-        variant.update('options', [...variant.options.models, option]);
-      });
-    });
+    //   options.forEach((option) => {
+    //     variant.update('options', [...variant.options.models, option]);
+    //   });
+    // });
       
     });
 

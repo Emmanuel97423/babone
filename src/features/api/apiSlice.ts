@@ -18,7 +18,7 @@ export const  apiSlice = createApi({
 //     }
 //     return headers;
 //   },
-    tagTypes: ["Products"],
+    tagTypes: ["Products", "ProductVariant"],
     endpoints: (builder) => ({
         getProductList: builder.query<Products[], void>({
             query:()=>({
@@ -32,21 +32,21 @@ export const  apiSlice = createApi({
                 method:"GET"
             })
         }),  
-         getProductVariant: builder.query<Product, string>({
+         getProductVariant: builder.query<ProductVariant, string>({
             query:(variantId)=>({
                 url:`/products/variants/${variantId}`,
                 method:"GET"
             })
         }),  
-        updateProductVariant: builder.mutation<Product, Partial<Product> & Pick<Product, 'id'>>({
+        updateProductVariant: builder.mutation<ProductVariant, Partial<ProductVariant> & Pick<ProductVariant, 'id'>>({
             query:({id, ...patch})=>({
                 url:`/products/variants/${id}`,
-                method:'PATCH',
+                method:'PUT',
                 body:patch,
             }),
-            transformResponse:(response:{data:Product}, meta, arg)=> response.data,
+            transformResponse:(response:{data:ProductVariant}, meta, arg)=> response.data,
             transformErrorResponse:(response:{status: string | number}, meta, arg)=> response.status,
-            invalidatesTags:["Products"],
+            // invalidatesTags:["ProductVariant"],
 
  // onQueryStarted is useful for optimistic updates
       // The 2nd parameter is the destructured `MutationLifecycleApi`
@@ -72,6 +72,12 @@ export const  apiSlice = createApi({
       ) {},
             
         }),
+        getProductStock: builder.query<Product, string>({
+            query:(stockId)=>({
+                url:`/products/stock/${stockId}`,
+                method:"GET"
+            })
+        }), 
         updateProductStock: builder.mutation<Stock, Partial<Stock> & Pick<Stock, 'id'>>({
             query:({id, ...patch})=>({
                 url:`/products/stock/${id}`,
@@ -117,4 +123,6 @@ export const {
     useGetProductListQuery,
     useGetProductQuery,
     useGetProductVariantQuery,
+    useGetProductStockQuery,
+    useUpdateProductVariantMutation,
 } = apiSlice;

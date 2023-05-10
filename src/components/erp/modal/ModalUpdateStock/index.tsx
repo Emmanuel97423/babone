@@ -1,7 +1,16 @@
 import { useState, useEffect } from 'react';
-import type { Product } from '../../../../types/interfaces/Product';
-import { useGetProductVariantQuery } from '../../../../features/api/apiSlice';
+import type {
+  Product,
+  ProductVariant
+} from '../../../../types/interfaces/Product';
+import {
+  useGetProductVariantQuery,
+  useGetProductStockQuery,
+  useUpdateProductVariantMutation
+} from '../../../../features/api/apiSlice';
 import Spinner from '../../../../components/Spinner';
+import { AiOutlineCheck } from 'react-icons/ai';
+import { GiCancel } from 'react-icons/gi';
 
 interface Props {
   variantId: string;
@@ -12,14 +21,19 @@ interface Motif {
   code: number;
 }
 
+interface Stock {
+  variantId: string;
+  stock: number;
+}
+
 const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
   const [motifCode, setMotifCode] = useState<number>(0);
-  // const [value, setValue] = useState<number | undefined | any>(undefined);
   const [isDamageSelected, setIsDamageSelected] = useState<boolean>(false);
   const [stockValue, setStockValue] = useState<number | undefined | any>(0);
   const [stockAjustement, setStockAjustement] = useState<
     number | undefined | any
   >(0);
+  const [currentStock, setCurrentStock] = useState<number | undefined | any>();
 
   const motifs: Motif[] = [
     { motif: 'Inventaire reçu', code: 1 },
@@ -35,12 +49,15 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
     error,
     isLoading
   } = useGetProductVariantQuery(variantId);
+  const [updateStockVariant, { isLoading: updateStockIsLoading }] =
+    useUpdateProductVariantMutation();
 
   useEffect(() => {
-    if (productVariant) setStockValue(productVariant?.stock);
+    if (productVariant) {
+      setStockValue(productVariant?.stock);
+      setCurrentStock(productVariant?.stock);
+    }
   }, [productVariant]);
-
-  const currentStock = productVariant?.stock;
 
   const motifOnChange: (e: React.ChangeEvent<HTMLSelectElement>) => void = (
     e
@@ -66,11 +83,10 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
     e: React.ChangeEvent<HTMLInputElement>,
     variantId: string
   ) => void = (e, variantId) => {
-    console.log('variantId:', variantId);
-
     if (motifCode === 1 || motifCode === 6) {
       if (currentStock) {
         setStockValue(currentStock + parseInt(e.target.value));
+        useUpdateProductVariantMutation();
         // setStockAjustement(parseInt(e.target.value));
       }
     } else if (motifCode === 3 || motifCode === 4 || motifCode === 5) {
@@ -112,6 +128,21 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
     setStockAjustement(parseInt(e.target.value));
   };
 
+  const handleUpdateStock: React.MouseEventHandler<
+    HTMLButtonElement
+  > = async () => {
+    try {
+      const payload = await updateStockVariant({
+        id: variantId,
+        stock: stockValue
+      });
+      setCurrentStock(stockValue);
+      console.log('fulfilled', payload);
+    } catch (error) {
+      console.log('error:', error);
+    }
+  };
+
   let content;
 
   if (isLoading) {
@@ -134,10 +165,11 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
         <tr key={index} className="hover ">
           <td>{productVariant?.name}</td>
 
-          <td>{productVariant?.stock}</td>
+          <td>{currentStock}</td>
           <td>
             <select
               className="select select-bordered w-full max-w-xs"
+              defaultValue="Selectionner un motif"
               onChange={motifOnChange}
             >
               <option disabled selected>
@@ -170,11 +202,28 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
               value={stockValue}
               // placeholder={10}
               className="input input-bordered w-20 "
-              disabled={motifCode === 0}
+              disabled={
+                motifCode === 0 ||
+                motifCode === 1 ||
+                motifCode === 3 ||
+                motifCode === 4 ||
+                motifCode === 5 ||
+                motifCode === 6
+              }
               onBlur={stockOnBlur}
               min="0"
               onChange={updateStock}
             />
+          </td>
+          <td>
+            <button
+              onClick={handleUpdateStock}
+              className={`"flex justify-center items-center btn bg-primary :hover-accent" ${
+                currentStock == stockValue && 'hidden'
+              }`}
+            >
+              <AiOutlineCheck className="cursor-pointer" />
+            </button>
           </td>
         </tr>
       </>
@@ -189,7 +238,7 @@ const ModalUpdateStock: React.FC<Product> = ({ id, variantIds }) => {
     <>
       <input type="checkbox" id="modal-update-stock" className="modal-toggle" />
       <div className="modal w-screen">
-        <div className="modal-box  max-w-5xl absolute top-24 text-center flex flex-col ">
+        <div className="modal-box  max-w-5xl absolute top-9 text-center flex flex-col ">
           <h2 className="text-3xl text-left font-semibold justify-self-start pb-6 pl-4">
             Gérer les stocks
           </h2>
@@ -205,10 +254,11 @@ const ModalUpdateStock: React.FC<Product> = ({ id, variantIds }) => {
               <thead>
                 <tr>
                   <th>Alternative</th>
-                  <th>Stock disponible</th>
+                  <th>Stock actuelle</th>
                   <th>Motif</th>
                   <th>Ajustement</th>
                   <th>Nouveau</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -221,7 +271,7 @@ const ModalUpdateStock: React.FC<Product> = ({ id, variantIds }) => {
                 ))}
               </tbody>
             </table>
-            <div className="w-full flex justify-between px-4 ">
+            {/* <div className="w-full flex justify-between px-4 ">
               <button className="btn btn-error text-white mt-6 overflow-hidden">
                 Annulé
               </button>
@@ -231,7 +281,7 @@ const ModalUpdateStock: React.FC<Product> = ({ id, variantIds }) => {
               >
                 Terminé
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
