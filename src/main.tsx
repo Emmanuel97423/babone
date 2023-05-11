@@ -3,9 +3,22 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './styles.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { store } from './store/store';
+// import { extendedApiSlice } from './features/product/productSlice';
+import { fetchProducts } from './features/product/productSlice';
+
+import { Provider } from 'react-redux';
 import ErrorPage from './error-page';
 import Home from './pages/Home';
 import Erp from './pages/Erp';
+import ProductListPage from './pages/Erp/ProductManagement';
+import DashboardErp from './pages/Erp/DashboardErp';
+import OrderPage from './pages/Erp/Order';
+import AddProduct from './pages/Erp/ProductManagement/Add';
+import UpdateProduct from './pages/Erp/ProductManagement/Update';
+import { setupMockServer } from './__mock__/api/server';
+
+setupMockServer();
 
 const router = createBrowserRouter([
   {
@@ -15,20 +28,41 @@ const router = createBrowserRouter([
   },
   {
     path: '/erp',
-    element: <Erp />
-    // errorElement: <ErrorPage />
+    element: <Erp />,
+    errorElement: <ErrorPage />,
 
-    // children: [
-    //   {
-    //     path: 'erp',
-    //     element: <Erp />
-    //   }
-    // ]
+    children: [
+      {
+        path: '/erp/dashboard',
+        element: <DashboardErp />
+      },
+      {
+        path: '/erp/products-management',
+        element: <ProductListPage />
+      },
+      {
+        path: '/erp/products-management/add',
+        element: <AddProduct />
+      },
+      {
+        path: '/erp/products-management/update/:id',
+        element: <UpdateProduct />
+      },
+      {
+        path: '/erp/orders',
+        element: <OrderPage />
+      }
+    ]
   }
 ]);
 
+// store.dispatch(fetchProducts());
+// store.dispatch(extendedApiSlice.endpoints.getProductsList.initiate(undefined));
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );

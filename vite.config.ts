@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
@@ -9,7 +10,6 @@ test: {
       reporter: ['text', 'json', 'html'],
     },
   },
- 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   // prevent vite from obscuring rust errors
   clearScreen: false,
@@ -29,4 +29,11 @@ test: {
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
   },
+  resolve: {
+    alias: {
+    // Configurations des alias
+   '@': path.resolve(__dirname, 'src'),
+      '~': path.resolve(__dirname, 'public'),
+  },
+  }
 }));

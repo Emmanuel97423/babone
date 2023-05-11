@@ -21,11 +21,11 @@ export default {
     themes: [
       {
         mytheme: {
-          primary: '#395B64',
+          primary: '#207BFF',
 
-          secondary: '#A5C9CA',
+          secondary: '#4EA5FF',
 
-          accent: '#1FB2A5',
+          accent: '#4EA5FF',
 
           neutral: '#2C3333',
 
@@ -37,7 +37,9 @@ export default {
 
           warning: '#FBBD23',
 
-          error: '#F87272'
+          error: '#F87272',
+
+          'table-grey': '#262B36'
         }
       }
     ]
