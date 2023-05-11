@@ -2,6 +2,7 @@ interface Props {
   children: React.ReactNode;
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
+  htmlFor?: string;
   disabled?: boolean;
   className?: string;
   style?: React.CSSProperties;

@@ -57,6 +57,11 @@ const SideBar: React.FC = () => {
           icon: <AiOutlinePlusCircle />
         }
       ]
+    },
+    {
+      title: 'Options',
+      link: '/erp/options',
+      icon: <MdPointOfSale />
     }
   ];
 
@@ -76,7 +81,7 @@ const SideBar: React.FC = () => {
       }`}
     >
       <BsArrowLeftCircleFill
-        className={`bg-primary text-3xl text-secondary absolute z-40 rounded-full -right-3 top-9 cursor-pointer ease-in-out duration-1 ${
+        className={`bg-primary text-3xl text-white absolute z-40 rounded-full -right-3 top-9 cursor-pointer ease-in-out duration-1 ${
           !open && ' rotate-180'
         }`}
         onClick={handleOpen}

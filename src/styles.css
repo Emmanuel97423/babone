@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+h1 {
+  text-align: center;
+}
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
 
 /* .container {
   margin: 0;

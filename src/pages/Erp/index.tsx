@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import SideBar from '../../components/erp/SideBar';
+import SideBar from '../../components/organisms/SideBar';
 const Erp: React.FC = () => {
   return (
     <div className="flex ">
