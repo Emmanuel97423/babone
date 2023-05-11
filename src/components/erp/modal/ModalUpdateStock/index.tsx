@@ -86,7 +86,8 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
     if (motifCode === 1 || motifCode === 6) {
       if (currentStock) {
         setStockValue(currentStock + parseInt(e.target.value));
-        useUpdateProductVariantMutation();
+
+        // useUpdateProductVariantMutation();
         // setStockAjustement(parseInt(e.target.value));
       }
     } else if (motifCode === 3 || motifCode === 4 || motifCode === 5) {
