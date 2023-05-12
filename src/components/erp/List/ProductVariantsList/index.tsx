@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useGetProductVariantQuery } from '../../../../features/api/apiSlice';
-import Spinner from '@/components/Spinner';
+import Spinner from '@/components/atoms/Spinner';
 interface Props {
   variantId: string;
   index: number;

@@ -8,7 +8,7 @@ import {
   useGetProductStockQuery,
   useUpdateProductVariantMutation
 } from '../../../../features/api/apiSlice';
-import Spinner from '../../../../components/Spinner';
+import Spinner from '../../../atoms/Spinner';
 import { AiOutlineCheck } from 'react-icons/ai';
 import { GiCancel } from 'react-icons/gi';
 

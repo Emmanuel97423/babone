@@ -11,11 +11,13 @@ import { Provider } from 'react-redux';
 import ErrorPage from './error-page';
 import Home from './pages/Home';
 import Erp from './pages/Erp';
+import ErpDefaultTemplate from '@/components/templates/Erp/ErpDefaultTemplate';
 import ProductListPage from './pages/Erp/ProductManagement';
 import DashboardErp from './pages/Erp/DashboardErp';
 import OrderPage from './pages/Erp/Order';
 import AddProduct from './pages/Erp/ProductManagement/Add';
 import UpdateProduct from './pages/Erp/ProductManagement/Update';
+import AddOptions from '@/pages/Erp/ProductManagement/AddOptions';
 import { setupMockServer } from './__mock__/api/server';
 
 setupMockServer();
@@ -28,7 +30,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/erp',
-    element: <Erp />,
+    element: <ErpDefaultTemplate />,
     errorElement: <ErrorPage />,
 
     children: [
@@ -51,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: '/erp/orders',
         element: <OrderPage />
+      },
+      {
+        path: '/erp/options',
+        element: <AddOptions />
       }
     ]
   }
