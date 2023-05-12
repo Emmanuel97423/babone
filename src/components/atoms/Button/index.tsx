@@ -27,7 +27,7 @@ interface Props {
 }
 const Button: React.FC<Props> = ({ children, ...props }) => {
   return (
-    <button className="btn btn-primary" {...props}>
+    <button className="btn btn-primary my-4" {...props}>
       {children}
     </button>
   );

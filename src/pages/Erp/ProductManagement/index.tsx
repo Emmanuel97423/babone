@@ -12,7 +12,7 @@ import {
   fetchProducts
 } from '../../../features/product/productSlice';
 import ProductVariantComponent from '../../../components/erp/List/ProductVariantsList';
-import Spinner from '../../../components/Spinner';
+import Spinner from '../../../components/atoms/Spinner';
 
 interface Props {
   product: Product;

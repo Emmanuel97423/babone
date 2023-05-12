@@ -1,63 +1,92 @@
 import Infos from '@/components/molecules/Infos';
+import Collapse from '@/components/molecules/Collapse';
 
 type InputProps = {
   id?: number;
   type: string;
   label?: string;
+  value?: string;
   placeholder?: string;
   className?: string;
   textInfos?: string;
   textInfosDirection?: string;
   radioValues?: radioValue[];
+  option?: string;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 type radioValue = {
   value: string;
 };
 
 const Input: React.FC<InputProps> = ({ ...props }) => {
+  let content: JSX.Element = <></>;
+  if (props.type === 'text') {
+    content = (
+      <input
+        type={props.type}
+        placeholder={props.placeholder}
+        className={` ${
+          props.className ? props.className : 'input input-bordered w-full mb-4'
+        }}`}
+        onBlur={props.onBlur}
+        onKeyDown={props.onKeyDown}
+        value={props.value}
+      />
+    );
+  } else if (props.type === 'radio' && props.radioValues) {
+    content = (
+      <>
+        {props.radioValues.map((value: radioValue, index: number) => (
+          <label key={index} className="label cursor-pointer">
+            <span className="label-text">
+              {value.toString()}{' '}
+              {value.toString() === 'Couleur et texte' && ' (non-disponible)'}
+            </span>
+            <input
+              type="radio"
+              name="radio"
+              className={`radio `}
+              disabled={value.toString() === 'Couleur et texte' && true}
+              checked={value.toString() === 'Texte' ? true : false}
+            />
+          </label>
+        ))}
+      </>
+    );
+  } else if (props.type === 'option') {
+    content = (
+      <input
+        type={props.type}
+        placeholder={props.placeholder}
+        className={`input input-bordered w-full mb-4 `}
+      />
+    );
+  }
+
   return (
     <>
-      <div className="flex justify-start items-center mb-1">
-        {props.label && (
-          <label htmlFor={props.label} className="label">
-            <label className="label-text">{props.label}</label>
-          </label>
-        )}
-        {props.textInfos && (
-          <>
+      {props.label && (
+        <div className="flex justify-start items-center mb-1 mt-6 ">
+          {props.label && (
+            <label htmlFor={props.label} className="label">
+              <label className="label-text text-lg font-semibold">
+                {props.label}
+              </label>
+            </label>
+          )}
+          {props.textInfos && (
             <Infos
               textInfos={props.textInfos}
               textInfosDirection={
-                props.textInfosDirection ? props.textInfosDirection : 'right'
+                props.textInfosDirection ? props.textInfosDirection : ''
               }
             />
-          </>
-        )}
-      </div>
-      {props.type === 'text' && (
-        <input
-          type={props.type}
-          placeholder={props.placeholder}
-          className={`input input-bordered w-full mb-4 `}
-        />
+          )}
+        </div>
       )}
-      {props.type === 'radio' &&
-        props.radioValues?.map((value: radioValue, index: number) => {
-          return (
-            <label key={index} className="label cursor-pointer">
-              <span className="label-text">
-                {value.toString()}{' '}
-                {value.toString() === 'Couleur et texte' && ' (non-disponible)'}
-              </span>
-              <input
-                type="radio"
-                name="radio"
-                className={`radio `}
-                disabled={value.toString() === 'Couleur et texte' && true}
-              />
-            </label>
-          );
-        })}
+      {content}
     </>
   );
 };

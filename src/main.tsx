@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import ErrorPage from './error-page';
 import Home from './pages/Home';
 import Erp from './pages/Erp';
-import ErpDefaultTemplate from '@/components/templates/erp/ErpDefaultTemplate';
+import ErpDefaultTemplate from '@/components/templates/Erp/ErpDefaultTemplate';
 import ProductListPage from './pages/Erp/ProductManagement';
 import DashboardErp from './pages/Erp/DashboardErp';
 import OrderPage from './pages/Erp/Order';

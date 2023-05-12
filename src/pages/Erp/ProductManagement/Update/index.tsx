@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Dropdown from '../../../../components/erp/Product/Add/Dropdown';
 import ProductVariantList from '../../../../components/erp/List/ProductVariantsList';
-import Spinner from '../../../../components/Spinner';
+import Spinner from '../../../../components/atoms/Spinner';
 import ModalVariant from '../../../../components/erp/modal/ModalAddVariant';
 import ModalBaseVariant from '../../../../components/erp/modal/ModalUpdateBaseVariant';
 import ModalUpdateStock from '../../../../components/erp/modal/ModalUpdateStock';

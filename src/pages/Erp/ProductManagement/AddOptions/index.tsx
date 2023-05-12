@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import Modal from '@/components/organisms/Modal';
 import Input from '@/components/atoms/Input';
+import Form from '@/components/organisms/Form';
+import Options from '@/components/molecules/Options';
 
 const AddOptions: React.FC = () => {
+  const [options, setOptions] = useState<string[]>([]);
   const inputData: any = [
     {
       id: 1,
@@ -32,8 +36,11 @@ const AddOptions: React.FC = () => {
       radioValues: ['Texte', 'Couleur et texte']
     }
   ];
+  const handleAddOption = (option: string) => {
+    setOptions([...options, option]);
+  };
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center p-4">
       <div className="w-1/2">
         <h2>Options</h2>
         <p>
@@ -43,16 +50,22 @@ const AddOptions: React.FC = () => {
         </p>
       </div>
       <Modal labelButton="Créer un ensemble d'options">
-        {inputData.map((input: any) => (
-          <Input
-            type={input.type}
-            label={input.label}
-            placeholder={input.placeholder}
-            textInfos={input.textInfos}
-            textInfosDirection={input.textInfosDirection}
-            radioValues={input.radioValues}
+        <Form className="flex flex-col">
+          {inputData.map((input: any) => (
+            <Input
+              type={input.type}
+              label={input.label}
+              placeholder={input.placeholder}
+              textInfos={input.textInfos}
+              textInfosDirection={input.textInfosDirection}
+              radioValues={input.radioValues}
+            />
+          ))}
+          <Options
+            placeholder="Ajouter une option"
+            onStateChange={handleAddOption}
           />
-        ))}
+        </Form>
       </Modal>
     </div>
   );
