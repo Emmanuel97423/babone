@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import Button from '@/components/atoms/Button';
+import Button from '@/components/ui/common/Button';
 
 type Props = {
   labelButton: string;

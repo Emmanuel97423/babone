@@ -1,4 +1,4 @@
-import Input from '@/components/atoms/Input';
+import Input from '@/components/ui/Input';
 type Props = {
   children: React.ReactNode;
   type: 'option';

@@ -1,4 +1,4 @@
-import Tooltip from '@/components/atoms/Tooltip';
+import Tooltip from '@/components/ui/common/Tooltip';
 import { AiFillInfoCircle } from 'react-icons/ai';
 
 type Props = {

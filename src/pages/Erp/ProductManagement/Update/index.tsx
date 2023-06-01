@@ -1,13 +1,13 @@
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Dropdown from '../../../../components/erp/Product/Add/Dropdown';
-import ProductVariantList from '../../../../components/erp/List/ProductVariantsList';
-import Spinner from '../../../../components/atoms/Spinner';
-import ModalVariant from '../../../../components/erp/modal/ModalAddVariant';
-import ModalBaseVariant from '../../../../components/erp/modal/ModalUpdateBaseVariant';
-import ModalUpdateStock from '../../../../components/erp/modal/ModalUpdateStock';
+import Dropdown from '@/components/erp/Product/Add/Dropdown';
+import ProductVariantList from '@/components/erp/List/ProductVariantsList';
+import Spinner from '@/components/ui/common/Spinner';
+import ModalVariant from '@/components/erp/modal/ModalAddVariant';
+import ModalBaseVariant from '@/components/erp/modal/ModalUpdateBaseVariant';
+import ModalUpdateStock from '@/components/erp/modal/ModalUpdateStock';
 import { useGetProductQuery } from '@/features/api/apiSlice';
-import type { Product } from '../../../../types/interfaces/Product';
+import type { Product } from '@/types/interfaces/Product';
 
 const UpdateProduct: React.FC = () => {
   const { id } = useParams<{ id: any }>();

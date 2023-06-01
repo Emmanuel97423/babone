@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import type {
-  Product,
-  ProductVariant
-} from '../../../../types/interfaces/Product';
+import type { Product, ProductVariant } from '@/types/interfaces/Product';
 import {
   useGetProductVariantQuery,
   useGetProductStockQuery,
   useUpdateProductVariantMutation
-} from '../../../../features/api/apiSlice';
-import Spinner from '../../../atoms/Spinner';
+} from '@/features/api/apiSlice';
+import Spinner from '@/components/ui/common/Spinner';
 import { AiOutlineCheck } from 'react-icons/ai';
 import { GiCancel } from 'react-icons/gi';
 

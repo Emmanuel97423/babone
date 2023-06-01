@@ -1,18 +1,14 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Product,
-  Products,
-  ProductVariant
-} from '../../../types/interfaces/Product';
-import { RootState, AppDispatch } from '../../../store/store';
+import { Product, Products, ProductVariant } from '@/types/interfaces/Product';
+import { RootState, AppDispatch } from '@/store/store';
 import {
   selectAllProducts,
   fetchProducts
-} from '../../../features/product/productSlice';
-import ProductVariantComponent from '../../../components/erp/List/ProductVariantsList';
-import Spinner from '../../../components/atoms/Spinner';
+} from '@/features/product/productSlice';
+import ProductVariantComponent from '@/components/erp/List/ProductVariantsList';
+import Spinner from '@/components/ui/common/Spinner';
 
 interface Props {
   product: Product;

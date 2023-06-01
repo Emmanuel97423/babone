@@ -1,8 +1,9 @@
-import Infos from '@/components/molecules/Infos';
-import Collapse from '@/components/molecules/Collapse';
+import Infos from '@/components/ui/Infos';
+import Collapse from '@/components/ui/Collapse';
 
 type InputProps = {
   id?: number;
+  name: string;
   type: string;
   label?: string;
   value?: string;
@@ -25,6 +26,7 @@ const Input: React.FC<InputProps> = ({ ...props }) => {
   if (props.type === 'text') {
     content = (
       <input
+        name={props.name}
         type={props.type}
         placeholder={props.placeholder}
         className={` ${
@@ -33,6 +35,7 @@ const Input: React.FC<InputProps> = ({ ...props }) => {
         onBlur={props.onBlur}
         onKeyDown={props.onKeyDown}
         value={props.value}
+        onChange={props.onChange}
       />
     );
   } else if (props.type === 'radio' && props.radioValues) {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Input from '@/components/atoms/Input';
-import Alert from '@/components/atoms/Alert';
+import Input from '@/components/ui/Input';
+import Alert from '@/components/ui/common/Alert';
 import { MdDeleteForever } from 'react-icons/md';
 type Props = {
   placeholder: string;
