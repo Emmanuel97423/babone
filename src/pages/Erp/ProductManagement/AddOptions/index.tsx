@@ -1,13 +1,12 @@
 import React, { useMemo, useCallback, useState, useRef } from 'react';
-import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { addNewsOptions } from '@/features/product/optionSlice';
 
 import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
 import Form from '@/components/ui/Form';
 import Options from '@/components/ui/Options';
 import Button from '@/components/ui/common/Button';
-
-import type { OptionsType, Option } from '@/types/features/product/OptionsType';
 
 type Input = {
   id: number;
@@ -26,12 +25,17 @@ type radioValue = {
 };
 
 const AddOptions: React.FC = () => {
-  const ref = useRef(null);
+  const dispatch = useDispatch();
   const [options, setOptions] = useState<string[]>(['XL', 'L']);
   const [optionDetails, setOptionDetails] = useState<string>('');
   const [optionName, setOptionName] = useState<string>('');
-  const [optionType, setOptionType] = useState<string>('');
+  const [optionType, setOptionType] = useState<string>('text');
   const [optionSelected, setOptionSelected] = useState<string>('');
+  const [formErrorMessage, setFormErrorMessage] = useState<string>('');
+
+  const canSave = [options, optionDetails, optionName, optionType].every(
+    Boolean
+  );
 
   // const inputData: Input[] = [
   //   {
@@ -154,8 +158,30 @@ const AddOptions: React.FC = () => {
     }
   };
 
-  const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitForm = async (e: React.FormEvent) => {
     e.preventDefault();
+    // e.stopPropagation();
+  };
+  const handleClickSubmit = async (e: React.MouseEvent<HTMLInputElement>) => {
+    if (canSave) {
+      const storeId = '34762349';
+      const optionsRequest = {
+        detail: optionDetails,
+        name: optionName,
+        type: optionType,
+        options: options
+      };
+
+      try {
+        const response = dispatch(
+          addNewsOptions({ optionsRequest, storeId })
+        ).unwrap();
+        console.log('response:', response);
+      } catch (error) {
+        console.log('error:', error);
+      }
+    } else {
+    }
   };
   const deleteOption = (option: string) => {
     let array = options;
@@ -226,7 +252,9 @@ const AddOptions: React.FC = () => {
             deleteOption={deleteOption}
           />
 
-          <Button type="submit">Enregistrer</Button>
+          <Button type="submit" onClick={handleClickSubmit}>
+            Enregistrer
+          </Button>
         </Form>
       </Modal>
     </div>

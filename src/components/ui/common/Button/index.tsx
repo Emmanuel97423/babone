@@ -1,6 +1,6 @@
 interface Props {
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (e: any) => void;
   type?: 'button' | 'submit' | 'reset';
   htmlFor?: string;
   disabled?: boolean;
@@ -27,7 +27,7 @@ interface Props {
 }
 const Button: React.FC<Props> = ({ children, ...props }) => {
   return (
-    <button className="btn btn-primary my-4 " {...props}>
+    <button className="btn btn-primary my-4" onClick={props.onClick} {...props}>
       {children}
     </button>
   );
