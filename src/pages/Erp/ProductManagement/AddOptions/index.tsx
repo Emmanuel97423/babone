@@ -174,6 +174,7 @@ const AddOptions: React.FC = () => {
 
       try {
         const response = dispatch(
+          // @ts-ignore
           addNewsOptions({ optionsRequest, storeId })
         ).unwrap();
         console.log('response:', response);
