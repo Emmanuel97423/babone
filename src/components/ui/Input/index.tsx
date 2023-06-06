@@ -1,9 +1,10 @@
+import { forwardRef } from 'react';
 import Infos from '@/components/ui/Infos';
 import Collapse from '@/components/ui/Collapse';
 
 type InputProps = {
   id?: number;
-  name: string;
+  name?: string;
   type: string;
   label?: string;
   value?: string;
@@ -16,6 +17,7 @@ type InputProps = {
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  deleteOption?: (option: string) => void;
 };
 type radioValue = {
   value: string;
@@ -23,6 +25,7 @@ type radioValue = {
 
 const Input: React.FC<InputProps> = ({ ...props }) => {
   let content: JSX.Element = <></>;
+
   if (props.type === 'text') {
     content = (
       <input
@@ -53,6 +56,7 @@ const Input: React.FC<InputProps> = ({ ...props }) => {
               className={`radio `}
               disabled={value.toString() === 'Couleur et texte' && true}
               checked={value.toString() === 'Texte' ? true : false}
+              onChange={props.onChange}
             />
           </label>
         ))}
@@ -64,6 +68,8 @@ const Input: React.FC<InputProps> = ({ ...props }) => {
         type={props.type}
         placeholder={props.placeholder}
         className={`input input-bordered w-full mb-4 `}
+        onChange={props.onChange}
+        onKeyDown={props.onKeyDown}
       />
     );
   }

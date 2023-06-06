@@ -1,55 +1,60 @@
-import { useState } from 'react';
 import Input from '@/components/ui/Input';
 import Alert from '@/components/ui/common/Alert';
 import { MdDeleteForever } from 'react-icons/md';
+import type { OptionsType, Option } from '@/types/features/product/OptionsType';
+
 type Props = {
+  name: string;
   placeholder: string;
-  onStateChange: (options: string) => void;
-  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  options: string[];
+  value: string;
+  onStateChange?: (options: string) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  deleteOption?: (option: string) => void;
 };
-const Options: React.FC<Props> = ({ ...props }) => {
-  const [options, setOptions] = useState<string[]>([]);
-  const handleAddOption = (e: any) => {
-    e.stopPropagation();
-    if (e.key === 'Enter') {
-      const option = e.target.value;
-      // options.find((item) => item === option) && event.target.value === '';
-      const record = options.find(
-        (item) => item.toLowerCase() === option.toLowerCase()
-      );
 
-      if (record) {
-        return;
-      }
-
-      setOptions([...options, option]);
-      props.onStateChange(option);
-    }
-  };
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('e:', e);
-  };
-
-  const optionsContent = options.map((option, index) => (
-    <div className="flex justify-between items-center">
+const Options: React.FC<Props> = ({
+  name,
+  options,
+  onChange,
+  onKeyDown,
+  value,
+  deleteOption,
+  ...props
+}) => {
+  // const onChangeTest = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   console.log('e:', e);
+  // };
+  const optionsContent = options.map((option: string, index: number) => (
+    <div key={index} className="w-full flex justify-between items-center">
       <Input
-        key={index}
         value={option}
         type="text"
-        onChange={handleOnChange}
         className="input rounded-none    w-full my-2 focus:outline-none"
       />
-      <MdDeleteForever size={22} className=" cursor-pointer" />
+      <MdDeleteForever
+        size={22}
+        className=" cursor-pointer"
+        onClick={() => {
+          if (deleteOption) {
+            deleteOption(option);
+          }
+        }}
+      />
     </div>
   ));
   return (
     <>
       <h2>Options</h2>
       <Input
-        type="text"
+        name={name}
+        type="option"
         className="input rounded-none border-t-1 border-white  focus:outline-none"
         placeholder={props.placeholder}
-        onKeyDown={handleAddOption}
+        onKeyDown={onKeyDown}
+        onChange={onChange}
+        value={value}
       />
       {optionsContent}
     </>

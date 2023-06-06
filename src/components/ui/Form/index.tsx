@@ -3,7 +3,7 @@ import Button from '@/components/ui/common/Button';
 
 type Props = {
   children: React.ReactNode;
-  onSubmit?: () => void;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
   className?: string;
 };
 type Inputs = {
