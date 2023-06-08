@@ -66,8 +66,25 @@ const OptionExpect: React.FC<OptionExpectProps> = ({ option }) => {
         id="update_option_modal"
       >
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Hello!</h3>
-          <p className="py-4">This modal works with anchor links</p>
+          <button
+            onClick={() => setOpenModal(false)}
+            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          >
+            ✕
+          </button>
+          <h2 className="font-bold text-lg">Modifier l’ensemble d’options</h2>
+          <div>
+            <Input
+              label="Nom de l'ensemble d'options"
+              type="text"
+              name="optionName"
+              textInfos="Nommez cet ensemble d’options. Par exemple, vous pourriez nommer cet ensemble d’options Couleurs ou Tailles de chemises."
+              textInfosDirection="bottom"
+              // placeholder="Taille"
+              // onChange={handleOptionName}
+              value={option.details}
+            />
+          </div>
           <div className="modal-action">
             <a href="#" className="btn">
               Yay!
