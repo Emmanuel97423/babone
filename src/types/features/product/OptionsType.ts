@@ -1,7 +1,10 @@
-export type OptionsType = {
-  options:Option[]
+export interface Option {
+    id?: string;
+    name?:string;
+    details:string;
+    type:string;
+    options: string[];
+    storeId?:string;
+   
+
 };
-export type Option = {
-  name: string;
-  value: string;
-}

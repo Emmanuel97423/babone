@@ -1,7 +1,6 @@
 import Input from '@/components/ui/Input';
 import Alert from '@/components/ui/common/Alert';
 import { MdDeleteForever } from 'react-icons/md';
-import type { OptionsType, Option } from '@/types/features/product/OptionsType';
 
 type Props = {
   name: string;
@@ -9,8 +8,8 @@ type Props = {
   options: string[];
   value: string;
   onStateChange?: (options: string) => void;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: any) => void;
   deleteOption?: (option: string) => void;
 };
 
@@ -32,6 +31,7 @@ const Options: React.FC<Props> = ({
         value={option}
         type="text"
         className="input rounded-none    w-full my-2 focus:outline-none"
+        // onChange={(e) => onChange(e)}
       />
       <MdDeleteForever
         size={22}
@@ -44,17 +44,18 @@ const Options: React.FC<Props> = ({
       />
     </div>
   ));
+
   return (
     <>
       <h2>Options</h2>
-      <Input
+      <input
         name={name}
-        type="option"
+        type="text"
         className="input rounded-none border-t-1 border-white  focus:outline-none"
         placeholder={props.placeholder}
         onKeyDown={onKeyDown}
         onChange={onChange}
-        value={value}
+        // value={value}
       />
       {optionsContent}
     </>

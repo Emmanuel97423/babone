@@ -2,8 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
-import App from '../../src/App';
-import TopNav from '../../src/components/header/TopNav';
+import App from '@/App';
+// import TopNav from '@/components/header/TopNav';
 import { mockWindows, mockIPC } from '@tauri-apps/api/mocks';
 import { invoke } from '@tauri-apps/api/tauri';
 

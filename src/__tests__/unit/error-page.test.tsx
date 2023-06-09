@@ -5,9 +5,9 @@ import {
   createMemoryRouter,
   BrowserRouter
 } from 'react-router-dom';
-import ErrorPage from '../../src/error-page';
-import Erp from '../../src/error-page';
-import App from '../../src/App';
+import ErrorPage from '@/error-page';
+import Erp from '@/error-page';
+import App from '@/App';
 
 describe('error-page', async () => {
   test('should render error page', () => {

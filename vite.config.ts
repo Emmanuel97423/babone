@@ -15,9 +15,17 @@ test: {
   clearScreen: false,
   // tauri expects a fixed port, fail if that port is not available
   server: {
-    port: 1420,
+    watch: {
+   usePolling: true,
+  },
+    host:true,
+    port: 8000,
     strictPort: true,
   },
+
+  // hmr:{
+  //     clientPort: 8000,
+  //   },  
   // to make use of `TAURI_DEBUG` and other env variables
   // https://tauri.studio/v1/api/config#buildconfig.beforedevcommand
   envPrefix: ["VITE_", "TAURI_"],

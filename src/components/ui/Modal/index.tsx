@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import Button from '@/components/ui/common/Button';
 
 type Props = {
-  labelButton: string;
+  labelButton?: string;
   labelModal?: string;
   children: ReactNode;
 };
