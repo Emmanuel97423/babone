@@ -16,7 +16,7 @@ type InputProps = {
   option?: string;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   deleteOption?: (option: string) => void;
 };
 type radioValue = {
@@ -38,7 +38,7 @@ const Input: React.FC<InputProps> = ({ ...props }) => {
         onBlur={props.onBlur}
         onKeyDown={props.onKeyDown}
         value={props.value}
-        onChange={props.onChange}
+        onChange={(e) => props.onChange(e)}
       />
     );
   } else if (props.type === 'radio' && props.radioValues) {
@@ -62,14 +62,15 @@ const Input: React.FC<InputProps> = ({ ...props }) => {
         ))}
       </>
     );
-  } else if (props.type === 'option') {
+  } else if (props.name === 'options') {
     content = (
       <input
-        type={props.type}
+        type="text"
         placeholder={props.placeholder}
         className={`input input-bordered w-full mb-4 `}
         onChange={props.onChange}
         onKeyDown={props.onKeyDown}
+        value={props.value}
       />
     );
   }

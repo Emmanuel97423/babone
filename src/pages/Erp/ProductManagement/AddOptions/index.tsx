@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  addNewsOptions,
+  addOptions,
   selectOptions,
   fetchOptions
 } from '@/features/product/options/optionSlice';
@@ -40,27 +40,16 @@ const OptionExpect: React.FC<OptionExpectProps> = ({ option }) => {
     setOpenModal(true);
   };
   return (
-    <div key={option.id} className="w-full overflow-x-auto">
-      <table className="table w-full">
-        <thead>
-          <tr>
-            <th>Nom de l'ensemble</th>
-            <th>Options</th>
-            <th>Article</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            className="hover cursor-pointer"
-            onClick={(e) => handleUpdate(e, option.id)}
-          >
-            <td>{option.details}</td>
-            <td>{option.options.join(', ')}</td>
-            <td>0</td>
-          </tr>
-        </tbody>
-      </table>
-
+    <>
+      <tr
+        key={option.id}
+        className="hover cursor-pointer"
+        onClick={(e) => handleUpdate(e, option.id)}
+      >
+        <td>{option.details}</td>
+        <td>{option.options.join(', ')}</td>
+        <td>0</td>
+      </tr>
       <div
         className={`modal ${openModal ? 'modal-open' : ''}   `}
         id="update_option_modal"
@@ -74,6 +63,7 @@ const OptionExpect: React.FC<OptionExpectProps> = ({ option }) => {
           </button>
           <h2 className="font-bold text-lg">Modifier l’ensemble d’options</h2>
           <div>
+            {/* ts-ignore */}
             <Input
               label="Nom de l'ensemble d'options"
               type="text"
@@ -83,6 +73,11 @@ const OptionExpect: React.FC<OptionExpectProps> = ({ option }) => {
               // placeholder="Taille"
               // onChange={handleOptionName}
               value={option.details}
+              onChange={function (
+                event: React.ChangeEvent<HTMLInputElement>
+              ): void {
+                throw new Error('Function not implemented.');
+              }}
             />
           </div>
           <div className="modal-action">
@@ -92,7 +87,7 @@ const OptionExpect: React.FC<OptionExpectProps> = ({ option }) => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -140,18 +135,10 @@ const AddOptions: React.FC = () => {
     setOptionType(e.target.value);
   };
 
-  const handleOnChangeOption = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOnChangeOption = (e: any) => {
     e.stopPropagation();
-    console.log('e:', e);
 
     setOptionSelected(e.target.value);
-    console.log('optionSelected:', optionSelected);
-  };
-
-  const handleAddOption = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    e.stopPropagation();
-    console.log('e:', e);
-
     if (e.key === 'Enter') {
       // const option = e.target.value;
       const record = options.find(
@@ -166,24 +153,45 @@ const AddOptions: React.FC = () => {
     }
   };
 
+  // const handleAddOption = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   // e.stopPropagation();
+  //   e.preventDefault();
+
+  //   if (e.key === 'Enter') {
+  //     // const option = e.target.value;
+  //     const record = options.find(
+  //       (item) => item.toLowerCase() === optionSelected.toLowerCase()
+  //     );
+
+  //     if (record) {
+  //       return;
+  //     }
+
+  //     setOptions([...options, optionSelected]);
+  //   }
+  // };
+
   const handleSubmitForm = async (e: React.FormEvent) => {
     e.preventDefault();
     // e.stopPropagation();
   };
   const handleClickSubmit = async (e: React.MouseEvent<HTMLInputElement>) => {
-    if (canSave) {
-      const storeId = '34762349';
-      const optionsRequest = {
-        detail: optionDetails,
-        name: optionName,
-        type: optionType,
-        options: options
-      };
+    e.stopPropagation();
 
+    console.log('e:', e);
+
+    if (canSave) {
       try {
         const response = dispatch(
-          // @ts-ignore
-          addNewsOptions({ optionsRequest, storeId })
+          addOptions({
+            data: {
+              details: optionDetails,
+              name: optionName,
+              type: optionType,
+              options: options,
+              storeId: '123456'
+            }
+          })
         ).unwrap();
         console.log('response:', response);
       } catch (error) {
@@ -218,9 +226,24 @@ const AddOptions: React.FC = () => {
   if (optionReduxStatus === 'idle') {
     optionsList = <>Loading...</>;
   } else if (optionReduxStatus === 'succeeded') {
-    optionsList = optionRedux.map((option) => (
-      <OptionExpect key={option.id} option={option} />
-    ));
+    optionsList = (
+      <div className="w-full overflow-x-auto">
+        <table className="table w-full">
+          <thead>
+            <tr>
+              <th>Nom de l'ensemble</th>
+              <th>Options</th>
+              <th>Article</th>
+            </tr>
+          </thead>
+          <tbody>
+            {optionRedux.map((option) => (
+              <OptionExpect key={option.id} option={option} />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
   } else if (optionReduxStatus === 'failed') {
     optionsList = <div>Error</div>;
   }
@@ -266,7 +289,7 @@ const AddOptions: React.FC = () => {
               placeholder="Ajouter une option"
               options={options}
               onChange={handleOnChangeOption}
-              onKeyDown={handleAddOption}
+              onKeyDown={handleOnChangeOption}
               value={optionName}
               deleteOption={deleteOption}
             />

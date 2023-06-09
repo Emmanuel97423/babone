@@ -20,17 +20,17 @@ interface OptionState {
   error?:string
 }
 
-export const addNewsOptions = createAsyncThunk(`options/addOptions`, async(payload:{options:Option, storeId:string})=>{
-    console.log('payload:', payload)
-    const response = await fetch(`${import.meta.env.API_BASE_URL}/options/add`,{
-        method: 'GET',
-        body:JSON.stringify(payload),
-        headers: {
-            'content-type': 'application/json'
-        }
-    });
-    return (await response.json()) as Option
-})
+// export const addNewsOptions = createAsyncThunk(`options/addOptions`, async(payload:{options:Option, storeId:string})=>{
+//     console.log('payload:', payload)
+//     const response = await fetch(`${import.meta.env.API_BASE_URL}/options/add`,{
+//         method: 'GET',
+//         body:JSON.stringify(payload),
+//         headers: {
+//             'content-type': 'application/json'
+//         }
+//     });
+//     return (await response.json()) as Option
+// })
 
 export const fetchOptions = createAsyncThunk('product/options', async(payload:{ storeId:string})=>{
     const { data: options, error} = await supabase.from('option').select().eq('storeId', payload.storeId)
@@ -40,6 +40,20 @@ export const fetchOptions = createAsyncThunk('product/options', async(payload:{ 
     }
   
     return options
+    
+})
+
+export const addOptions = createAsyncThunk('product/addOptions', async(payload:{ data:Option})=>{
+    console.log('payload:', payload.data)
+    const { data:response, error} = await supabase.from('option').insert(payload.data)
+    console.log('response:', response)
+
+     if (error) {
+        console.log('error:', error)
+        throw new Error(error.message)
+    }
+  
+    return response
     
 })
 
@@ -54,28 +68,31 @@ const OptionSlice = createSlice({
     initialState,
     reducers:{},
     extraReducers:(builder)=>{
-        builder.addCase(addNewsOptions.pending, (state, action)=>{
-            state.loading = 'pending'
-        })
-        .addCase(addNewsOptions.fulfilled,(state, action)=>{
-            state.loading='succeeded'
-        })
-        .addCase(addNewsOptions.rejected,(state, action)=>{
-            state.loading="failed"
-            
-        })
-         builder.addCase(fetchOptions.pending, (state, action)=>{
+   
+        //Fetch options
+        builder.addCase(fetchOptions.pending, (state, action)=>{
             state.loading = 'pending'
         })
         .addCase(fetchOptions.fulfilled,(state, action)=>{
             state.loading='succeeded'
             state.entities = action.payload as Option[]
-
         })
         .addCase(fetchOptions.rejected,(state, action)=>{
             state.loading="failed"
-            state.error = action.error.message
+            state.error = action.error.message  
         })
+         //Add Option builder
+        .addCase(addOptions.pending,(state, action)=>{
+            state.loading="pending"
+        })
+        .addCase(addOptions.fulfilled,(state, action)=>{
+            state.loading="succeeded"
+            
+        })
+        .addCase(addOptions.rejected,(state, action)=>{
+            state.error = action.error.message 
+        })
+       
     }
 });
 

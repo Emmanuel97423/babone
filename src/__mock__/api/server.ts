@@ -210,12 +210,7 @@ const apiUrl = 'http://127.0.0.1:1420/api'
       },
       { timing: 1000 }
     );
-      this.post(`${apiUrl}/options/:storeId/add`, (schema, request) => {
-      console.log('schema:', schema)
-      let attrs = JSON.parse(request.requestBody)
-      console.log(attrs)
-      debugger
-    })
+  
   },
   seeds(server) {
    const products = server.createList('product', 10);
