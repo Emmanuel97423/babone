@@ -15,6 +15,7 @@ import Button from '@/components/ui/common/Button';
 import type { AppDispatch, RootState } from '@/store/store';
 import type { Option } from '@/types/features/product/OptionsType';
 import { MdDeleteForever } from 'react-icons/md';
+import { P } from 'vitest/dist/types-e3c9754d';
 
 type Input = {
   id: number;
@@ -36,6 +37,13 @@ type OptionExpectProps = {
   option: Option;
 };
 
+type UpdateInputProps = {
+  name: string;
+  details: string;
+  options: Option[];
+  article: number;
+};
+
 const OptionExpect: React.FC<OptionExpectProps> = ({ option }) => {
   const dispatch: AppDispatch = useDispatch();
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -50,6 +58,64 @@ const OptionExpect: React.FC<OptionExpectProps> = ({ option }) => {
     } catch (error) {
       console.log('error:', error);
     }
+  };
+  const updateInputList = (option: Option): JSX.Element => {
+    return (
+      <>
+        <Input
+          label="Nom de l’ensemble d’options"
+          type="text"
+          // name="optionName"
+          textInfos="Nommez cet ensemble d’options. Par exemple, vous pourriez nommer cet ensemble d’options Couleurs ou Tailles de chemises."
+          textInfosDirection="bottom"
+          // placeholder="Taille"
+          // onChange={handleOptionName}
+          value={option.details}
+          onChange={function (
+            event: React.ChangeEvent<HTMLInputElement>
+          ): void {
+            throw new Error('Function not implemented.');
+          }}
+        />
+        <Input
+          label="Nom à afficher"
+          type="text"
+          // name="optionName"
+          textInfos="Nommez cet ensemble d’options. Par exemple, vous pourriez nommer cet ensemble d’options Couleurs ou Tailles de chemises."
+          textInfosDirection="bottom"
+          // placeholder="Taille"
+          // onChange={handleOptionName}
+          value={option.name}
+          onChange={function (
+            event: React.ChangeEvent<HTMLInputElement>
+          ): void {
+            throw new Error('Function not implemented.');
+          }}
+        />
+        <Input
+          label="Type d'ensemble d’options"
+          type="radio"
+          name="optionType"
+          textInfos="Choisissez entre afficher les options uniquement en format texte ou à la fois en format texte et en plage de couleurs lors du passage en caisse."
+          textInfosDirection="bottom"
+          // @ts-ignore
+          radioValues={['Texte', 'Couleur et texte']}
+          // onChange={handleOptionType}
+          value="text"
+          // className="checked"
+        />
+        <Options
+          className="w-full"
+          name="options"
+          placeholder="Ajouter une option"
+          options={option.options}
+          // onChange={handleOnChangeOption}
+          // onKeyDown={handleOnChangeOption}
+          value={option.name ? option.name : ''}
+          // deleteOption={deleteOption}
+        />
+      </>
+    );
   };
   return (
     <>
@@ -86,27 +152,11 @@ const OptionExpect: React.FC<OptionExpectProps> = ({ option }) => {
           </button>
           <h2 className="font-bold text-lg">Modifier l’ensemble d’options</h2>
           <div>
+            {updateInputList(option)}
             {/* ts-ignore */}
-            <Input
-              label="Nom de l'ensemble d'options"
-              type="text"
-              name="optionName"
-              textInfos="Nommez cet ensemble d’options. Par exemple, vous pourriez nommer cet ensemble d’options Couleurs ou Tailles de chemises."
-              textInfosDirection="bottom"
-              // placeholder="Taille"
-              // onChange={handleOptionName}
-              value={option.details}
-              onChange={function (
-                event: React.ChangeEvent<HTMLInputElement>
-              ): void {
-                throw new Error('Function not implemented.');
-              }}
-            />
           </div>
           <div className="modal-action">
-            <a href="#" className="btn">
-              Yay!
-            </a>
+            <Button type="submit">Enregistrer</Button>
           </div>
         </div>
       </div>

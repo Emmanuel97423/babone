@@ -28,10 +28,10 @@ const Options: React.FC<Props> = ({
   // };
   const optionsContent = options.map((option: string, index: number) => (
     <div key={index} className="w-full flex justify-between items-center">
-      <Input
+      <input
         value={option}
         type="text"
-        className="input rounded-none    w-full my-2 focus:outline-none"
+        className="input rounded-none w-full my-2 focus:outline-none"
         // onChange={(e) => onChange(e)}
       />
       <MdDeleteForever
