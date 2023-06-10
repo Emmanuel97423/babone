@@ -44,18 +44,29 @@ export const fetchOptions = createAsyncThunk('product/options', async(payload:{ 
 })
 
 export const addOptions = createAsyncThunk('product/addOptions', async(payload:{ data:Option})=>{
-    console.log('payload:', payload.data)
-    const { data:response, error} = await supabase.from('option').insert(payload.data)
-    console.log('response:', response)
+    const { data, error} = await supabase.from('option').insert(payload.data).select()
+    console.log('response:', data)
 
      if (error) {
         console.log('error:', error)
         throw new Error(error.message)
     }
   
-    return response
+    return data[0]
     
 })
+
+export const deleteOptions = createAsyncThunk('product/deleteOptions', async(payload:{ optionId:string})=>{
+    const {  error} = await supabase.from('option').delete().eq('id',payload.optionId)
+
+     if (error) {
+        console.log('error:', error)
+        throw new Error(error.message)
+    }
+  
+    
+})
+
 
 const initialState = {
     entities: [],
@@ -86,10 +97,28 @@ const OptionSlice = createSlice({
             state.loading="pending"
         })
         .addCase(addOptions.fulfilled,(state, action)=>{
+            console.log('action:', action.payload)
+            console.log('action.meta.arg.data:', action.meta.arg.data)
+            if(action.payload!==null){
+               state.entities.push(action.payload as Option)
+            }
             state.loading="succeeded"
             
         })
         .addCase(addOptions.rejected,(state, action)=>{
+            state.error = action.error.message 
+        })
+        //Delete Option
+         .addCase(deleteOptions.pending,(state, action)=>{
+            state.loading="pending"
+        })
+        .addCase(deleteOptions.fulfilled,(state, action)=>{
+            state.entities = state.entities.filter(
+                    (option) => option.id !== action.meta.arg.optionId
+             );
+            state.loading="succeeded"           
+        })
+        .addCase(deleteOptions.rejected,(state, action)=>{
             state.error = action.error.message 
         })
        

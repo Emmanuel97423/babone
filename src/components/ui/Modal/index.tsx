@@ -5,6 +5,7 @@ type Props = {
   labelButton?: string;
   labelModal?: string;
   children: ReactNode;
+  className?: string;
 };
 
 const Modal: React.FC<Props> = ({ children, ...props }) => {

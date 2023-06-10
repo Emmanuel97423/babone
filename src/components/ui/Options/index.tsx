@@ -11,6 +11,7 @@ type Props = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: any) => void;
   deleteOption?: (option: string) => void;
+  className?: string;
 };
 
 const Options: React.FC<Props> = ({
@@ -51,7 +52,7 @@ const Options: React.FC<Props> = ({
       <input
         name={name}
         type="text"
-        className="input rounded-none border-t-1 border-white  focus:outline-none"
+        className="w-full input rounded-none border-t-1 border-white  focus:outline-none"
         placeholder={props.placeholder}
         onKeyDown={onKeyDown}
         onChange={onChange}

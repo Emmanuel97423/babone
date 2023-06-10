@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   addOptions,
   selectOptions,
-  fetchOptions
+  fetchOptions,
+  deleteOptions
 } from '@/features/product/options/optionSlice';
 
 import Modal from '@/components/ui/Modal';
@@ -13,6 +14,7 @@ import Options from '@/components/ui/Options';
 import Button from '@/components/ui/common/Button';
 import type { AppDispatch, RootState } from '@/store/store';
 import type { Option } from '@/types/features/product/OptionsType';
+import { MdDeleteForever } from 'react-icons/md';
 
 type Input = {
   id: number;
@@ -35,9 +37,19 @@ type OptionExpectProps = {
 };
 
 const OptionExpect: React.FC<OptionExpectProps> = ({ option }) => {
+  const dispatch: AppDispatch = useDispatch();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const handleUpdate = (e: React.MouseEvent, optionId: string | undefined) => {
     setOpenModal(true);
+  };
+  const handleDeleteOptions = async (optionId: string | undefined) => {
+    try {
+      if (optionId) {
+        await dispatch(deleteOptions({ optionId: optionId }));
+      }
+    } catch (error) {
+      console.log('error:', error);
+    }
   };
   return (
     <>
@@ -49,6 +61,17 @@ const OptionExpect: React.FC<OptionExpectProps> = ({ option }) => {
         <td>{option.details}</td>
         <td>{option.options.join(', ')}</td>
         <td>0</td>
+        <td>
+          <MdDeleteForever
+            size={22}
+            className=" cursor-pointer"
+            onClick={() => {
+              if (option) {
+                handleDeleteOptions(option.id);
+              }
+            }}
+          />
+        </td>
       </tr>
       <div
         className={`modal ${openModal ? 'modal-open' : ''}   `}
@@ -144,6 +167,7 @@ const AddOptions: React.FC = () => {
       const record = options.find(
         (item) => item.toLowerCase() === optionSelected.toLowerCase()
       );
+      setOptionName('');
 
       if (record) {
         return;
@@ -178,11 +202,9 @@ const AddOptions: React.FC = () => {
   const handleClickSubmit = async (e: React.MouseEvent<HTMLInputElement>) => {
     e.stopPropagation();
 
-    console.log('e:', e);
-
     if (canSave) {
       try {
-        const response = dispatch(
+        const resultAction = await dispatch(
           addOptions({
             data: {
               details: optionDetails,
@@ -192,12 +214,20 @@ const AddOptions: React.FC = () => {
               storeId: '123456'
             }
           })
-        ).unwrap();
-        console.log('response:', response);
+        );
+        if (addOptions.fulfilled.match(resultAction)) {
+          // Here you might want to clear the form inputs
+          setOptionDetails('');
+          setOptionName('');
+          setOptionType('text');
+          setOptions([]);
+        } else {
+          // Handle the case when it is rejected.
+          console.log('Rejected:', resultAction.payload);
+        }
       } catch (error) {
         console.log('error:', error);
       }
-    } else {
     }
   };
   const deleteOption = (option: string) => {
@@ -234,12 +264,15 @@ const AddOptions: React.FC = () => {
               <th>Nom de l'ensemble</th>
               <th>Options</th>
               <th>Article</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            {optionRedux.map((option) => (
-              <OptionExpect key={option.id} option={option} />
-            ))}
+            <>
+              {optionRedux.map((option) => (
+                <OptionExpect key={option.id} option={option} />
+              ))}
+            </>
           </tbody>
         </table>
       </div>
@@ -256,10 +289,13 @@ const AddOptions: React.FC = () => {
           articles avec des valeurs pouvant être sélectionnées au moment du
           passage en caisse.
         </p>
-        <Modal labelButton="Créer un ensemble d'options">
+        <Modal
+          labelButton="Créer un ensemble d'options"
+          className="flex flex-col"
+        >
           <Form
             className="flex flex-col items-stretch"
-            onSubmit={handleSubmitForm}
+            // onSubmit={handleSubmitForm}
           >
             {InputOptionDetails}
 
@@ -284,20 +320,21 @@ const AddOptions: React.FC = () => {
               onChange={handleOptionType}
               value={optionType}
             />
-            <Options
-              name="options"
-              placeholder="Ajouter une option"
-              options={options}
-              onChange={handleOnChangeOption}
-              onKeyDown={handleOnChangeOption}
-              value={optionName}
-              deleteOption={deleteOption}
-            />
-
-            <Button type="submit" onClick={handleClickSubmit}>
-              Enregistrer
-            </Button>
           </Form>
+          <Options
+            className="w-full"
+            name="options"
+            placeholder="Ajouter une option"
+            options={options}
+            onChange={handleOnChangeOption}
+            onKeyDown={handleOnChangeOption}
+            value={optionName}
+            deleteOption={deleteOption}
+          />
+
+          <Button type="submit" onClick={handleClickSubmit}>
+            Enregistrer
+          </Button>
         </Modal>
       </div>
       <div className="w-full">{optionsList}</div>

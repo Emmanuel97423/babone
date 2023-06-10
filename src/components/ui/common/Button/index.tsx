@@ -27,7 +27,11 @@ interface Props {
 }
 const Button: React.FC<Props> = ({ children, ...props }) => {
   return (
-    <button className="btn btn-primary my-4" onClick={props.onClick} {...props}>
+    <button
+      className="btn btn-primary my-4 w-full"
+      onClick={props.onClick}
+      {...props}
+    >
       {children}
     </button>
   );

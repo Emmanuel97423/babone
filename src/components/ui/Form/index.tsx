@@ -14,7 +14,7 @@ type Inputs = {
 const Form: React.FC<Props> = ({ onSubmit, children, ...props }) => {
   return (
     <form
-      onSubmit={onSubmit}
+      // onSubmit={onSubmit}
       className={`${props.className ? props.className : ''}`}
     >
       {children}
