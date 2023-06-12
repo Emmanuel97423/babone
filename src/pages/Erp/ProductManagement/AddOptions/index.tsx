@@ -4,7 +4,8 @@ import {
   addOptions,
   selectOptions,
   fetchOptions,
-  deleteOptions
+  deleteOptions,
+  updateOptions
 } from '@/features/product/options/optionSlice';
 
 import Modal from '@/components/ui/Modal';
@@ -38,10 +39,132 @@ type OptionExpectProps = {
 };
 
 type UpdateInputProps = {
-  name: string;
-  details: string;
-  options: Option[];
-  article: number;
+  option: Option;
+};
+
+const UpdateInputList: React.FC<UpdateInputProps> = ({ option }) => {
+  const [details, setDetails] = useState<string>(option.details);
+  const [name, setName] = useState<string>(option.name || '');
+  const [type, setType] = useState<string>('');
+  const [options, setOptions] = useState<string[]>(option.options);
+  const [optionSelected, setOptionSelected] = useState<string>('');
+
+  const dispatch: AppDispatch = useDispatch();
+
+  const handleDetails: (e: React.ChangeEvent<HTMLInputElement>) => void = (
+    e
+  ) => {
+    setDetails(e.target.value);
+  };
+  const handleName: (e: React.ChangeEvent<HTMLInputElement>) => void = (e) => {
+    setName(e.target.value);
+  };
+  const handleUpdateOption = (
+    index: number,
+    oldValue: string,
+    newValue: string
+  ) => {
+    setOptions((options) =>
+      options.map((option, i) => (i === index ? newValue : option))
+    );
+  };
+  const handleOnChangeOption = (e: any) => {
+    e.stopPropagation();
+
+    setOptionSelected(e.target.value);
+    if (e.key === 'Enter') {
+      // const option = e.target.value;
+      const record = options.find(
+        (item) => item.toLowerCase() === optionSelected.toLowerCase()
+      );
+
+      if (record) {
+        return;
+      }
+
+      setOptions([...options, optionSelected]);
+    }
+  };
+  const deleteOption = (option: string) => {
+    let array = options;
+    array = array.filter((item) => item.toLowerCase() !== option);
+    setOptions((options) => options.filter((item) => item !== option));
+  };
+  const handleSubmit = async () => {
+    try {
+      const reponse = await dispatch(
+        updateOptions({
+          data: {
+            id: option.id,
+            name: name,
+            details: details,
+            options: options,
+            storeId: option.storeId,
+            type: 'text'
+          }
+        })
+      );
+      console.log('reponse:', reponse);
+    } catch (error) {
+      console.log('error:', error);
+    }
+  };
+  return (
+    <>
+      <Input
+        label="Nom de l’ensemble d’options"
+        type="text"
+        // name="optionName"
+        textInfos="Nommez cet ensemble d’options. Par exemple, vous pourriez nommer cet ensemble d’options Couleurs ou Tailles de chemises."
+        textInfosDirection="bottom"
+        // placeholder="Taille"
+        onChange={handleDetails}
+        value={details}
+        // onChange={function (event: React.ChangeEvent<HTMLInputElement>): void {
+        //   throw new Error('Function not implemented.');
+        // }}
+      />
+      <Input
+        label="Nom à afficher"
+        type="text"
+        // name="optionName"
+        textInfos="Nommez cet ensemble d’options. Par exemple, vous pourriez nommer cet ensemble d’options Couleurs ou Tailles de chemises."
+        textInfosDirection="bottom"
+        // placeholder="Taille"
+        onChange={handleName}
+        value={name}
+        // onChange={function (event: React.ChangeEvent<HTMLInputElement>): void {
+        //   throw new Error('Function not implemented.');
+        // }}
+      />
+      <Input
+        label="Type d'ensemble d’options"
+        type="radio"
+        name="optionType"
+        textInfos="Choisissez entre afficher les options uniquement en format texte ou à la fois en format texte et en plage de couleurs lors du passage en caisse."
+        textInfosDirection="bottom"
+        // @ts-ignore
+        radioValues={['Texte', 'Couleur et texte']}
+        // onChange={handleOptionType}
+        value="text"
+        // className="checked"
+      />
+      <Options
+        className="w-full"
+        name="options"
+        placeholder="Ajouter une option"
+        options={options}
+        onChange={handleOnChangeOption}
+        onUpdateOption={handleUpdateOption}
+        onKeyDown={handleOnChangeOption}
+        value={option.name ? option.name : ''}
+        deleteOption={deleteOption}
+      />
+      <Button type="submit" onClick={handleSubmit}>
+        Enregistrer
+      </Button>
+    </>
+  );
 };
 
 const OptionExpect: React.FC<OptionExpectProps> = ({ option }) => {
@@ -59,108 +182,28 @@ const OptionExpect: React.FC<OptionExpectProps> = ({ option }) => {
       console.log('error:', error);
     }
   };
-  const updateInputList = (option: Option): JSX.Element => {
-    return (
-      <>
-        <Input
-          label="Nom de l’ensemble d’options"
-          type="text"
-          // name="optionName"
-          textInfos="Nommez cet ensemble d’options. Par exemple, vous pourriez nommer cet ensemble d’options Couleurs ou Tailles de chemises."
-          textInfosDirection="bottom"
-          // placeholder="Taille"
-          // onChange={handleOptionName}
-          value={option.details}
-          onChange={function (
-            event: React.ChangeEvent<HTMLInputElement>
-          ): void {
-            throw new Error('Function not implemented.');
-          }}
-        />
-        <Input
-          label="Nom à afficher"
-          type="text"
-          // name="optionName"
-          textInfos="Nommez cet ensemble d’options. Par exemple, vous pourriez nommer cet ensemble d’options Couleurs ou Tailles de chemises."
-          textInfosDirection="bottom"
-          // placeholder="Taille"
-          // onChange={handleOptionName}
-          value={option.name}
-          onChange={function (
-            event: React.ChangeEvent<HTMLInputElement>
-          ): void {
-            throw new Error('Function not implemented.');
-          }}
-        />
-        <Input
-          label="Type d'ensemble d’options"
-          type="radio"
-          name="optionType"
-          textInfos="Choisissez entre afficher les options uniquement en format texte ou à la fois en format texte et en plage de couleurs lors du passage en caisse."
-          textInfosDirection="bottom"
-          // @ts-ignore
-          radioValues={['Texte', 'Couleur et texte']}
-          // onChange={handleOptionType}
-          value="text"
-          // className="checked"
-        />
-        <Options
-          className="w-full"
-          name="options"
-          placeholder="Ajouter une option"
-          options={option.options}
-          // onChange={handleOnChangeOption}
-          // onKeyDown={handleOnChangeOption}
-          value={option.name ? option.name : ''}
-          // deleteOption={deleteOption}
-        />
-      </>
-    );
-  };
+
   return (
-    <>
-      <tr
-        key={option.id}
-        className="hover cursor-pointer"
-        onClick={(e) => handleUpdate(e, option.id)}
-      >
-        <td>{option.details}</td>
-        <td>{option.options.join(', ')}</td>
-        <td>0</td>
-        <td>
-          <MdDeleteForever
-            size={22}
-            className=" cursor-pointer"
-            onClick={() => {
-              if (option) {
-                handleDeleteOptions(option.id);
-              }
-            }}
-          />
-        </td>
-      </tr>
-      <div
-        className={`modal ${openModal ? 'modal-open' : ''}   `}
-        id="update_option_modal"
-      >
-        <div className="modal-box">
-          <button
-            onClick={() => setOpenModal(false)}
-            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-          >
-            ✕
-          </button>
-          <h2 className="font-bold text-lg">Modifier l’ensemble d’options</h2>
-          <div>
-            {updateInputList(option)}
-            {/* ts-ignore */}
-          </div>
-          <div className="modal-action">
-            <Button type="submit">Enregistrer</Button>
-          </div>
-        </div>
-      </div>
-    </>
+    <tr
+      key={option.id}
+      className="hover cursor-pointer"
+      onClick={(e) => handleUpdate(e, option.id)}
+    >
+      <td>{option.details}</td>
+      <td>{option.options.join(', ')}</td>
+      <td>0</td>
+      <td>
+        <MdDeleteForever
+          size={22}
+          className=" cursor-pointer"
+          onClick={() => {
+            if (option) {
+              handleDeleteOptions(option.id);
+            }
+          }}
+        />
+      </td>
+    </tr>
   );
 };
 
@@ -171,6 +214,7 @@ const AddOptions: React.FC = () => {
   const [optionName, setOptionName] = useState<string>('');
   const [optionType, setOptionType] = useState<string>('text');
   const [optionSelected, setOptionSelected] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const optionRedux = useSelector(selectOptions);
   const optionReduxStatus = useSelector(
@@ -189,19 +233,22 @@ const AddOptions: React.FC = () => {
     Boolean
   );
 
-  const handleOptionDetails = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      e.stopPropagation();
+  const handleOptionDetails = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
 
-      setOptionDetails(e.target.value);
-    },
-    [optionDetails]
-  );
+    setOptionDetails(e.target.value);
+  };
+
   const handleOptionName = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
 
     setOptionName(e.target.value);
   };
+  // const handleOptionName = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   e.stopPropagation();
+
+  //   setOptionName(e.target.value);
+  // };
   const handleOptionType = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
 
@@ -217,7 +264,6 @@ const AddOptions: React.FC = () => {
       const record = options.find(
         (item) => item.toLowerCase() === optionSelected.toLowerCase()
       );
-      setOptionName('');
 
       if (record) {
         return;
@@ -245,10 +291,9 @@ const AddOptions: React.FC = () => {
   //   }
   // };
 
-  const handleSubmitForm = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // e.stopPropagation();
-  };
+  // const handleSubmitForm = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  // };
   const handleClickSubmit = async (e: React.MouseEvent<HTMLInputElement>) => {
     e.stopPropagation();
 
@@ -266,6 +311,7 @@ const AddOptions: React.FC = () => {
           })
         );
         if (addOptions.fulfilled.match(resultAction)) {
+          setIsModalOpen(false);
           // Here you might want to clear the form inputs
           setOptionDetails('');
           setOptionName('');
@@ -301,34 +347,46 @@ const AddOptions: React.FC = () => {
     );
   }, [optionDetails]);
 
+  const InputOptionName = useMemo(() => {
+    return (
+      <Input
+        label="Nom à afficher"
+        type="text"
+        name="optionName"
+        textInfos="Choisissez un nom à afficher pour cet ensemble d’options lors du paiement."
+        textInfosDirection="bottom"
+        placeholder="Taille"
+        onChange={handleOptionName}
+        value={optionName}
+      />
+    );
+  }, [optionName]);
+
   let optionsList;
 
   if (optionReduxStatus === 'idle') {
-    optionsList = <>Loading...</>;
+    optionsList = (
+      <tr>
+        <td>Loading...</td>
+      </tr>
+    );
   } else if (optionReduxStatus === 'succeeded') {
     optionsList = (
-      <div className="w-full overflow-x-auto">
-        <table className="table w-full">
-          <thead>
-            <tr>
-              <th>Nom de l'ensemble</th>
-              <th>Options</th>
-              <th>Article</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <>
-              {optionRedux.map((option) => (
-                <OptionExpect key={option.id} option={option} />
-              ))}
-            </>
-          </tbody>
-        </table>
-      </div>
+      <>
+        {optionRedux.map((option) => (
+          <OptionExpect
+            key={option.id}
+            option={{ ...option, type: option.type || 'defaultType' }}
+          />
+        ))}
+      </>
     );
   } else if (optionReduxStatus === 'failed') {
-    optionsList = <div>Error</div>;
+    optionsList = (
+      <tr>
+        <td>Une erreur s'est produite...</td>
+      </tr>
+    );
   }
   return (
     <div className="w-full flex flex-col">
@@ -340,6 +398,8 @@ const AddOptions: React.FC = () => {
           passage en caisse.
         </p>
         <Modal
+          isOpenModal={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
           labelButton="Créer un ensemble d'options"
           className="flex flex-col"
         >
@@ -348,17 +408,8 @@ const AddOptions: React.FC = () => {
             // onSubmit={handleSubmitForm}
           >
             {InputOptionDetails}
+            {InputOptionName}
 
-            <Input
-              label="Nom à afficher"
-              type="text"
-              name="optionName"
-              textInfos="Choisissez un nom à afficher pour cet ensemble d’options lors du paiement."
-              textInfosDirection="bottom"
-              placeholder="Taille"
-              onChange={handleOptionName}
-              value={optionName}
-            />
             <Input
               label="Type d'ensemble d’options"
               type="radio"
@@ -378,7 +429,7 @@ const AddOptions: React.FC = () => {
             options={options}
             onChange={handleOnChangeOption}
             onKeyDown={handleOnChangeOption}
-            value={optionName}
+            value=""
             deleteOption={deleteOption}
           />
 
@@ -387,7 +438,22 @@ const AddOptions: React.FC = () => {
           </Button>
         </Modal>
       </div>
-      <div className="w-full">{optionsList}</div>
+      <div className="w-full">
+        <div className="w-full overflow-x-auto">
+          <table className="table w-full">
+            <thead>
+              <tr>
+                <th>Nom de l'ensemble</th>
+                <th>Options</th>
+                <th>Article</th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody>{optionsList}</tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

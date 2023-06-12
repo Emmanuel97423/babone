@@ -14,6 +14,7 @@ type InputProps = {
   textInfosDirection?: string;
   radioValues?: radioValue[];
   option?: string;
+  checked?: boolean;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -56,7 +57,7 @@ const Input: React.FC<InputProps> = ({ ...props }) => {
               className={`radio `}
               disabled={value.toString() === 'Couleur et texte' && true}
               checked={value.toString() === 'Texte' ? true : false}
-              onChange={props.onChange}
+              readOnly={value.toString() === 'Texte' ? true : false}
             />
           </label>
         ))}
