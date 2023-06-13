@@ -203,6 +203,26 @@ const OptionExpect: React.FC<OptionExpectProps> = ({ option }) => {
           }}
         />
       </td>
+      <div
+        className={`modal ${openModal ? 'modal-open' : ''}   `}
+        id="update_option_modal"
+      >
+        <div className="modal-box">
+          <button
+            onClick={() => setOpenModal(false)}
+            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          >
+            ✕
+          </button>
+          <h2 className="font-bold text-lg">Modifier l’ensemble d’options</h2>
+          <div>
+            {/* {updateInputList(option)} */}
+            <UpdateInputList option={option} />
+            {/* ts-ignore */}
+          </div>
+          <div className="modal-action"></div>
+        </div>
+      </div>
     </tr>
   );
 };

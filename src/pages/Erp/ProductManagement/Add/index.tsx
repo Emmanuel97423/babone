@@ -3,12 +3,12 @@ import Modal from '../../../../components/erp/Product/Add/Modal';
 
 const AddProduct: React.FC = () => {
   return (
-    <div className=" p-4 flex flex-col justify-center items-center z-40  relative">
+    <div className="  p-4 flex flex-col justify-center items-center z-40  relative">
       <h1 className="text-3xl font-bold">Créer un produit</h1>
-      <div className="form-control  ">
+      <div className="form-control mx-52 ">
         <h2 className="text-xl py-4 font-bold">Détails</h2>
 
-        <div className="flex">
+        <div className="flex justify-between">
           <div className="flex flex-col mr-2">
             {' '}
             {/* <label htmlFor="name" className="label ">
@@ -18,7 +18,7 @@ const AddProduct: React.FC = () => {
               id="name"
               type="text"
               placeholder="Nom"
-              className="input input-bordered w-full max-w-xl  hover:input-accent "
+              className="input input-bordered w-full  hover:input-accent "
             />
             {/* <label className="label">
               <span className="label-text">Catégorie</span>
@@ -47,6 +47,17 @@ const AddProduct: React.FC = () => {
           className="textarea textarea-bordered textarea-lg w-full  hover:input-accent"
         ></textarea>
         <button className=" w-full btn mt-4">Point de vente</button>
+        <div className="flex flex-col">
+          <h2 className="text-xl font-bold ">Options</h2>
+          <p className="text-justify">
+            Appliquez un groupe d’options personnalisées à un article pour créer
+            des variantes. Par exemple, les options de format peuvent créer les
+            variantes tel que «petit, moyen et grand».
+          </p>
+          <div>
+            <h3>Nom de l’ensemble d’options</h3>
+          </div>
+        </div>
         <div>
           <div className="flex py-12 justify-between items-center">
             <h2 className="text-xl font-bold ">Variantes</h2>
