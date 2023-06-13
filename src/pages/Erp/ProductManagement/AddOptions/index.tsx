@@ -8,7 +8,7 @@ import {
   updateOptions
 } from '@/features/product/options/optionSlice';
 
-import Modal from '@/components/ui/Modal';
+import ModalUI from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
 import Form from '@/components/ui/Form';
 import Options from '@/components/ui/Options';
@@ -277,19 +277,19 @@ const AddOptions: React.FC = () => {
 
   const handleOnChangeOption = (e: any) => {
     e.stopPropagation();
-
     setOptionSelected(e.target.value);
+
     if (e.key === 'Enter') {
-      // const option = e.target.value;
-      const record = options.find(
-        (item) => item.toLowerCase() === optionSelected.toLowerCase()
-      );
-
-      if (record) {
-        return;
+      if (optionSelected !== '') {
+        const record = options.find(
+          (item) => item.toLowerCase() === optionSelected.toLowerCase()
+        );
+        if (record) {
+          return;
+        }
+        setOptions([...options, optionSelected]);
       }
-
-      setOptions([...options, optionSelected]);
+      // const option = e.target.value;
     }
   };
 
@@ -417,7 +417,8 @@ const AddOptions: React.FC = () => {
           articles avec des valeurs pouvant être sélectionnées au moment du
           passage en caisse.
         </p>
-        <Modal
+        <ModalUI
+          titleModal="Créer un ensemble d’options"
           isOpenModal={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           labelButton="Créer un ensemble d'options"
@@ -456,7 +457,7 @@ const AddOptions: React.FC = () => {
           <Button type="submit" onClick={handleClickSubmit}>
             Enregistrer
           </Button>
-        </Modal>
+        </ModalUI>
       </div>
       <div className="w-full">
         <div className="w-full overflow-x-auto">

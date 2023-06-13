@@ -57,25 +57,12 @@ const SideBar: React.FC = () => {
           icon: <AiOutlinePlusCircle />
         }
       ]
+    },
+    {
+      title: 'Options',
+      link: '/erp/options',
+      icon: <MdPointOfSale />
     }
-    // {
-    //   title: 'Catégorie',
-    //   link: '/erp/categori',
-    //   icon: <MdPointOfSale />
-    // },
-    // {
-    //   title: 'Produits',
-    //   link: '/erp/products-management',
-    //   icon: <FaFish />,
-    //   subMenu: true,
-    //   subMenuItems: [
-    //     {
-    //       title: 'Ajouter un produit',
-    //       link: '/erp/products-management/add',
-    //       icon: <AiOutlinePlusCircle />
-    //     }
-    //   ]
-    // }
   ];
 
   const handleOpen = (): void => {

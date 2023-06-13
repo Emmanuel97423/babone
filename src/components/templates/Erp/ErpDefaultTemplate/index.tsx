@@ -6,7 +6,7 @@ const ErpDefaultTemplate: React.FC = () => {
       <div>
         <SideBar />
       </div>
-      <div className="overflow-x-auto overflow-y-auto  w-full h-screen flex justify-center">
+      <div className="overflow-x-auto overflow-y-auto  w-full h-screen ">
         <Outlet />
       </div>
     </div>
