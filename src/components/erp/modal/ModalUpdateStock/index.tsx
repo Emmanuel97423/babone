@@ -27,9 +27,7 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
   const [motifCode, setMotifCode] = useState<number>(0);
   const [isDamageSelected, setIsDamageSelected] = useState<boolean>(false);
   const [stockValue, setStockValue] = useState<number | undefined | any>(0);
-  const [stockAjustement, setStockAjustement] = useState<
-    number | undefined | any
-  >(0);
+  const [stockAjustement, setStockAjustement] = useState<any>('0');
   const [currentStock, setCurrentStock] = useState<number | undefined | any>();
 
   const motifs: Motif[] = [
@@ -123,7 +121,15 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
   const updateAjustement: (e: React.ChangeEvent<HTMLInputElement>) => void = (
     e
   ) => {
-    setStockAjustement(parseInt(e.target.value));
+    console.log(
+      '!Number.isFinite(e.target.value):',
+      !Number.isFinite(e.target.value)
+    );
+    if (!Number.isFinite(e.target.value)) {
+      setStockAjustement(parseInt(e.target.value));
+
+      return;
+    }
   };
 
   const handleUpdateStock: React.MouseEventHandler<
@@ -182,7 +188,7 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
           </td>
           <td>
             <input
-              type="string"
+              type="number"
               value={stockAjustement}
               placeholder="0"
               className="input input-bordered w-20  appearance-none"
@@ -191,12 +197,12 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
                 ajustementOnBlur(e, productVariant?.id);
               }}
               onChange={updateAjustement}
-              min="0"
+              min="1"
             />
           </td>
           <td>
             <input
-              type="string"
+              type="number"
               value={stockValue}
               // placeholder={10}
               className="input input-bordered w-20 "
@@ -213,7 +219,11 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
               onChange={updateStock}
             />
           </td>
-          <td>
+          <td
+          // className={`${
+          //   isNaN(currentStock) || isNaN(stockValue) ? 'hidden' : ''
+          // }`}
+          >
             <button
               onClick={handleUpdateStock}
               className={`"flex justify-center items-center btn bg-primary :hover-accent" ${

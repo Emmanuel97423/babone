@@ -1,4 +1,4 @@
-export interface Option {
+export type Option = {
     id?: string;
     name?:string;
     details:string;

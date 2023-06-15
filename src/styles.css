@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* * {
+  box-shadow: 0 0 0 3px red
+  inset
+} */
+
 h1 {
   text-align: center;
 }

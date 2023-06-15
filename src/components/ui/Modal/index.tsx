@@ -3,14 +3,16 @@ import Button from '@/components/ui/common/Button';
 
 type Props = {
   labelButton?: string;
+  titleModal?: string;
   labelModal?: string;
   children: ReactNode;
   className?: string;
+  btnClassName?: string;
   isOpenModal: boolean;
   setIsModalOpen: (open: boolean) => void;
 };
 
-const Modal: React.FC<Props> = ({
+const ModalUI: React.FC<Props> = ({
   children,
   isOpenModal,
   setIsModalOpen,
@@ -22,7 +24,9 @@ const Modal: React.FC<Props> = ({
 
       <label
         htmlFor="my-modal-default"
-        className="btn btn-primary"
+        className={`${
+          props.btnClassName ? props.btnClassName : 'btn btn-primary '
+        }${props.labelButton ? '' : 'hidden'}`}
         onClick={() => setIsModalOpen(true)}
       >
         {props.labelButton}
@@ -31,7 +35,7 @@ const Modal: React.FC<Props> = ({
       {/* Put this part before </body> tag */}
       {/* <input type="checkbox" id="my-modal-default" className="modal-toggle" /> */}
       <div className={`modal ${isOpenModal ? 'modal-open' : ''}   `}>
-        <div className="modal-box relative w-screen h-screen ">
+        <div className="modal-box relative  h-screen ">
           <label
             htmlFor="my-modal-default"
             className="btn btn-sm btn-circle absolute right-2 top-2"
@@ -39,7 +43,7 @@ const Modal: React.FC<Props> = ({
           >
             ✕
           </label>
-          <h2>Créer un ensemble d’options</h2>
+          <h2>{props.titleModal}</h2>
           <div className="relative pt-6">{children}</div>
         </div>
       </div>
@@ -47,4 +51,4 @@ const Modal: React.FC<Props> = ({
   );
 };
 
-export default Modal;
+export default ModalUI;

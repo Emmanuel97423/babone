@@ -1,18 +1,20 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {supabase} from '@/utils/supabaseClient';
+import type {Option} from '@/types/features/product/OptionsType'
+import {RootState} from '@/store/store';
 
 
 
-interface Option {
-    id?: string;
-    name?:string;
-    details:string;
-    type?:string;
-    options: string[];
-    storeId?:string;
+// interface Option {
+//     id?: string;
+//     name?:string;
+//     details:string;
+//     type?:string;
+//     options: string[];
+//     storeId?:string;
    
 
-};
+// };
 
 interface OptionState {
   entities: Option[]
@@ -20,17 +22,7 @@ interface OptionState {
   error?:string
 }
 
-// export const addNewsOptions = createAsyncThunk(`options/addOptions`, async(payload:{options:Option, storeId:string})=>{
-//     console.log('payload:', payload)
-//     const response = await fetch(`${import.meta.env.API_BASE_URL}/options/add`,{
-//         method: 'GET',
-//         body:JSON.stringify(payload),
-//         headers: {
-//             'content-type': 'application/json'
-//         }
-//     });
-//     return (await response.json()) as Option
-// })
+
 
 export const fetchOptions = createAsyncThunk('product/options', async(payload:{ storeId:string})=>{
     const { data: options, error} = await supabase.from('option').select().eq('storeId', payload.storeId)
@@ -38,6 +30,19 @@ export const fetchOptions = createAsyncThunk('product/options', async(payload:{ 
      if (error) {
         throw new Error(error.message)
     }
+  
+    return options
+    
+})
+
+export const fetchOptionById = createAsyncThunk('product/optionById', async(payload:{ optionId:string})=>{
+    console.log('payload:', payload)
+    const { data: options, error} = await supabase.from('option').select().eq('id', payload.optionId)
+
+     if (error) {
+        throw new Error(error.message)
+    }
+    console.log('options:', options)
   
     return options
     
@@ -107,6 +112,19 @@ const OptionSlice = createSlice({
             state.loading="failed"
             state.error = action.error.message  
         })
+        //Fetch By id
+         builder.addCase(fetchOptionById.pending, (state, action)=>{
+            state.loading = 'pending'
+        })
+        .addCase(fetchOptionById.fulfilled,(state, action)=>{
+            state.loading='succeeded'
+            state.entities = action.payload as Option[]
+        })
+        .addCase(fetchOptionById.rejected,(state, action)=>{
+            state.loading="failed"
+            state.error = action.error.message  
+        })
+        
          //Add Option builder
         .addCase(addOptions.pending,(state, action)=>{
             state.loading="pending"
@@ -166,5 +184,9 @@ const OptionSlice = createSlice({
 });
 
 export const selectOptions = (state: { options: { entities: Option[]; }; }) => state.options.entities;
+export const optionsById=(state:RootState, optionId:string)=> state.options.entities.find((option:Option)=> option.id === optionId)
+console.log('optionsById:', optionsById)
+// export const selectPostById = (state, postId) =>
+//   state.posts.posts.find((post) => post.id === postId)
 
 export default OptionSlice.reducer;
