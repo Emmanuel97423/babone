@@ -9,6 +9,7 @@ const Collapse: React.FC<Props> = ({ children, ...props }) => {
     content = (
       <div className="collapse">
         <input type="checkbox" className="peer" />
+        {/* @ts-ignore */}
         <Input type="text" label="options" />
 
         <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">

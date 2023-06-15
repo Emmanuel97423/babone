@@ -21,11 +21,11 @@ const Dropdown: React.FC<Props> = ({ options, placeholder }) => {
       <input
         type="text"
         placeholder={placeholder ? placeholder : 'Catégorie'}
-        className="input input-bordered w-full max-w-xs hover:input-accent "
+        className="input input-bordered w-full  hover:input-accent "
       />
       <ul
         tabIndex={0}
-        className="dropdown-content menu w-full max-w-xs shadow bg-base-100 rounded-b-lg mt-1"
+        className="dropdown-content menu w-full  shadow bg-base-100 rounded-b-lg mt-1"
       >
         {sampleOption?.map((option, index) => (
           <li key={index} className="py-4 px-2 cursor-pointer hover:bg-accent">

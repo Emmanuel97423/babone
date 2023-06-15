@@ -1,10 +1,10 @@
-interface OptionProps {
+export interface OptionProps {
     name:string,
     details:string,
     value:string
 }
 
-interface VariantProps  {
+export interface VariantProps  {
     id?:string,
     name:string,
     stock:number,

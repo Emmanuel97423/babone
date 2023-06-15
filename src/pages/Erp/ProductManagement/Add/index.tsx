@@ -10,7 +10,7 @@ const AddProduct: React.FC = () => {
         <h2 className="text-xl py-4 font-bold">Détails</h2>
 
         <div className="flex justify-between">
-          <div className="flex flex-col mr-2">
+          <div className="w-full flex flex-col mr-2 ">
             {' '}
             {/* <label htmlFor="name" className="label ">
               <span className="label-text">Nom</span>

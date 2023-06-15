@@ -17,8 +17,10 @@ const AddOptionToProduct: React.FC = () => {
   const state = useSelector((state: RootState) => state);
 
   const optionsList: Option[] = useSelector(selectOptions);
+  const [optionsSelected, setOptionsSelected] = useState<Option>();
   const [modalOptionsOpen, setModalOptionsOpen] = useState<boolean>(false);
   const [optionsListString, setOptionsListString] = useState<string[]>();
+  const [searchValue, setSearchValue] = useState<string>('');
   const [isInputDisabled, setInputDisabled] = useState(true);
   const storeId = '123456';
 
@@ -30,9 +32,11 @@ const AddOptionToProduct: React.FC = () => {
     }
   };
   const handleOptions: (id: string) => void = async (id) => {
-    const optionById = optionsById(state, id);
-    if (optionById) {
-      setOptionsListString(optionById.options);
+    const optionResult = optionsById(state, id);
+    if (optionResult) {
+      setOptionsListString(optionResult.options);
+      setSearchValue(optionResult.details);
+      setOptionsSelected(optionResult);
     }
   };
 
@@ -56,27 +60,6 @@ const AddOptionToProduct: React.FC = () => {
     optionContent = <li>Error...</li>;
   }
 
-  // let optionsValues;
-  // if (fetchStatus === 'loading') {
-  //   optionsValues = <>Loading...</>;
-  // } else if (fetchStatus === 'succeeded') {
-  //   optionsValues = (
-  //     <>
-  //       {' '}
-  //       {optionsListString?.map((item, index) => (
-  //         <input
-  //           key={index}
-  //           disabled
-  //           type="text"
-  //           tabIndex={0}
-  //           className="input  py-4 rounded-none px-2 cursor-pointer  bg-inherit focus:outline-none"
-  //           value={item}
-  //         />
-  //       ))}
-  //     </>
-  //   );
-  // }
-
   return (
     <div className="flex flex-col">
       <h2 className="text-xl font-bold ">Options</h2>
@@ -86,9 +69,6 @@ const AddOptionToProduct: React.FC = () => {
         variantes tel que « petit, moyen et grand ».
       </p>
       <div>
-        {/* <button className="btn" onClick={() => setModalOptionsOpen(true)}>
-              Ajouter des options
-            </button> */}
         <ModalUI
           titleModal="Ajouter des options"
           labelButton="Ajouter des options"
@@ -117,6 +97,7 @@ const AddOptionToProduct: React.FC = () => {
                   className=" cursor-pointer  bg-inherit focus:outline-none"
                   placeholder="Rechercher"
                   onClick={handleSearch}
+                  value={searchValue}
                 />
                 <ul
                   tabIndex={0}
@@ -126,12 +107,28 @@ const AddOptionToProduct: React.FC = () => {
                 </ul>
               </div>
             </div>
-            {/* <table className="flex flex-col w-full mt-12">
-              <tr className="w-full font-semibold  text-left py-4 px-2">
-                Options
-              </tr>
-              {optionsValues}
-            </table> */}
+
+            <div
+              className={`${
+                optionsSelected
+                  ? 'flex  items-center border py-4 px-2 mt-4'
+                  : 'hidden'
+              }`}
+            >
+              <label className="font-semibold basis-1/2">
+                Nom à afficher :
+              </label>
+              <div>
+                <input
+                  disabled
+                  tabIndex={0}
+                  className=" input cursor-pointer  bg-inherit focus:outline-none"
+                  placeholder="Rechercher"
+                  value={optionsSelected?.name || ''}
+                />
+              </div>
+            </div>
+
             <table className="table-fixed w-full mt-12">
               <thead>
                 <tr>
@@ -172,24 +169,6 @@ const AddOptionToProduct: React.FC = () => {
               </tbody>
             </table>
           </div>
-
-          {/* <form className="relative flex items-center mt-4 p-4 border-2 ">
-            <label className="text-bold basis-1/2">
-              Nom de l’ensemble d’options
-            </label>
-            <div className=" basis-1/2 ">
-              <div className="absolute  flex flex-col  px-2 ">
-                <input
-                  type="text"
-                  className=" cursor-pointer  bg-inherit focus:outline-none"
-                  placeholder="Rechercher"
-                />
-                <div className="relative cursor-pointer p-2 bg-inherit">
-                  <p>Taille</p>
-                </div>
-              </div>
-            </div>
-          </form> */}
         </ModalUI>
       </div>
     </div>

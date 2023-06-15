@@ -8,6 +8,7 @@ type Props = {
 const UpdateOptionsModal: React.FC<Props> = ({ ...props }) => {
   return (
     <>
+      {/* @ts-ignore */}
       <ModalUI labelButton="Modifier l’ensemble d’options">
         Update Options
       </ModalUI>

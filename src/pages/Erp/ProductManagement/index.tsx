@@ -9,6 +9,8 @@ import {
 } from '@/features/product/productSlice';
 import ProductVariantComponent from '@/components/erp/List/ProductVariantsList';
 import Spinner from '@/components/ui/common/Spinner';
+import DropdownUI from '@/components/ui/Dropdown';
+import ImportCatalogue from '@/features/catalog/ImportCatalog';
 
 interface Props {
   product: Product;
@@ -17,6 +19,7 @@ interface Props {
 }
 
 const ProductListPage: React.FC = () => {
+  const [openModalImport, setOpenModalImport] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
   const products: Products = useSelector(selectAllProducts);
 
@@ -43,10 +46,10 @@ const ProductListPage: React.FC = () => {
         <td>{product.category}</td>
         <td>{product.stock}</td>
         <td>{product.ean}</td>
-        <td>
+        <td className=" pr-4">
           <Link
             to={`/erp/products-management/update/${product.id}`}
-            className="btn btn-secondary"
+            className="btn btn-secondary w-full"
           >
             Gérer
           </Link>
@@ -76,8 +79,24 @@ const ProductListPage: React.FC = () => {
     content = <div>{error?.toString()}</div>;
   }
 
+  const handleImportCatalog: (e: React.MouseEvent) => void = (e) => {
+    console.log('e:', e);
+  };
+
   return (
     <div>
+      <div className="flex p-4">
+        <div></div>
+        <DropdownUI className="ml-auto" labelButton="Actions">
+          <li>
+            <a onClick={handleImportCatalog}>Importer le catalogue</a>
+          </li>
+          <li>
+            <a>Exporter le catalogue</a>
+          </li>
+        </DropdownUI>
+        <ImportCatalogue />
+      </div>
       <table className=" table table-compact w-full ">
         <thead>
           <tr>
