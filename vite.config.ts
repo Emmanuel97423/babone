@@ -1,9 +1,11 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv  } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
-
 // https://vitejs.dev/config/
-export default defineConfig(async () => ({
+export default defineConfig(async ({command, mode}) => (
+  
+  {
+  
   plugins: [react()],
 test: {
     coverage: {
@@ -43,5 +45,8 @@ test: {
    '@': path.resolve(__dirname, 'src'),
       '~': path.resolve(__dirname, 'public'),
   },
-  }
+  },
+  define: {
+      __APP_ENV__: loadEnv(mode, process.cwd(), '').APP_ENV,
+    },
 }));

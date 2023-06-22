@@ -1,6 +1,11 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useDropzone } from 'react-dropzone';
 import ModalUI from '@/components/ui/Modal';
 import { HiArrowLeft } from 'react-icons/hi';
+import { importCSV } from '@/features/catalog/import/importProductsSlice';
+import { AppDispatch } from '@/store/store';
+import type { CSVRowProps } from '@/types/features/import/ImportType';
 
 type importCatalogProps = {
   isOpenModal: boolean;
@@ -12,6 +17,23 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
   setIsModalOpen
 }) => {
   const [modalPage, setModalPage] = useState<number>(1);
+  const [activeDownload, setActiveDownload] = useState<boolean>(false);
+  const [csvFile, setCsvFile] = useState<CSVRowProps>();
+  const dispatch: AppDispatch = useDispatch();
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: (acceptedFiles) => {
+      console.log(acceptedFiles);
+      if (acceptedFiles) {
+        setActiveDownload(true);
+        setCsvFile(acceptedFiles[0]);
+      }
+    }
+  });
+
+  const handleSubmit: () => void = () => {
+    dispatch(importCSV(csvFile));
+  };
 
   let content;
 
@@ -81,16 +103,34 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
             les taxes et toutes les catégories avant de procéder à l’importation
             des articles.
           </p>
-          <div>
-            <h2>Déposez votre fichier ici</h2>
-            <span>
-              ou{' '}
-              <span className="text-underline">
-                sélectionnez-le depuis votre ordinateurAucun fichier choisi
-              </span>
-            </span>
+          <div
+            {...getRootProps()}
+            className="border-dashed border-2 p-4 mt-9 rounded-md"
+          >
+            <h2 className="m-0">Déposez votre fichier ici</h2>
+            <input {...getInputProps()} className="input" />
+            {isDragActive ? (
+              <p>Relâchez pour déposer les fichiers ici.</p>
+            ) : (
+              <p>
+                ou{' '}
+                <span className="text-underline">
+                  sélectionnez-le depuis votre ordinateurAucun fichier choisi
+                </span>
+              </p>
+            )}
           </div>
-          <input></input>
+          <div className="flex justify-end mt-9">
+            <button
+              className={`btn btn-primary ml-auto  ${
+                activeDownload ? '' : 'btn-disabled'
+              }`}
+              onClick={handleSubmit}
+            >
+              Télécharger
+            </button>
+          </div>
+          {/* Drag and drop prosition */}
         </div>
       </>
     );
