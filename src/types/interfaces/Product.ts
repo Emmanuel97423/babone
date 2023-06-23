@@ -17,15 +17,17 @@ export interface Product {
 }
 
 export interface ProductVariant {
-  id: string;
-  sku: string;
+  id?: string;
+  sku?: string;
   ean?: number;
   name: string;
+  variantname: string;
+  category?:string;
   productname:string;
-  productId:number[];
-  priceHt: number;
-  tva:number;
-  priceTtc:number;
+  productId:number;
+  priceht: string;
+  tva:string;
+  pricettc:string;
   brand?:string;
   manufacturer?:string;
   weight?:number;
@@ -33,7 +35,8 @@ export interface ProductVariant {
   width?:number;
   image?: string;
   options?:Option[];
-  stock?: number;
+  stock: string;
+  [key: string]: any;
   // stockId?: string;
 }
 
