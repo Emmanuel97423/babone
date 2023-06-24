@@ -7,10 +7,12 @@ import {
   selectAllProducts,
   fetchProducts
 } from '@/features/product/productSlice';
+// import {importCSV} from '@/features/catalog/';
 import ProductVariantComponent from '@/components/erp/List/ProductVariantsList';
 import Spinner from '@/components/ui/common/Spinner';
 import DropdownUI from '@/components/ui/Dropdown';
 import ImportCatalogue from '@/features/catalog/ImportCatalog';
+import ModalUI from '@/components/ui/Modal';
 
 interface Props {
   product: Product;
@@ -81,6 +83,7 @@ const ProductListPage: React.FC = () => {
 
   const handleImportCatalog: (e: React.MouseEvent) => void = (e) => {
     console.log('e:', e);
+    // dispatch(setOpenModalImport);
   };
 
   return (
@@ -89,13 +92,18 @@ const ProductListPage: React.FC = () => {
         <div></div>
         <DropdownUI className="ml-auto" labelButton="Actions">
           <li>
-            <a onClick={handleImportCatalog}>Importer le catalogue</a>
+            <a onClick={() => setOpenModalImport(true)}>
+              Importer le catalogue
+            </a>
           </li>
           <li>
             <a>Exporter le catalogue</a>
           </li>
         </DropdownUI>
-        <ImportCatalogue />
+        <ImportCatalogue
+          isOpenModal={openModalImport}
+          setIsModalOpen={() => setOpenModalImport}
+        />
       </div>
       <table className=" table table-compact w-full ">
         <thead>

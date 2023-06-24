@@ -4,29 +4,53 @@ import { Category } from "./Category";
 
 export interface Product {
   id: string;
-  storeId: Store["id"];
-  sku: string;
+  storeId?: Store["id"];
+  sku?: string;
   ean?: number;
   name: string;
   category: Category["id"];
+  subCategoryId:Number;
   description: string;
-  price: number;
   images: string[];
   stock?: number;
-  variants?: ProductVariant[];
-  variantIds?: string[];
+  variantIds?: number[];
 }
 
 export interface ProductVariant {
-  id: string;
-  sku: string;
+  id?: string;
+  sku?: string;
   ean?: number;
   name: string;
-  price: number;
-  images: string[];
+  variantname: string;
+  category?:string;
+  productname:string;
+  productId:number;
+  priceht: string;
+  tva:string;
+  pricettc:string;
+  brand?:string;
+  manufacturer?:string;
+  weight?:number;
+  height?:number;
+  width?:number;
+  image?: string;
   options?:Option[];
-  stock?: number;
-  stockId?: string;
+  stock: string;
+  [key: string]: any;
+  // stockId?: string;
+}
+
+export interface Properties {
+  id:number;
+  name:string;
+  value:string;
+  // variantProperties:
+}
+
+export interface VariantProperties {
+  id:number;
+  variantId:number;
+  propertyId:number;
 }
 
 export interface Option {

@@ -1,5 +1,6 @@
 import { ReactNode, useState } from 'react';
 import Button from '@/components/ui/common/Button';
+import { useDispatch } from 'react-redux';
 
 type Props = {
   labelButton?: string;
@@ -35,7 +36,7 @@ const ModalUI: React.FC<Props> = ({
       {/* Put this part before </body> tag */}
       {/* <input type="checkbox" id="my-modal-default" className="modal-toggle" /> */}
       <div className={`modal ${isOpenModal ? 'modal-open' : ''}   `}>
-        <div className="modal-box relative  h-screen ">
+        <div className="modal-box relative  max-h-auto  max-w-[600px] ">
           <label
             htmlFor="my-modal-default"
             className="btn btn-sm btn-circle absolute right-2 top-2"
@@ -44,7 +45,7 @@ const ModalUI: React.FC<Props> = ({
             ✕
           </label>
           <h2>{props.titleModal}</h2>
-          <div className="relative pt-6">{children}</div>
+          <div className="relative pb-4">{children}</div>
         </div>
       </div>
     </>
