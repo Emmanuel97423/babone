@@ -34,8 +34,8 @@ export const getProductByName = async (name: string, categoryId: number) => {
           .from(PRODUCT_TABLE)
           .insert([{ name: name, categoryId: categoryId }])
           .select();
-        if (createProducName) {
-          return createProducName;
+        if (createProducName.data) {
+          return createProducName.data[0];
         }
         return null;
       } catch (error) {
@@ -88,13 +88,17 @@ export const getVariant = async (variantProps: ProductVariant) => {
       for (const key in variant) {
         if (variantProps[key]) {
           if (variant[key] !== variantProps[key]) {
-             const updateData: Partial<ProductVariant> = {
-        [key]: variantProps[key] // Utilisation de la notation de propriété dynamique
-      };
+            const updateData: Partial<ProductVariant> = {
+              [key]: variantProps[key] // Utilisation de la notation de propriété dynamique
+            };
 
             try {
-              const updateVariant= await supabase.from(VARIANT_TABLE).update(updateData).eq('id', variant.id).select()
-              console.log('updateVariant:', updateVariant)
+              const updateVariant = await supabase
+                .from(VARIANT_TABLE)
+                .update(updateData)
+                .eq('id', variant.id)
+                .select();
+              console.log('updateVariant:', updateVariant);
             } catch (error) {
               console.log('error:', error);
               return error;
