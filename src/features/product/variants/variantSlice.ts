@@ -3,7 +3,8 @@ import {
   createEntityAdapter,
   createSelector,
   createAsyncThunk,
-  EntityState
+  EntityState,
+  AsyncThunkAction, 
 } from '@reduxjs/toolkit';
 import {supabase} from '@/utils/supabaseClient';
 // import { fetchVariants} from '@/services/database/products';
@@ -18,11 +19,11 @@ interface VariantsState {
   error?:string
 }
 const VARIANT_TABLE = "Variant"
-export const fetchVariants = createAsyncThunk<ProductVariant[] | undefined >('variants/fetchVariant', async()=>{
+export const fetchVariants = createAsyncThunk<ProductVariant[] | undefined >('variants/fetchVariant', async(_,{RejectWithValue})=>{
 
     const { data: variants, error} = await supabase.from(VARIANT_TABLE).select('*');
      if (error) {
-        return error.message
+        return RejectWithValue(error.message)
     }   
       return variants    
 });
