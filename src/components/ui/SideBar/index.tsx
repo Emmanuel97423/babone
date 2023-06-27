@@ -27,11 +27,11 @@ const SideBar: React.FC = () => {
     subMenuItems?: SubMenuItems[] | undefined;
   }
   const menus: MenuItems[] = [
-    {
-      title: 'Tableau de bord',
-      link: '/erp/dashboard',
-      icon: <RiDashboardLine />
-    },
+    // {
+    //   title: 'Tableau de bord',
+    //   link: '/erp/dashboard',
+    //   icon: <RiDashboardLine />
+    // },
     {
       title: 'Produits',
       link: '/erp/products-management',
@@ -43,6 +43,11 @@ const SideBar: React.FC = () => {
         //   link: '/erp/products-management/add',
         //   icon: <AiOutlinePlusCircle />
         // },
+        {
+          title: 'Produit de base',
+          link: '/erp/products-management',
+          icon: <AiOutlinePlusCircle />
+        },
         {
           title: 'Variantes',
           link: '/erp/products-management/variants',
