@@ -102,7 +102,7 @@ const ProductListPage: React.FC = () => {
         </DropdownUI>
         <ImportCatalogue
           isOpenModal={openModalImport}
-          setIsModalOpen={() => setOpenModalImport}
+          setIsModalOpen={(open) => setOpenModalImport(open)}
         />
       </div>
       <table className=" table table-compact w-full ">

@@ -42,6 +42,11 @@ const SideBar: React.FC = () => {
           title: 'Ajouter un produit',
           link: '/erp/products-management/add',
           icon: <AiOutlinePlusCircle />
+        },
+        {
+          title: 'Variantes',
+          link: '/erp/products-management/variants',
+          icon: <AiOutlinePlusCircle />
         }
       ]
     },
