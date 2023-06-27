@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": "Emmanuel Narcisse",
+  "description": "An ERP minimalist software",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

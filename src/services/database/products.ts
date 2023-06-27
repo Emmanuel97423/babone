@@ -209,5 +209,7 @@ export const createCategory = async (name: string) => {
 };
 
 type VariantResponse = Awaited<ReturnType<typeof getVariant>>;
+ // @ts-ignore
 export type VariantResponseSuccess = VariantResponse['data'];
+ // @ts-ignore
 export type VariantResponseError = VariantResponse['error'];

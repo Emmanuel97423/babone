@@ -17,6 +17,7 @@ type FulfilledAction = ReturnType<GenericAsyncThunk["fulfilled"]>;
 
 
 const productVariantAdapter = createEntityAdapter<ProductVariant>({
+  // @ts-ignore 
     selectId: (product) => product.id,
     sortComparer: (a, b) => a.name.localeCompare(b.name),
 });

@@ -54,12 +54,18 @@ const UpdateProduct: React.FC = () => {
             </label> */}
               <Dropdown
                 options={[{ value: 'Moulinets', label: 'Moulinets' }]}
+                // @ts-ignore
                 placeholder={product?.category}
               />
             </div>
             <div className="card w-96 h-10 bg-base-100 shadow-xl image-full">
               <figure>
-                <img src={product?.images[0]} alt="Shoes" className="w-full" />
+                <img
+                  // @ts-ignore
+                  src={product?.images[0]}
+                  alt="Shoes"
+                  className="w-full"
+                />
               </figure>
               <div className="card-body justify-center items-center">
                 {/* <h2 className="card-title">Shoes!</h2>
@@ -111,6 +117,7 @@ const UpdateProduct: React.FC = () => {
                           <ProductVariantList
                             key={index}
                             index={index}
+                            // @ts-ignore
                             variantId={variantId}
                           />
                         ))
@@ -163,6 +170,7 @@ const UpdateProduct: React.FC = () => {
           storeId={''}
           sku={''}
           name={''}
+          // @ts-ignore
           category={''}
           description={''}
           price={0}
