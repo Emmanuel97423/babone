@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database/databaseType';
-import type { ProductVariant } from '@/types/interfaces/Product';
-import { Product } from '@prisma/client';
+import type { ProductVariant,Product, Products } from '@/types/interfaces/Product';
+// import { Product } from '@prisma/client';
 import { Result } from 'postcss';
 
 const supabaseUrl: string =
@@ -17,6 +17,48 @@ export const supabase = createClient<Database>(
 const PRODUCT_TABLE = 'Product';
 const CATEGORY_TABLE = 'Category';
 const VARIANT_TABLE = 'Variant';
+
+
+export const fetchProductsFromDatabase  = async (): Promise<Products> => {
+  try {
+    const result = await supabase.from(PRODUCT_TABLE).select('*');
+    console.log('result:', result)
+    if(result.data ){
+      return result.data.map(item => ({
+        id: item.id,
+        storeId: item.storeId || null,
+        sku: item.sku || null ,
+        ean: item.ean || null,
+        name: item.name,
+        categoryId: item.categoryId,
+        subCategoryId: item.subCategoryId,
+        description: item.description || null,
+        images: item.images || [],
+        stock: item.stock || 0,
+        variantIds: item.variantIds || [],
+      }));
+    }
+    return []
+    
+  } catch (error) {
+    console.log('error:', error)
+    throw error
+  }
+}
+
+export const fetchVariantsFromDatabase = async () => {
+  try {
+    const result = await supabase.from(VARIANT_TABLE).select('*');
+    console.log('result:', result)
+    if(result.data ){
+      return result.data
+    }
+    
+  } catch (error) {
+    console.log('error:', error)
+    return error
+  }
+}
 
 export const getProductByName = async (name: string, categoryId: number) => {
   try {

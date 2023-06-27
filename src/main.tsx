@@ -18,6 +18,7 @@ import OrderPage from './pages/Erp/Order';
 import AddProduct from './pages/Erp/ProductManagement/Add';
 import UpdateProduct from './pages/Erp/ProductManagement/Update';
 import AddOptions from '@/pages/Erp/ProductManagement/AddOptions';
+import VariantsPage from '@/pages/Erp/ProductManagement/VariantsPage';
 import { setupMockServer } from './__mock__/api/server';
 
 setupMockServer();
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: '/erp/products-management/update/:id',
         element: <UpdateProduct />
+      },
+      {
+        path: '/erp/products-management/variants',
+        element: <VariantsPage />
       },
       {
         path: '/erp/orders',

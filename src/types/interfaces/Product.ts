@@ -8,10 +8,10 @@ export interface Product {
   sku?: string;
   ean?: number;
   name: string;
-  category: Category["id"];
+  categoryId: number;
   subCategoryId:Number;
-  description: string;
-  images: string[];
+  description?: string;
+  images?: string[];
   stock?: number;
   variantIds?: number[];
 }

@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useDropzone } from 'react-dropzone';
+import { useSelector, useDispatch } from 'react-redux';
+import { useDropzone, DropzoneInputProps } from 'react-dropzone';
 import ModalUI from '@/components/ui/Modal';
 import { HiArrowLeft } from 'react-icons/hi';
 import { importCSV } from '@/features/catalog/import/importProductsSlice';
-import { AppDispatch } from '@/store/store';
+import { AppDispatch, RootState } from '@/store/store';
 import type { CSVRowProps } from '@/types/features/import/ImportType';
 
 type importCatalogProps = {
@@ -19,20 +19,45 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
   const [modalPage, setModalPage] = useState<number>(1);
   const [activeDownload, setActiveDownload] = useState<boolean>(false);
   const [csvFile, setCsvFile] = useState<CSVRowProps>();
+  const [errorCsvFormat, setErrorCsvFormat] = useState<boolean>(false);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [importIsLoading, setIsLoadingImport] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: (acceptedFiles) => {
-      console.log(acceptedFiles);
-      if (acceptedFiles) {
+      if (acceptedFiles && acceptedFiles[0].type === 'text/csv') {
         setActiveDownload(true);
         setCsvFile(acceptedFiles[0]);
+        setFileName(acceptedFiles[0].name);
+      } else {
+        setErrorCsvFormat(true);
+        setTimeout(() => {
+          setErrorCsvFormat(false);
+        }, 5000);
       }
     }
   });
 
-  const handleSubmit: () => void = () => {
-    dispatch(importCSV(csvFile));
+  const handleSubmit: () => void = async () => {
+    setIsLoadingImport(true);
+    try {
+      const importingCsv = await dispatch(importCSV(csvFile));
+      if (importingCsv) {
+        console.log('importingCsv:', importingCsv);
+        setIsLoadingImport(false);
+      }
+    } catch (error) {
+      console.log('error:', error);
+      setIsLoadingImport(false);
+    }
+
+    // const importStatusLoading = useSelector(
+    //   (state: RootState) => state.importProduct.loading
+    // );
+    // if (importStatusLoading === 'pending') {
+    //   setIsLoadingImport;
+    // }
   };
 
   let content;
@@ -90,41 +115,74 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
     content = (
       <>
         <div className="flex items-center mb-12">
-          <HiArrowLeft size={24} />
+          <HiArrowLeft
+            size={24}
+            onClick={() => setModalPage(1)}
+            className="cursor-pointer"
+          />
           <h2 className="text-center my-0 ml-8">
             Choisissez une méthode d’importation
           </h2>
         </div>
         <div>
           <p>
-            Téléchargez le fichier de votre catalogue pour classer vos articles
-            et ajouter ou modifier les informations correspondantes. Nous
-            recommandons d’ajouter tous les ensembles de modificateurs, toutes
-            les taxes et toutes les catégories avant de procéder à l’importation
-            des articles.
+            <a
+              className="font-bold underline text-accent"
+              href="https://fbmqpashvkbldqtjnlds.supabase.co/storage/v1/object/sign/import-csv/admin/import-product-exemple.xlsx?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJpbXBvcnQtY3N2L2FkbWluL2ltcG9ydC1wcm9kdWN0LWV4ZW1wbGUueGxzeCIsImlhdCI6MTY4NzYyODM1OSwiZXhwIjoxNzE5MTY0MzU5fQ.kybyjhgKLsqO0hARVPOnZnKqynMidpQltCpBK7rrkd4&t=2023-06-24T17%3A39%3A18.441Z"
+              download
+            >
+              Téléchargez le fichier
+            </a>
+            &nbsp; de votre catalogue pour classer vos articles et ajouter ou
+            modifier les informations correspondantes. Nous recommandons
+            d’ajouter tous les ensembles de modificateurs, toutes les taxes et
+            toutes les catégories avant de procéder à l’importation des
+            articles.
           </p>
           <div
             {...getRootProps()}
-            className="border-dashed border-2 p-4 mt-9 rounded-md"
+            className={`${
+              fileName ? ' border-accent' : ''
+            } border-dashed border-2 p-4 mt-9 rounded-md`}
           >
             <h2 className="m-0">Déposez votre fichier ici</h2>
-            <input {...getInputProps()} className="input" />
+            <input
+              {...(getInputProps() as DropzoneInputProps)}
+              className="input"
+            />
             {isDragActive ? (
               <p>Relâchez pour déposer les fichiers ici.</p>
             ) : (
               <p>
                 ou{' '}
                 <span className="text-underline">
-                  sélectionnez-le depuis votre ordinateurAucun fichier choisi
+                  sélectionnez-le depuis votre ordinateur
                 </span>
+                {fileName ? (
+                  <p className="text-underline font-bold text-accent mb-2">
+                    Fichier sélectionné : {fileName}
+                  </p>
+                ) : (
+                  <p className="text-underline font-bold mb-2">
+                    Aucun fichier choisi
+                  </p>
+                )}
               </p>
             )}
+          </div>
+
+          <div
+            className={`text-red-500 font-bold mt-2 ${
+              errorCsvFormat ? 'flex' : 'hidden'
+            } `}
+          >
+            <span>Format du fichier d'import incorrect. (csv attendu)</span>
           </div>
           <div className="flex justify-end mt-9">
             <button
               className={`btn btn-primary ml-auto  ${
                 activeDownload ? '' : 'btn-disabled'
-              }`}
+              } ${importIsLoading ? 'loading loading-spinner' : ''}`}
               onClick={handleSubmit}
             >
               Télécharger
@@ -139,14 +197,14 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
     <>
       <ModalUI
         isOpenModal={isOpenModal}
-        setIsModalOpen={() => setIsModalOpen}
+        setIsModalOpen={setIsModalOpen}
         className="flex flex-col w-36"
         labelModal="Modifier le catalogue d’articles"
       >
         {content}
         <div className="flex justify-end">
           <button
-            className={`${modalPage != 1 ? 'hidden' : 'btn btn-primary'}`}
+            className={`${modalPage != 1 ? 'hidden' : 'btn btn-primary'} `}
             onClick={() => setModalPage(2)}
           >
             Suivant

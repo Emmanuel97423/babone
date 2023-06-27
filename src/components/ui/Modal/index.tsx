@@ -19,6 +19,11 @@ const ModalUI: React.FC<Props> = ({
   setIsModalOpen,
   ...props
 }) => {
+  const handleCloseModal: (e: React.MouseEvent) => void = (e) => {
+    e.stopPropagation();
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       {/* The button to open modal */}
@@ -40,7 +45,7 @@ const ModalUI: React.FC<Props> = ({
           <label
             htmlFor="my-modal-default"
             className="btn btn-sm btn-circle absolute right-2 top-2"
-            onClick={() => setIsModalOpen(false)}
+            onClick={handleCloseModal}
           >
             ✕
           </label>
