@@ -36,7 +36,7 @@
     "updater": {
       "active": true,
       "endpoints": [
-        "https://raw.githubusercontent.com/Emmanuel97423/babone/master/update-manifest.json"
+        "https://babone-manifest.s3.eu-west-3.amazonaws.com/update-manifest.json"
       ],
       "dialog": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEVDQTY5OUZFRkM5QUQxOEQKUldTTjBacjgvcG1tN0I2NDNmVjIvOFA1ZHFjZmY1eW9uRXRuUUQ0bkoxRzdTZXNxZ3JjOHFGSksK"
