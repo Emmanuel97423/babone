@@ -28,7 +28,8 @@ import {
 import type { ProductVariant } from '@/types/interfaces/Product';
 
 interface TableProps {
-  data: [] | unknown;
+  data: any[];
+  columns: ColumnDef<any, any>[];
 }
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -67,119 +68,17 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
 };
 
-const TableUI: React.FC<TableProps> = ({ data, ...props }) => {
+const TableUI: React.FC<TableProps> = ({ data, columns, ...props }) => {
   console.log('data:', data);
   const rerender = useReducer(() => ({}), {})[1];
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
 
-  const columns = useMemo<ColumnDef<ProductVariant, any>[]>(
-    () => [
-      {
-        header: 'Liste Variants',
-        footer: (props) => props.column.id,
-        columns: [
-          {
-            accessorKey: 'name',
-            cell: (info) => info.getValue(),
-            header: () => <span>Variants</span>,
-            footer: (props) => props.column.id
-          },
-          {
-            accessorFn: (row) => row.brand,
-            accessorKey: 'brand',
-            cell: (info) => info.getValue(),
-            header: () => <span>Marques</span>,
-            footer: (props) => props.column.id
-          },
-          {
-            accessorFn: (row) => row.manufacturer,
-            accessorKey: 'manufacturer',
-            cell: (info) => info.getValue(),
-            header: () => <span>Fournisseurs</span>,
-            footer: (props) => props.column.id
-          },
-          {
-            accessorFn: (row) => row.stock,
-            accessorKey: 'stock',
-            cell: (info) => info.getValue(),
-            header: () => <span>Stock</span>,
-            footer: (props) => props.column.id
-          },
-          {
-            accessorFn: (row) => row.priceHt,
-            accessorKey: 'priceHt',
-            cell: (info) => info.getValue(),
-            header: () => <span>Prix H.T</span>,
-            footer: (props) => props.column.id
-          },
-          {
-            accessorFn: (row) => row.tva,
-            accessorKey: 'tva',
-            cell: (info) => info.getValue(),
-            header: () => <span>Tva</span>,
-            footer: (props) => props.column.id
-          },
-          {
-            accessorFn: (row) => row.priceTtc,
-            accessorKey: 'priceTtc',
-            cell: (info) => info.getValue(),
-            header: () => <span>Prix T.T.C</span>,
-            footer: (props) => props.column.id
-          }
-
-          // {
-          //   accessorFn: (row) => `${row.firstName} ${row.lastName}`,
-          //   id: 'fullName',
-          //   header: 'Full Name',
-          //   cell: (info) => info.getValue(),
-          //   footer: (props) => props.column.id,
-          //   filterFn: 'fuzzy',
-          //   sortingFn: fuzzySort
-          // }
-        ]
-      }
-      // {
-      //   header: 'Info',
-      //   footer: (props) => props.column.id,
-      //   columns: [
-      //     {
-      //       accessorKey: 'age',
-      //       header: () => 'Age',
-      //       footer: (props) => props.column.id
-      //     },
-      //     {
-      //       header: 'More Info',
-      //       columns: [
-      //         {
-      //           accessorKey: 'visits',
-      //           header: () => <span>Visits</span>,
-      //           footer: (props) => props.column.id
-      //         },
-      //         {
-      //           accessorKey: 'status',
-      //           header: 'Status',
-      //           footer: (props) => props.column.id
-      //         },
-      //         {
-      //           accessorKey: 'progress',
-      //           header: 'Profile Progress',
-      //           footer: (props) => props.column.id
-      //         }
-      //       ]
-      //     }
-      //   ]
-      // }
-    ],
-    []
-  );
-
   // const [data, setData] = useState<Person[]>(() => makeData(50000))
   // const refreshData = () => setData(old => makeData(50000))
 
   const table = useReactTable({
-    // @ts-ignore
     data,
     columns,
     filterFns: {
@@ -214,7 +113,8 @@ const TableUI: React.FC<TableProps> = ({ data, ...props }) => {
 
   return (
     <div className="py-2">
-      <div className="flex justify-end p-2">
+      <div className="flex justify-end p-2 ">
+        {/* <h1 className="text-5xl text-center">VARIANTS</h1> */}
         <DebouncedInput
           value={globalFilter ?? ''}
           onChange={(value) => setGlobalFilter(String(value))}
