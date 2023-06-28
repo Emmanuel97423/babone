@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import { checkForUpdates } from '@/utils/checkForUpdateTauri';
 import './App.css';
 // import TopNav from './components/header/TopNav';
 
@@ -37,6 +38,11 @@ const data = [
 ];
 
 const App: React.FC = () => {
+  useEffect(() => {
+    console.log('App rendered');
+
+    checkForUpdates();
+  }, []);
   const Card: React.FC<ButtonProps> = ({ title, description, icon, link }) => {
     return (
       <div className="shadow-2xl">
