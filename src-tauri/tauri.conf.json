@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "babone",
-    "version": "1.0.3"
+    "version": "0.0.0"
   },
   "tauri": {
     "allowlist": {
@@ -39,7 +39,7 @@
         "https://raw.githubusercontent.com/Emmanuel97423/babone/master/update-manifest.json"
       ],
       "dialog": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDNDNTVBN0E2ODg4M0NDMUYKUldRZnpJT0lwcWRWUENoZWQ3UFVpVHVzdTZjQnZQYk11dytUMWphM0VydjZjc0lCZkI5VUdPbEQK"
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEVDQTY5OUZFRkM5QUQxOEQKUldTTjBacjgvcG1tN0I2NDNmVjIvOFA1ZHFjZmY1eW9uRXRuUUQ0bkoxRzdTZXNxZ3JjOHFGSksK"
     },
     "windows": [
       {
