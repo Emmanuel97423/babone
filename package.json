@@ -1,8 +1,10 @@
 {
   "name": "babone-vite",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.2",
   "type": "module",
+  "author": "Emmanuel Narcisse",
+  "description": "An ERP minimalist software",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

@@ -17,6 +17,7 @@ export const importCSV = createAsyncThunk(
     try {
       // Modeling csv to data
       const result = await modelingCsv(file, { rejectWithValue });
+      // @ts-ignore 
       result.map(async (variant: ProductVariant) => {
         console.log('variant:', variant);
         const categoryName = variant.category;
@@ -31,6 +32,7 @@ export const importCSV = createAsyncThunk(
           try {
             const category = await getCategory(categoryName);
             if (category) {
+              // @ts-ignore 
               const categoryId = category.id;
 
               //Check if product base exist if no exist create product base
@@ -46,6 +48,7 @@ export const importCSV = createAsyncThunk(
                   // variantname: variant.variantname,
                   name: variant.variantname,
                   // productname: getProduct.name,
+                  // @ts-ignore 
                   productId: getProduct.id,
                   priceHt: variantPriceHt,
                   tva: variantTva,
@@ -58,6 +61,7 @@ export const importCSV = createAsyncThunk(
                   width: variant.width,
                   image: variant.image
                 };
+                // @ts-ignore 
                 const variantCreate = await getVariant(variantObject);
                 console.log('variantCreate:', variantCreate);
               }
@@ -271,10 +275,12 @@ const ImportProductsSlice = createSlice({
       })
       .addCase(importCSV.fulfilled, (state, action) => {
         state.loading = 'succeeded';
+        // @ts-ignore 
         state.entities = action.payload;
       })
       .addCase(importCSV.rejected, (state, action) => {
         state.loading = 'failed';
+        // @ts-ignore 
         state.error = action.error.message ;
       });
   }

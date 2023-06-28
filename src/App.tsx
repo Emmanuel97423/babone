@@ -1,4 +1,11 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  checkUpdate,
+  installUpdate,
+  onUpdaterEvent
+} from '@tauri-apps/api/updater';
+import { relaunch } from '@tauri-apps/api/process';
 import './App.css';
 // import TopNav from './components/header/TopNav';
 
@@ -35,6 +42,37 @@ const data = [
 ];
 
 const App: React.FC = () => {
+  useEffect(() => {
+    let unlisten: Function;
+
+    const checkForUpdates = async () => {
+      unlisten = await onUpdaterEvent(({ error, status }) => {
+        console.log('Updater event', error, status);
+      });
+
+      try {
+        const { shouldUpdate, manifest } = await checkUpdate();
+
+        if (shouldUpdate) {
+          console.log(
+            `Installing update ${manifest?.version}, ${manifest?.date}, ${manifest?.body}`
+          );
+          await installUpdate();
+          await relaunch();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+
+      unlisten();
+    };
+    checkForUpdates();
+
+    // cleanup function
+    return () => {
+      unlisten && unlisten();
+    };
+  }, []);
   const Card: React.FC<ButtonProps> = ({ title, description, icon, link }) => {
     return (
       <div className="shadow-2xl">

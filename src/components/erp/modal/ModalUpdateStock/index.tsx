@@ -194,6 +194,7 @@ const ProductVariantList: React.FC<Props> = ({ variantId, index }) => {
               className="input input-bordered w-20  appearance-none"
               disabled={motifCode === 0 || motifCode === 2}
               onBlur={(e) => {
+                // @ts-ignore
                 ajustementOnBlur(e, productVariant?.id);
               }}
               onChange={updateAjustement}
@@ -274,6 +275,7 @@ const ModalUpdateStock: React.FC<Product> = ({ id, variantIds }) => {
                   <ProductVariantList
                     key={index}
                     index={index}
+                    // @ts-ignore
                     variantId={variantId}
                   />
                 ))}

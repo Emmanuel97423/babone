@@ -28,6 +28,7 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
     onDrop: (acceptedFiles) => {
       if (acceptedFiles && acceptedFiles[0].type === 'text/csv') {
         setActiveDownload(true);
+        // @ts-ignore
         setCsvFile(acceptedFiles[0]);
         setFileName(acceptedFiles[0].name);
       } else {
@@ -42,6 +43,7 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
   const handleSubmit: () => void = async () => {
     setIsLoadingImport(true);
     try {
+      // @ts-ignore
       const importingCsv = await dispatch(importCSV(csvFile));
       if (importingCsv) {
         console.log('importingCsv:', importingCsv);

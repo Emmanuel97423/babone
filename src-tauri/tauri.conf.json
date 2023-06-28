@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "babone",
-    "version": "0.0.0"
+    "version": "1.0.2"
   },
   "tauri": {
     "allowlist": {
@@ -34,7 +34,12 @@
       "csp": null
     },
     "updater": {
-      "active": false
+      "active": true,
+      "endpoints": [
+        "https://github.com/Emmanuel97423/babone/releases/download/1.0.2/babone_1.0.2_x64_en-US.msi.zip"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDNDNTVBN0E2ODg4M0NDMUYKUldRZnpJT0lwcWRWUENoZWQ3UFVpVHVzdTZjQnZQYk11dytUMWphM0VydjZjc0lCZkI5VUdPbEQK"
     },
     "windows": [
       {

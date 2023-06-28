@@ -45,13 +45,18 @@ const ProductListPage: React.FC = () => {
       <tr key={index}>
         <th className=" pl-4 ">{index + 1}</th>
         <td>{product.name}</td>
-        <td>{product.category}</td>
+
+        <td>
+          {/* @ts-ignore */}
+          {product.category}
+        </td>
         <td>{product.stock}</td>
         <td>{product.ean}</td>
         <td className=" pr-4">
           <Link
+            aria-disabled="true"
             to={`/erp/products-management/update/${product.id}`}
-            className="btn btn-secondary w-full"
+            className="btn btn-disabled btn-secondary w-full disabled "
           >
             Gérer
           </Link>

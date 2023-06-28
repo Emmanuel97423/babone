@@ -3,6 +3,7 @@ import Papa from 'papaparse';
 import { transform } from 'lodash';
 
 //Parse Csv to data function
+ // @ts-ignore
 export const modelingCsv = async (file: File, { rejectWithValue })=>{
     return new Promise ((resolve, reject) => {
         Papa.parse<CSVRowProps>(file,{
@@ -13,6 +14,7 @@ export const modelingCsv = async (file: File, { rejectWithValue })=>{
                         const transformedRow = Object.fromEntries(
                         Object.entries(row).map(([key, value]) => [key.toLowerCase(), typeof value === 'string' ? value.toLowerCase() : value])
                         );
+                         // @ts-ignore
                         result.push(transformedRow);
                             }, []);
                             console.log('transformedData:', transformedData)

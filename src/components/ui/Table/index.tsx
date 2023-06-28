@@ -179,6 +179,7 @@ const TableUI: React.FC<TableProps> = ({ data, ...props }) => {
   // const refreshData = () => setData(old => makeData(50000))
 
   const table = useReactTable({
+    // @ts-ignore
     data,
     columns,
     filterFns: {

@@ -16,6 +16,7 @@ const VariantsList: React.FC = () => {
 
   useEffect(() => {
     try {
+      // @ts-ignore
       dispatch(fetchVariants());
       // if (result.data.length > 0) {
       //   console.log('result:', result);

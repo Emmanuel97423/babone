@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
+
 import App from './App';
 import './styles.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -19,9 +20,6 @@ import AddProduct from './pages/Erp/ProductManagement/Add';
 import UpdateProduct from './pages/Erp/ProductManagement/Update';
 import AddOptions from '@/pages/Erp/ProductManagement/AddOptions';
 import VariantsPage from '@/pages/Erp/ProductManagement/VariantsPage';
-import { setupMockServer } from './__mock__/api/server';
-
-setupMockServer();
 
 const router = createBrowserRouter([
   {

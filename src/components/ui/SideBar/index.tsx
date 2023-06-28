@@ -27,20 +27,25 @@ const SideBar: React.FC = () => {
     subMenuItems?: SubMenuItems[] | undefined;
   }
   const menus: MenuItems[] = [
-    {
-      title: 'Tableau de bord',
-      link: '/erp/dashboard',
-      icon: <RiDashboardLine />
-    },
+    // {
+    //   title: 'Tableau de bord',
+    //   link: '/erp/dashboard',
+    //   icon: <RiDashboardLine />
+    // },
     {
       title: 'Produits',
       link: '/erp/products-management',
       icon: <FaFish />,
       subMenu: true,
       subMenuItems: [
+        // {
+        //   title: 'Ajouter un produit',
+        //   link: '/erp/products-management/add',
+        //   icon: <AiOutlinePlusCircle />
+        // },
         {
-          title: 'Ajouter un produit',
-          link: '/erp/products-management/add',
+          title: 'Produit de base',
+          link: '/erp/products-management',
           icon: <AiOutlinePlusCircle />
         },
         {
@@ -49,25 +54,25 @@ const SideBar: React.FC = () => {
           icon: <AiOutlinePlusCircle />
         }
       ]
-    },
-    {
-      title: 'Commandes',
-      link: '/erp/orders',
-      icon: <MdPointOfSale />,
-      subMenu: true,
-      subMenuItems: [
-        {
-          title: 'Ajouter une commande',
-          link: '/erp',
-          icon: <AiOutlinePlusCircle />
-        }
-      ]
-    },
-    {
-      title: 'Options',
-      link: '/erp/options',
-      icon: <MdPointOfSale />
     }
+    // {
+    //   title: 'Commandes',
+    //   link: '/erp/orders',
+    //   icon: <MdPointOfSale />,
+    //   subMenu: true,
+    //   subMenuItems: [
+    //     {
+    //       title: 'Ajouter une commande',
+    //       link: '/erp',
+    //       icon: <AiOutlinePlusCircle />
+    //     }
+    //   ]
+    // },
+    // {
+    //   title: 'Options',
+    //   link: '/erp/options',
+    //   icon: <MdPointOfSale />
+    // }
   ];
 
   const handleOpen = (): void => {
