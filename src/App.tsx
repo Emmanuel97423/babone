@@ -39,8 +39,6 @@ const data = [
 
 const App: React.FC = () => {
   useEffect(() => {
-    console.log('App rendered');
-
     checkForUpdates();
   }, []);
   const Card: React.FC<ButtonProps> = ({ title, description, icon, link }) => {
