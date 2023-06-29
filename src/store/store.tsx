@@ -1,6 +1,7 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { apiSlice } from '../features/api/apiSlice';
+import AuthReducer from '@/features/auth/authSlice';
 import ProductsReducer from '../features/product/productSlice';
 import VariantsReducer from '@/features/product/variants/variantSlice';
 import ProductVariantReducer from '../features/product/productVariantSlice';
@@ -11,6 +12,7 @@ import ModalReducer from '@/features/ui/modal/modalSlice';
 
 export const store = configureStore({
   reducer: {
+    auth: AuthReducer,
     catalog: CatalogReducer,
     products: ProductsReducer,
     variants: VariantsReducer,
