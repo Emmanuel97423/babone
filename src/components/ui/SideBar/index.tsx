@@ -1,13 +1,19 @@
 import { MouseEventHandler, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '@/features/auth/authSlice';
 import { BsArrowLeftCircleFill, BsChevronDoubleLeft } from 'react-icons/bs';
 import { AiOutlineSearch, AiOutlinePlusCircle } from 'react-icons/ai';
 import { RiDashboardLine } from 'react-icons/ri';
 import { FaFish } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
 import { MdPointOfSale } from 'react-icons/md';
+import { BiLogOut } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 
 const SideBar: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(true);
   const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
 
@@ -21,6 +27,7 @@ const SideBar: React.FC = () => {
     title: string;
     link: string;
     icon: any;
+    disconnect?: boolean;
     spacing?: boolean | undefined;
     subMenu?: boolean | undefined;
     subMenuOpen?: number | undefined | unknown;
@@ -54,7 +61,15 @@ const SideBar: React.FC = () => {
           icon: <AiOutlinePlusCircle />
         }
       ]
+    },
+    {
+      title: 'Déconnexion',
+
+      link: '',
+      icon: <BiLogOut />,
+      disconnect: true
     }
+
     // {
     //   title: 'Commandes',
     //   link: '/erp/orders',
@@ -81,12 +96,16 @@ const SideBar: React.FC = () => {
 
   const handleOpenSubMenu = (
     index: number
-  ): MouseEventHandler<HTMLAnchorElement> => {
+  ): MouseEventHandler<HTMLAnchorElement> | undefined => {
     return () => setOpenSubMenu(openSubMenu === index ? null : index);
+  };
+  const handleDisconnect = () => {
+    // @ts-ignore
+    dispatch(logout());
   };
   return (
     <div
-      className={`bg-primary h-screen p-5 pt-8  relative ease-in-out duration-300 ${
+      className={`bg-primary h-screen p-5 pt-8  relative ease-in-out duration-300 flex flex-col items-stretch ${
         open ? 'w-72' : 'w-20'
       }`}
     >
@@ -133,7 +152,12 @@ const SideBar: React.FC = () => {
       <ul className={`pt-2`}>
         {menus.map((menu, index) => (
           <div key={index}>
-            <Link to={menu.link} onClick={handleOpenSubMenu(index)}>
+            <Link
+              to={menu.link}
+              onClick={
+                menu.disconnect ? handleDisconnect : handleOpenSubMenu(index)
+              }
+            >
               <li
                 className={`relative text-grey-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-accent/50   rounded-md ${
                   menu.spacing ? 'mt-9' : 'mt-2'
@@ -191,6 +215,10 @@ const SideBar: React.FC = () => {
           </div>
         ))}
       </ul>
+      {/* <div className="self-end relative w-full bottom-0 flex justify-start items-center gap-2 cursor-pointer font-semibold">
+        <BiLogOut />
+        <span>Deconnexion</span>
+      </div> */}
     </div>
   );
 };

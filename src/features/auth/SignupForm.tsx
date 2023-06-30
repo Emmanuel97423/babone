@@ -27,35 +27,45 @@ const SignupForm: React.FC = () => {
     e.stopPropagation();
     const value = e.target.value;
     setEmail(value);
-    if (!isValidEmail(value)) {
-      setEmailError('Veuillez entrer une adresse email valide.');
-    } else {
-      setEmailError(null);
-    }
   };
   const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
     const value = e.target.value;
     setPassword(value);
-    if (!isValidPassword(value)) {
-      setPasswordError('Le mot de passe doit comporter au moins 6 caractères.');
-    } else {
-      setPasswordError(null);
-    }
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      await dispatch(signup({ email: email, password: password })).unwrap();
-      // Navigate on successful signup
-      navigate('/auth/signup/success');
-    } catch (err) {
-      // Handle error in signup
-      if (signupState.error) {
-        setSignupError(signupState.error);
-        setTimeout(() => {
-          setSignupError(null);
-        }, 5000);
+    if (!email) setEmailError('Email requis');
+    if (!password) setPasswordError('Mot de passe requis');
+
+    if (!isValidEmail(email)) {
+      setEmailError('Veuillez entrer une adresse email valide.');
+      return;
+    } else {
+      setEmailError(null);
+    }
+    if (!isValidPassword(password)) {
+      setPasswordError('Le mot de passe doit comporter au moins 6 caractères.');
+      return;
+    } else {
+      setPasswordError(null);
+    }
+
+    if (email && password) {
+      try {
+        // @ts-ignore
+
+        await dispatch(signup({ email: email, password: password })).unwrap();
+        // Navigate on successful signup
+        navigate('/auth/signup/success');
+      } catch (err) {
+        // Handle error in signup
+        if (signupState.error) {
+          setSignupError(signupState.error);
+          setTimeout(() => {
+            setSignupError(null);
+          }, 5000);
+        }
       }
     }
   };
