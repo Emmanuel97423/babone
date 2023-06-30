@@ -4,14 +4,18 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './styles.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { PrivateRoute } from './features/auth/PrivateRoute';
 import { store } from './store/store';
 // import { extendedApiSlice } from './features/product/productSlice';
-import { fetchProducts } from './features/product/productSlice';
+// import { fetchProducts } from './features/product/productSlice';
 
 import { Provider } from 'react-redux';
 import ErrorPage from './error-page';
 import Home from './pages/Home';
 import Erp from './pages/Erp';
+import Login from '@/pages/Auth/Login';
+import Signup from '@/pages/Auth/Signup';
+import SignupSuccess from '@/pages/Auth/Signup/SignupSuccess';
 import ErpDefaultTemplate from '@/components/templates/Erp/ErpDefaultTemplate';
 import ProductListPage from './pages/Erp/ProductManagement';
 import DashboardErp from './pages/Erp/DashboardErp';
@@ -28,8 +32,24 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />
   },
   {
+    path: '/auth/login',
+    element: <Login />
+  },
+  {
+    path: '/auth/signup',
+    element: <Signup />
+  },
+  {
+    path: '/auth/signup/success',
+    element: <SignupSuccess />
+  },
+  {
     path: '/erp',
-    element: <ErpDefaultTemplate />,
+    element: (
+      <PrivateRoute>
+        <ErpDefaultTemplate />
+      </PrivateRoute>
+    ),
     errorElement: <ErrorPage />,
 
     children: [

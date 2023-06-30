@@ -1,8 +1,11 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { checkForUpdates } from '@/utils/checkForUpdateTauri';
+import { signup } from '@/features/auth/authSlice';
+import LoginForm from '@/features/auth/LoginForm';
 import './App.css';
+import type { RootState } from '@/store/store';
 // import TopNav from './components/header/TopNav';
 
 interface ButtonProps {
@@ -38,6 +41,12 @@ const data = [
 ];
 
 const App: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const signupStatus = useSelector((state: RootState) => state.auth.loading);
+  const isLogined = useSelector((state: RootState) => state.auth.isLogined);
+  const [isSignup, setIsSignup] = useState<boolean>(false);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
   useEffect(() => {
     checkForUpdates();
   }, []);
@@ -53,6 +62,36 @@ const App: React.FC = () => {
       </div>
     );
   };
+
+  // let content;
+
+  // if (isLogined) {
+  //   content = (
+  //     <>
+  //       {/* <TopNav /> */}
+  //       <h1 data-testid="title-app" className="uppercase text-4xl pb-32 ">
+  //         Babone project
+  //       </h1>
+  //       <div className=" space-x-12 pt-0 flex justify-center items-center ">
+  //         {data.map((data) => (
+  //           <Card
+  //             key={data.id}
+  //             title={data.title}
+  //             description={data.description}
+  //             icon={data.icon}
+  //             link={data.link}
+  //           />
+  //         ))}
+  //       </div>
+  //     </>
+  //   );
+  // } else {
+  //   content = (
+  //     <>
+  //       <LoginForm />
+  //     </>
+  //   );
+  // }
 
   return (
     <div

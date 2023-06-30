@@ -33,7 +33,7 @@ export const checkForUpdates = async () => {
 
       // On macOS and Linux you will need to restart the app manually.
       // You could use this step to display another confirmation dialog.
-      // await relaunch();
+      await relaunch();
     }
   } catch (error) {
     console.error(error);

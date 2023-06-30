@@ -1,8 +1,9 @@
 import { Outlet } from 'react-router-dom';
 import SideBar from '@/components/ui/SideBar';
+import Footer from '@/components/ui/Footer';
 const ErpDefaultTemplate: React.FC = () => {
   return (
-    <div className="flex ">
+    <div className="flex">
       <div>
         <SideBar />
       </div>
