@@ -1,17 +1,19 @@
-import { useState, useffect } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { signup } from '@/features/auth/authSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, redirect } from 'react-router-dom';
 import type { RootState, AppDispatch } from '@/store/store';
-import { Root } from 'postcss';
 const SignupForm: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const signupStatus = useSelector((state: RootState) => state.auth.loading);
+  const signupState = useSelector((state: RootState) => state.auth);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [signupError, setSignupError] = useState<string | null>(null);
 
   const isValidEmail = (email: string) => {
     const emailRegex = /\S+@\S+\.\S+/;
@@ -42,15 +44,19 @@ const SignupForm: React.FC = () => {
     }
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log('e:', e);
     e.preventDefault();
     try {
-      const signupResult = await dispatch<AppDispatch>(
-        signup({ email: email, password: password })
-      );
-      console.log('signupResult:', signupResult);
-    } catch (error) {
-      console.log('error:', error);
+      await dispatch(signup({ email: email, password: password })).unwrap();
+      // Navigate on successful signup
+      navigate('/auth/signup/success');
+    } catch (err) {
+      // Handle error in signup
+      if (signupState.error) {
+        setSignupError(signupState.error);
+        setTimeout(() => {
+          setSignupError(null);
+        }, 5000);
+      }
     }
   };
   let content;
@@ -68,6 +74,8 @@ const SignupForm: React.FC = () => {
             <h2 className="m-0 text-4xl">
               Procédons à la création de votre compte.
             </h2>
+            {signupError && <p className="text-red-500">{signupError}</p>}
+
             {/* <p>
             S’inscrire à Babone, c’est rapide et gratuit. Pas d’engagement, pas
             de contrat longue durée.
@@ -93,8 +101,13 @@ const SignupForm: React.FC = () => {
               onChange={handleChangePassword}
             />
             {passwordError && <p className="text-red-500">{passwordError}</p>}
-            <button className=" w-full btn btn-primary" type="submit">
-              Continuer
+            <button
+              className={`" w-full btn btn-primary  loading-spinner" ${
+                signupStatus === 'pending' ? 'loading' : null
+              }`}
+              type="submit"
+            >
+              {signupStatus === 'pending' ? null : 'Continuer'}
             </button>
             <div className="flex gap-2">
               <p>Vous avez déjà un compte Babone?</p>

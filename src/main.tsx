@@ -15,6 +15,7 @@ import Home from './pages/Home';
 import Erp from './pages/Erp';
 import Login from '@/pages/Auth/Login';
 import Signup from '@/pages/Auth/Signup';
+import SignupSuccess from '@/pages/Auth/Signup/SignupSuccess';
 import ErpDefaultTemplate from '@/components/templates/Erp/ErpDefaultTemplate';
 import ProductListPage from './pages/Erp/ProductManagement';
 import DashboardErp from './pages/Erp/DashboardErp';
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: '/auth/signup',
     element: <Signup />
+  },
+  {
+    path: '/auth/signup/success',
+    element: <SignupSuccess />
   },
   {
     path: '/erp',
