@@ -9,7 +9,6 @@ import {
 } from '@/services/database/products';
 import { modelingCsv } from '@/utils/modelingCsv';
 import type { ProductVariant, Product } from '@/types/interfaces/Product';
-import { v } from 'vitest/dist/types-e3c9754d';
 export const importCSV = createAsyncThunk(
   'products/importCSV',
 
