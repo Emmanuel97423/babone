@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addStore } from '@/features/store/storeSlice';
+import { addStore, fetchStores } from '@/features/store/storeSlice';
 import Modal from '@/components/ui/Modal';
 import type { RootState, AppDispatch } from '@/store/store';
 const AddStore: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const addStoreStatus = useSelector((state: RootState) => state.store.loading);
-  const userId = useSelector((state: RootState) => state.auth.entities);
+  const user = useSelector((state: RootState) => state.auth.entities);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [storeName, setStoreName] = useState<string>('');
   const [address, setAddress] = useState<string>('');
@@ -43,7 +43,7 @@ const AddStore: React.FC = () => {
           storeName: storeName,
           address: address,
           zip: zip,
-          userId: userId.id
+          userId: user.id
         })
       );
       if (result) {
@@ -51,6 +51,7 @@ const AddStore: React.FC = () => {
         setStoreName('');
         setAddress('');
         setZip(undefined);
+        dispatch(fetchStores(user.id));
       }
     } catch (error) {
       console.log('error:', error);

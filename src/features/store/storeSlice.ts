@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {supabase} from '@/utils/supabaseClient';
+import { RootState } from '@/store/store';
 interface Store {
     name: string;
     address: string;
@@ -32,6 +33,25 @@ console.log('payload:', payload)
 
 
 })
+export const fetchStores = createAsyncThunk('store/fetchStores', async(payload:{ userId:string})=>{
+console.log('payload:', payload)
+
+let { data: Store, error } = await supabase
+  .from('Store')
+  .select("*")
+
+  // Filters
+  .eq('userId', payload.userId)
+   
+  if(Store){
+    return Store
+  }
+  if(error){
+    throw new Error(error.message)
+  }
+
+
+})
 
 const initialState = {
   entities: [],
@@ -50,9 +70,23 @@ const storeSlice = createSlice({
         })
         .addCase(addStore.fulfilled, (state, action)=>{
             state.loading="succeeded";
-            state.entities.push(action.payload)
+            // state.entities= action.payload
         })
         .addCase(addStore.rejected, (state, action)=>{
+            state.loading="failed";
+            if(action.error.message){
+                state.error = action.error
+            }
+        })
+        .addCase(fetchStores.pending, (state, action)=>{
+            state.loading="pending"
+        })
+        .addCase(fetchStores.fulfilled, (state, action)=>{
+            console.log('action:', action)
+            state.loading="succeeded";
+            state.entities=action.payload
+        })
+        .addCase(fetchStores.rejected, (state, action)=>{
             state.loading="failed";
             if(action.error.message){
                 state.error = action.error
@@ -61,5 +95,6 @@ const storeSlice = createSlice({
     }
 
 });
+
 
 export default storeSlice.reducer
