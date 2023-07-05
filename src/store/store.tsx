@@ -8,11 +8,13 @@ import ProductVariantReducer from '../features/product/productVariantSlice';
 import OptionReducer from '@/features/product/options/optionSlice';
 import ImportProductsReducer from '@/features/catalog/import/importProductsSlice';
 import CatalogReducer from '@/features/catalog/catalogSlice';
+import StoreReducer from '@/features/store/storeSlice';
 import ModalReducer from '@/features/ui/modal/modalSlice';
 
 export const store = configureStore({
   reducer: {
     auth: AuthReducer,
+    store: StoreReducer,
     catalog: CatalogReducer,
     products: ProductsReducer,
     variants: VariantsReducer,
