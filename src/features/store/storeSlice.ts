@@ -4,7 +4,8 @@ import { RootState } from '@/store/store';
 interface Store {
     name: string;
     address: string;
-    zip: number | null;
+    zip: number ;
+    userId:string;
 }
 
 interface StoreState {
@@ -15,7 +16,6 @@ interface StoreState {
 }
 
 export const addStore = createAsyncThunk('store/addStore', async(payload:{storeName: string, address:string, zip:number, userId:string})=>{
-console.log('payload:', payload)
 
 
     const { data, error } = await supabase
@@ -47,6 +47,7 @@ let { data: Store, error } = await supabase
     return Store
   }
   if(error){
+    console.log('error:', error)
     throw new Error(error.message)
   }
 

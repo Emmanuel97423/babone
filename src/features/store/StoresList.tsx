@@ -18,11 +18,11 @@ const StoreList: React.FC = () => {
     if (user) {
       dispatch(fetchStores({ userId: user.id }));
     }
-  }, []);
-  const stores: Store[] = [
-    { name: 'Exo-Trap', address: 'foo', zip: 97460 },
-    { name: 'Littoral Pêche', address: 'foo', zip: 97460 }
-  ];
+  }, [dispatch]);
+  // const stores: Store[] = [
+  //   { name: 'Exo-Trap', address: 'foo', zip: 97460 },
+  //   { name: 'Littoral Pêche', address: 'foo', zip: 97460 }
+  // ];
 
   const list = useMemo(() => {
     return storesState.map((store: Store, index: number) => (

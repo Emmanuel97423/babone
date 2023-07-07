@@ -10,7 +10,7 @@ const AddStore: React.FC = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [storeName, setStoreName] = useState<string>('');
   const [address, setAddress] = useState<string>('');
-  const [zip, setZip] = useState<number>();
+  const [zip, setZip] = useState<number>(0);
 
   const handleStoreNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
@@ -38,7 +38,7 @@ const AddStore: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const result = dispatch(
+      const result = await dispatch(
         addStore({
           storeName: storeName,
           address: address,
@@ -50,8 +50,8 @@ const AddStore: React.FC = () => {
         setOpenModal(false);
         setStoreName('');
         setAddress('');
-        setZip(undefined);
-        dispatch(fetchStores(user.id));
+        setZip(0);
+        dispatch(fetchStores({ userId: user.id }));
       }
     } catch (error) {
       console.log('error:', error);
