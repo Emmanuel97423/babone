@@ -1,10 +1,12 @@
 import { useEffect, useMemo } from 'react';
 import AddStore from './AddStore';
+import UpdateStore from './UpdateStore';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchStores } from '@/features/store/storeSlice';
 import Spinner from '@/components/ui/common/Spinner';
 import type { RootState, AppDispatch } from '@/store/store';
 interface Store {
+  id?: number;
   name: string;
   address: string;
   zip: number | null;
@@ -19,15 +21,11 @@ const StoreList: React.FC = () => {
       dispatch(fetchStores({ userId: user.id }));
     }
   }, [dispatch]);
-  // const stores: Store[] = [
-  //   { name: 'Exo-Trap', address: 'foo', zip: 97460 },
-  //   { name: 'Littoral Pêche', address: 'foo', zip: 97460 }
-  // ];
 
   const list = useMemo(() => {
-    return storesState.map((store: Store, index: number) => (
+    return storesState.map((store, index: number) => (
       <div key={index}>
-        <div className="card w-96 bg-base-100 shadow-xl image-full mt-6">
+        <div className="card w-96 bg-base-100 shadow-xl image-full mt-6 mb-3">
           <figure>
             <img
               src="https://picsum.photos/384/200?grayscale"
@@ -38,10 +36,14 @@ const StoreList: React.FC = () => {
             <h2 className="card-title">{store.name}</h2>
             {/* <p>If a dog chews shoes whose shoes does he choose?</p> */}
             <div className="card-actions justify-end">
-              <button className="btn btn-primary">Modifier</button>
+              {/* <button className="btn btn-primary">Modifier</button> */}
+
               <button className="btn btn-primary">Choisir</button>
             </div>
           </div>
+        </div>
+        <div className="w-full">
+          <UpdateStore storeId={store.id} />
         </div>
       </div>
     ));

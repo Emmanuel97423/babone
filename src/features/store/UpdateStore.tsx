@@ -1,16 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addStore, fetchStores } from '@/features/store/storeSlice';
+import {
+  updateStores,
+  fetchStores,
+  storeById
+} from '@/features/store/storeSlice';
 import Modal from '@/components/ui/Modal';
 import type { RootState, AppDispatch } from '@/store/store';
-const AddStore: React.FC = () => {
+interface UpdateStoreProps {
+  storeId: number;
+}
+interface StoreProps {
+  name: string;
+  address: string;
+  zip: number | undefined;
+}
+const UpdateStore: React.FC<UpdateStoreProps> = ({ storeId }) => {
   const dispatch: AppDispatch = useDispatch();
   const addStoreStatus = useSelector((state: RootState) => state.store.loading);
   const user = useSelector((state: RootState) => state.auth.entities);
+  const store = useSelector((state: RootState) => state.store.entitie);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [storeName, setStoreName] = useState<string>('');
   const [address, setAddress] = useState<string>('');
-  const [zip, setZip] = useState<number>(0);
+  const [zip, setZip] = useState<number | undefined>();
+  // const [store, setStore] = useState<StoreProps>();
 
   const handleStoreNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
@@ -30,20 +44,22 @@ const AddStore: React.FC = () => {
     setZip(value);
   };
 
-  const handleOpenModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleOpenModal = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+
     setOpenModal(true);
+    dispatch(storeById(storeId));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const result = await dispatch(
-        addStore({
+        updateStores({
           storeName: storeName,
           address: address,
           zip: zip,
-          userId: user.id
+          storeId: storeId
         })
       );
       if (result) {
@@ -51,7 +67,9 @@ const AddStore: React.FC = () => {
         setStoreName('');
         setAddress('');
         setZip(0);
-        dispatch(fetchStores({ userId: user.id }));
+        if (user) {
+          dispatch(fetchStores({ userId: user.id }));
+        }
       }
     } catch (error) {
       console.log('error:', error);
@@ -60,20 +78,20 @@ const AddStore: React.FC = () => {
 
   return (
     <>
-      <button className="btn btn-primary" onClick={handleOpenModal}>
-        Ajouter un magasin
+      <button className="btn btn-primary w-full" onClick={handleOpenModal}>
+        Modifier
       </button>
       <Modal
-        htmlFor="add-store-modal"
+        htmlFor="update-store-modal"
         isOpenModal={openModal}
         setIsModalOpen={setOpenModal}
       >
-        <h2>Ajouter un magasin</h2>
+        <h2>Modifier le magasin</h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-2">
             <input
               type="text"
-              placeholder="Nom du magasin"
+              placeholder={store[0]?.name || 'Nom du magasin'}
               className="input input-bordered"
               value={storeName}
               onChange={handleStoreNameChange}
@@ -81,7 +99,7 @@ const AddStore: React.FC = () => {
             />
             <input
               type="text"
-              placeholder="Adresse"
+              placeholder={store[0]?.address || 'Adresse'}
               className="input input-bordered"
               value={address}
               onChange={handleAddressChange}
@@ -89,15 +107,18 @@ const AddStore: React.FC = () => {
             />
             <input
               type="number"
-              placeholder="Code postal"
+              placeholder={store[0]?.zip?.toString() || 'Code postal'}
               className="input input-bordered"
               value={zip}
               onChange={handleZipChange}
               required
             />
             <div className="mt-2">
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn btn-primary mr-4">
                 Enregistrer
+              </button>
+              <button type="submit" className="btn btn-warning">
+                Supprimer
               </button>
             </div>
           </div>
@@ -106,4 +127,4 @@ const AddStore: React.FC = () => {
     </>
   );
 };
-export default AddStore;
+export default UpdateStore;

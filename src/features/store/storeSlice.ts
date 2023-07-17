@@ -1,18 +1,20 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk, PayloadAction, SerializedError} from '@reduxjs/toolkit';
 import {supabase} from '@/utils/supabaseClient';
 import { RootState } from '@/store/store';
 interface Store {
+    id: number;
     name: string;
     address: string;
-    zip: number ;
+    zip: number | undefined;
     userId:string;
 }
 
 interface StoreState {
     entities:Store[],
+    entitie:Store[] | [],
     loading:'idle' | 'pending' | 'succeeded' | 'failed';
     isLogined: boolean;
-    error: string | undefined;
+    error: SerializedError;
 }
 
 export const addStore = createAsyncThunk('store/addStore', async(payload:{storeName: string, address:string, zip:number, userId:string})=>{
@@ -34,7 +36,6 @@ export const addStore = createAsyncThunk('store/addStore', async(payload:{storeN
 
 })
 export const fetchStores = createAsyncThunk('store/fetchStores', async(payload:{ userId:string})=>{
-console.log('payload:', payload)
 
 let { data: Store, error } = await supabase
   .from('Store')
@@ -44,7 +45,43 @@ let { data: Store, error } = await supabase
   .eq('userId', payload.userId)
    
   if(Store){
-    return Store
+    return Store as Store[]
+  }
+  if(error){
+    console.log('error:', error)
+    throw new Error(error.message)
+  }
+
+
+})
+export const updateStores = createAsyncThunk('store/updateStores', async(payload:{storeId:number, storeName: string, address:string, zip:number | undefined})=>{
+
+let { data: Store, error } = await supabase
+  .from('Store')
+  .update({ name: payload.storeName, address: payload.address, zip: payload.zip})
+  .eq('id', payload.storeId)
+  .select()
+   
+  if(Store){
+    return Store as Store[]
+  }
+  if(error){
+    console.log('error:', error)
+    throw new Error(error.message)
+  }
+
+
+})
+export const fetchOneStore = createAsyncThunk('store/fetchOneStore', async(payload:{storeId:number})=>{
+
+let { data: Store, error } = await supabase
+  .from('Store')
+  .select("*")
+  .eq('id', payload.storeId)
+  .select()
+   
+  if(Store){
+    return Store as Store[]
   }
   if(error){
     console.log('error:', error)
@@ -54,17 +91,23 @@ let { data: Store, error } = await supabase
 
 })
 
+
 const initialState = {
   entities: [],
+  entitie: [],
   loading: 'idle',
-  error: undefined,
+  error: null,
   isLogined: false
-} as StoreState;
+} as unknown as StoreState;
 
 const storeSlice = createSlice({
     name:'store',
     initialState,
-    reducers:{},
+    reducers:{
+      storeById: (state, action: PayloadAction<number>)=>{
+state.entitie = state.entities.filter((store:Store) => store.id === action.payload)
+      }
+    },
     extraReducers: builder=>{
         builder.addCase(addStore.pending, (state, action)=>{
             state.loading="pending"
@@ -83,11 +126,42 @@ const storeSlice = createSlice({
             state.loading="pending"
         })
         .addCase(fetchStores.fulfilled, (state, action)=>{
-            console.log('action:', action)
             state.loading="succeeded";
-            state.entities=action.payload
+            if(action.payload){
+              state.entities=action.payload
+            }
         })
         .addCase(fetchStores.rejected, (state, action)=>{
+            state.loading="failed";
+            if(action.error.message){
+                state.error = action.error
+            }
+        })
+         .addCase(updateStores.pending, (state, action)=>{
+            state.loading="pending"
+        })
+        .addCase(updateStores.fulfilled, (state, action)=>{
+            state.loading="succeeded";
+            if(action.payload){
+              state.entities=action.payload
+            }
+        })
+        .addCase(updateStores.rejected, (state, action)=>{
+            state.loading="failed";
+            if(action.error.message){
+                state.error = action.error
+            }
+        })
+         .addCase(fetchOneStore.pending, (state, action)=>{
+            state.loading="pending"
+        })
+        .addCase(fetchOneStore.fulfilled, (state, action)=>{
+            state.loading="succeeded";
+            if(action.payload){
+              state.entitie=action.payload
+            }
+        })
+        .addCase(fetchOneStore.rejected, (state, action)=>{
             state.loading="failed";
             if(action.error.message){
                 state.error = action.error
@@ -97,5 +171,6 @@ const storeSlice = createSlice({
 
 });
 
+export const { storeById } = storeSlice.actions;
 
 export default storeSlice.reducer
