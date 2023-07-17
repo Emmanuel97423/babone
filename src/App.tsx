@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { checkForUpdates } from '@/utils/checkForUpdateTauri';
-import { signup } from '@/features/auth/authSlice';
-import LoginForm from '@/features/auth/LoginForm';
+import { BsChevronDoubleLeft } from 'react-icons/bs';
 import './App.css';
 import type { RootState } from '@/store/store';
 // import TopNav from './components/header/TopNav';
@@ -29,24 +28,22 @@ const data = [
     title: 'E-COMMERCE',
     description: 'Gérer vos ventes en ligne, produits, clients...',
     icon: 'fas fa-shopping-cart',
-    link: '/'
+    link: '#'
   },
   {
     id: 3,
     title: 'CAISSE ENREGISTREUSE',
     description: 'Gérer vos réglements clients, fournisseurs...',
     icon: 'fas fa-shopping-cart',
-    link: '/'
+    link: '#'
   }
 ];
 
 const App: React.FC = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const signupStatus = useSelector((state: RootState) => state.auth.loading);
-  const isLogined = useSelector((state: RootState) => state.auth.isLogined);
-  const [isSignup, setIsSignup] = useState<boolean>(false);
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const store = useSelector((state: RootState) => state.store.entitie);
+  const storeId = store[0].id;
+  const storeName = store[0].name;
+
   useEffect(() => {
     checkForUpdates();
   }, []);
@@ -63,44 +60,20 @@ const App: React.FC = () => {
     );
   };
 
-  // let content;
-
-  // if (isLogined) {
-  //   content = (
-  //     <>
-  //       {/* <TopNav /> */}
-  //       <h1 data-testid="title-app" className="uppercase text-4xl pb-32 ">
-  //         Babone project
-  //       </h1>
-  //       <div className=" space-x-12 pt-0 flex justify-center items-center ">
-  //         {data.map((data) => (
-  //           <Card
-  //             key={data.id}
-  //             title={data.title}
-  //             description={data.description}
-  //             icon={data.icon}
-  //             link={data.link}
-  //           />
-  //         ))}
-  //       </div>
-  //     </>
-  //   );
-  // } else {
-  //   content = (
-  //     <>
-  //       <LoginForm />
-  //     </>
-  //   );
-  // }
-
   return (
     <div
       id="App"
       className="h-screen  mx-auto flex flex-col justify-center items-center tracking-widest"
     >
+      <div className="absolute left-0 top-0 p-6">
+        <Link to="/" className="flex justify-center items-center gap-1">
+          <BsChevronDoubleLeft />
+          Retour
+        </Link>
+      </div>
       {/* <TopNav /> */}
       <h1 data-testid="title-app" className="uppercase text-4xl pb-32 ">
-        Babone project
+        {storeName}
       </h1>
       <div className=" space-x-12 pt-0 flex justify-center items-center ">
         {data.map((data) => (

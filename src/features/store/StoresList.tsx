@@ -30,7 +30,7 @@ const StoreList: React.FC = () => {
   ) => {
     const fetchStore = dispatch(storeById(storeId));
     if (fetchStore) {
-      navigate('/erp');
+      navigate('/apps');
     }
   };
 
@@ -69,7 +69,7 @@ const StoreList: React.FC = () => {
   let content;
   if (loading === 'pending') {
     content = (
-      <div className="h-screen w-full">
+      <div className="h-screen w-screen">
         <Spinner />
       </div>
     );
@@ -80,13 +80,13 @@ const StoreList: React.FC = () => {
   }
 
   return (
-    <>
+    <div className="p-9">
       <AddStore />
 
-      <div className="flex justify-center flex-wrap items-center gap-4 ">
+      <div className="flex justify-center flex-wrap items-center gap-4">
         {content}
       </div>
-    </>
+    </div>
   );
 };
 export default StoreList;

@@ -58,12 +58,15 @@ const productSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(
+    builder.addCase(fetchProducts.pending, (state, action) => {
+      state.status = 'loading';
+    }).addCase(
       fetchProducts.fulfilled,
       (state, action) => {
         console.log('action:', action)
         if (action.payload) {
           state.status = 'success';
+          // @ts-ignore
           productsAdapter.setAll(state, action.payload);
         } else {
           // handle the case where payload is undefined
@@ -72,13 +75,10 @@ const productSlice = createSlice({
           state.error = 'Failed to fetch products';
         }
       }
-    );
-    builder.addCase(fetchProducts.rejected, (state, action) => {
+    )
+   .addCase(fetchProducts.rejected, (state, action) => {
       state.status = 'failed';
       state.error = action.error?.message;
-    });
-    builder.addCase(fetchProducts.pending, (state, action) => {
-      state.status = 'loading';
     });
   }
 });

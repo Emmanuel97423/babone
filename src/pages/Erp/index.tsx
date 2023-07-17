@@ -12,7 +12,7 @@ const Erp: React.FC = () => {
     // },
     {
       title: 'Produits',
-      link: '/erp/products-management',
+      // link: '/erp/products-management',
       icon: <FaFish />,
       subMenu: true,
       subMenuItems: [
@@ -23,7 +23,7 @@ const Erp: React.FC = () => {
         // },
         {
           title: 'Produit de base',
-          link: '/erp/products-management',
+          link: '/erp/products-management/base-products',
           icon: <AiOutlinePlusCircle />
         },
         {

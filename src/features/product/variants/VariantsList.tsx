@@ -14,11 +14,13 @@ const VariantsList: React.FC = () => {
   const variants: ProductVariant[] | unknown = useSelector<RootState>(
     (state) => state.variants.entities
   );
+  const store = useSelector((state: RootState) => state.store.entitie);
+  const storeId = store[0].id;
 
   useEffect(() => {
     try {
       // @ts-ignore
-      dispatch(fetchVariants());
+      dispatch(fetchVariants({ storeId }));
       // if (result.data.length > 0) {
       //   console.log('result:', result);
       // }

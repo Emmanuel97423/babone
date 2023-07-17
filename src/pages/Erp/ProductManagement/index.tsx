@@ -35,10 +35,14 @@ const ProductListPage: React.FC = () => {
   );
 
   useEffect(() => {
-    if (productStatus === 'idle') {
-      dispatch(fetchProducts({ storeId }));
-    }
-  }, [dispatch, productStatus]);
+    console.log('storeId:', storeId);
+    console.log('productStatus:', productStatus);
+    dispatch(fetchProducts({ storeId }));
+
+    // if (productStatus === 'idle') {
+    //   dispatch(fetchProducts({ storeId }));
+    // }
+  }, []);
 
   let ProductsList: React.FC<Props> = ({ product, index }) => {
     // const productsListModel = new ProductModel(product);

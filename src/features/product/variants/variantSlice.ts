@@ -20,9 +20,9 @@ interface VariantsState {
 }
 const VARIANT_TABLE = "Variant"
 // @ts-ignore
-export const fetchVariants = createAsyncThunk<ProductVariant[] | undefined >('variants/fetchVariant', async(_,{RejectWithValue})=>{
+export const fetchVariants = createAsyncThunk<ProductVariant[] | undefined >('variants/fetchVariant', async(payload:{storeId:number},{RejectWithValue})=>{
 
-    const { data: variants, error} = await supabase.from(VARIANT_TABLE).select('*');
+    const { data: variants, error} = await supabase.from(VARIANT_TABLE).select('*').eq('storeId',payload.storeId);
      if (error) {
         return RejectWithValue(error.message)
     }   

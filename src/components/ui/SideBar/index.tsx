@@ -1,6 +1,6 @@
 import { MouseEventHandler, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@/features/auth/authSlice';
 import { BsArrowLeftCircleFill, BsChevronDoubleLeft } from 'react-icons/bs';
 import {
@@ -14,16 +14,17 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { MdPointOfSale } from 'react-icons/md';
 import { BiLogOut } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
+import { RootState } from '@/store/store';
 
 interface SubMenuItems {
   title: string;
-  link: string;
+  link?: string;
   icon: any;
 }
 
 interface MenuItems {
   title: string;
-  link: string;
+  link?: string;
   icon?: any;
   disconnect?: boolean;
   spacing?: boolean | undefined;
@@ -32,15 +33,19 @@ interface MenuItems {
   subMenuItems?: SubMenuItems[] | undefined;
 }
 interface data {
-  menus: MenuItems[];
+  menus?: MenuItems[];
 }
 
 const SideBar: React.FC<data> = ({ menus = [] }) => {
+  const location = useLocation();
+  const pathname = location.pathname;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
   const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
 
+  const store = useSelector((state: RootState) => state.store.entitie);
+  const storeName = store[0].name;
   // const menus: MenuItems[] = [
   //   // {
   //   //   title: 'Tableau de bord',
@@ -122,6 +127,13 @@ const SideBar: React.FC<data> = ({ menus = [] }) => {
         open ? 'w-72' : 'w-20'
       }`}
     >
+      <div
+        className={`text-sm w-full flex justify-center items-center gap-2 mb-6 ${
+          !open && 'hidden'
+        }`}
+      >
+        <span>Magasin:</span> <span className="font-bold">{storeName}</span>
+      </div>
       <BsArrowLeftCircleFill
         className={`bg-primary text-3xl text-white absolute z-40 rounded-full -right-3 top-9 cursor-pointer ease-in-out duration-1 ${
           !open && ' rotate-180'
@@ -132,7 +144,9 @@ const SideBar: React.FC<data> = ({ menus = [] }) => {
       {/* <button className={`btn btn-wide `}>Menu principal</button> */}
       <Link
         to="/"
-        className={`${open ? 'flex  items-center cursor-pointer' : ''}`}
+        className={`${open ? 'flex  items-center cursor-pointer' : ''} ${
+          pathname === '/' ? 'hidden' : ''
+        }`}
       >
         <BsChevronDoubleLeft className="text-xl rounded  block float-left mr-2" />
         <h2
@@ -166,7 +180,7 @@ const SideBar: React.FC<data> = ({ menus = [] }) => {
         {menus.map((menu, index) => (
           <div key={index}>
             <Link
-              to={menu.link}
+              to={menu.link ? menu.link : '#'}
               onClick={
                 menu.disconnect ? handleDisconnect : handleOpenSubMenu(index)
               }
@@ -214,7 +228,7 @@ const SideBar: React.FC<data> = ({ menus = [] }) => {
                       className=" text-grey-300 text-sm px-5  relative  cursor-pointer p-2 hover:bg-accent/50  rounded-md"
                     >
                       <Link
-                        to={subMenu.link}
+                        to={subMenu.link ? subMenu.link : '#'}
                         className="flex items-center gap-x-4"
                       >
                         {subMenu.icon}

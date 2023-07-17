@@ -30,7 +30,11 @@ import StoreList from '@/features/store/StoresList';
 const router = createBrowserRouter([
   {
     path: '/apps',
-    element: <App />,
+    element: (
+      <PrivateRoute>
+        <App />
+      </PrivateRoute>
+    ),
     errorElement: <ErrorPage />
   },
 
@@ -50,7 +54,7 @@ const router = createBrowserRouter([
     path: '/',
     element: (
       <PrivateRoute>
-        <StorePage />
+        <StoreList />
       </PrivateRoute>
     ),
     errorElement: <ErrorPage />,
@@ -75,8 +79,12 @@ const router = createBrowserRouter([
         path: '/erp/dashboard',
         element: <DashboardErp />
       },
+      // {
+      //   path: '/erp/products-management',
+      //   element: <ProductListPage />
+      // },
       {
-        path: '/erp/products-management',
+        path: '/erp/products-management/base-products',
         element: <ProductListPage />
       },
       {

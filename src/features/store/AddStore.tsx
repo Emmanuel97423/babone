@@ -43,6 +43,7 @@ const AddStore: React.FC = () => {
           storeName: storeName,
           address: address,
           zip: zip,
+          // @ts-ignore
           userId: user.id
         })
       );
@@ -51,6 +52,7 @@ const AddStore: React.FC = () => {
         setStoreName('');
         setAddress('');
         setZip(0);
+        // @ts-ignore
         dispatch(fetchStores({ userId: user.id }));
       }
     } catch (error) {

@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom';
+import { FaStore } from 'react-icons/fa';
 import SideBar from '@/components/ui/SideBar';
 const StorePage: React.FC = () => {
   const menus = [
@@ -9,8 +10,8 @@ const StorePage: React.FC = () => {
     // },
     {
       title: 'Magasins',
-      link: '/stores'
-      //   icon: <FaFish />,
+      link: '/stores',
+      icon: <FaStore />
     }
   ];
   return (
