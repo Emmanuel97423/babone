@@ -3,7 +3,7 @@ import Button from '@/components/ui/common/Button';
 import { useDispatch } from 'react-redux';
 
 type Props = {
-  htmlFor: string;
+  htmlFor?: string;
   labelButton?: string;
   titleModal?: string;
   labelModal?: string;

@@ -1,8 +1,9 @@
 import { useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AddStore from './AddStore';
 import UpdateStore from './UpdateStore';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchStores } from '@/features/store/storeSlice';
+import { fetchStores, storeById } from '@/features/store/storeSlice';
 import Spinner from '@/components/ui/common/Spinner';
 import type { RootState, AppDispatch } from '@/store/store';
 interface Store {
@@ -12,6 +13,7 @@ interface Store {
   zip: number | null;
 }
 const StoreList: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const loading = useSelector((state: RootState) => state.store.loading);
   const storesState = useSelector((state: RootState) => state.store.entities);
@@ -21,6 +23,16 @@ const StoreList: React.FC = () => {
       dispatch(fetchStores({ userId: user.id }));
     }
   }, [dispatch]);
+
+  const navigateToStore = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    storeId: number
+  ) => {
+    const fetchStore = dispatch(storeById(storeId));
+    if (fetchStore) {
+      navigate('/erp');
+    }
+  };
 
   const list = useMemo(() => {
     return storesState.map((store, index: number) => (
@@ -38,7 +50,12 @@ const StoreList: React.FC = () => {
             <div className="card-actions justify-end">
               {/* <button className="btn btn-primary">Modifier</button> */}
 
-              <button className="btn btn-primary">Choisir</button>
+              <button
+                className="btn btn-primary"
+                onClick={(e) => navigateToStore(e, store.id)}
+              >
+                Choisir
+              </button>
             </div>
           </div>
         </div>

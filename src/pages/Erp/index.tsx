@@ -33,12 +33,12 @@ const Erp: React.FC = () => {
         }
       ]
     },
-    {
-      title: 'Paramètre magasin',
+    // {
+    //   title: 'Paramètre magasin',
 
-      link: '/store',
-      icon: <AiOutlineSetting />
-    },
+    //   link: '/store',
+    //   icon: <AiOutlineSetting />
+    // },
     {
       title: 'Déconnexion',
       link: '',

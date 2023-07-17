@@ -24,6 +24,9 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
   const [importIsLoading, setIsLoadingImport] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
 
+  const store = useSelector((state: RootState) => state.store.entitie);
+  const storeId = store[0].id;
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: (acceptedFiles) => {
       if (acceptedFiles && acceptedFiles[0].type === 'text/csv') {
@@ -43,10 +46,11 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
   const handleSubmit: () => void = async () => {
     setIsLoadingImport(true);
     try {
-      // @ts-ignore
-      const importingCsv = await dispatch(importCSV(csvFile));
+      const importingCsv = await dispatch(
+        // @ts-ignore
+        importCSV({ file: csvFile, storeId: storeId })
+      );
       if (importingCsv) {
-        console.log('importingCsv:', importingCsv);
         setIsLoadingImport(false);
       }
     } catch (error) {

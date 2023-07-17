@@ -19,9 +19,9 @@ const CATEGORY_TABLE = 'Category';
 const VARIANT_TABLE = 'Variant';
 
 
-export const fetchProductsFromDatabase  = async (): Promise<Products> => {
+export const fetchProductsFromDatabase  = async (storeId:number): Promise<Products> => {
   try {
-    const result = await supabase.from(PRODUCT_TABLE).select('*');
+    const result = await supabase.from(PRODUCT_TABLE).select('*').eq('storeId', storeId);
     console.log('result:', result)
     if(result.data ){
       return result.data.map(item => ({
@@ -60,7 +60,7 @@ export const fetchVariantsFromDatabase = async () => {
   }
 }
 
-export const getProductByName = async (name: string, categoryId: number) => {
+export const getProductByName = async (name: string, categoryId: number, storeId:number) => {
   try {
     const result = await supabase
       .from(PRODUCT_TABLE)
@@ -74,7 +74,7 @@ export const getProductByName = async (name: string, categoryId: number) => {
       try {
         const createProducName = await supabase
           .from(PRODUCT_TABLE)
-          .insert([{ name: name, categoryId: categoryId }])
+          .insert([{ name: name, categoryId: categoryId, storeId: storeId }])
           .select();
         if (createProducName.data) {
           return createProducName.data[0];

@@ -24,6 +24,8 @@ const ProductListPage: React.FC = () => {
   const [openModalImport, setOpenModalImport] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
   const products: Products = useSelector(selectAllProducts);
+  const store = useSelector((state: RootState) => state.store.entitie);
+  const storeId = store[0].id;
 
   const productStatus: string = useSelector(
     (state: any) => state.products.status
@@ -34,7 +36,7 @@ const ProductListPage: React.FC = () => {
 
   useEffect(() => {
     if (productStatus === 'idle') {
-      dispatch(fetchProducts());
+      dispatch(fetchProducts({ storeId }));
     }
   }, [dispatch, productStatus]);
 
@@ -78,10 +80,18 @@ const ProductListPage: React.FC = () => {
       </tr>
     );
   } else if (productStatus === 'success') {
-    const renderedProducts = products.map((product, index) => (
-      <ProductsList key={index} product={product} index={index} />
-    ));
-    content = <>{renderedProducts}</>;
+    if (products.length < 1) {
+      content = (
+        <div className="h-full w-full flex justify-center items-center">
+          Vous n'avez aucun article...
+        </div>
+      );
+    } else {
+      const renderedProducts = products.map((product, index) => (
+        <ProductsList key={index} product={product} index={index} />
+      ));
+      content = <>{renderedProducts}</>;
+    }
   } else if (productStatus === 'failed') {
     content = <div>{error?.toString()}</div>;
   }

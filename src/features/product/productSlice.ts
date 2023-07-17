@@ -5,6 +5,8 @@ import {
   createAsyncThunk,
   EntityState
 } from '@reduxjs/toolkit';
+import {supabase} from '@/utils/supabaseClient';
+
 import { fetchProductsFromDatabase } from '@/services/database/products';
 import type { Products, Product } from '../../types/interfaces/Product';
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -14,6 +16,9 @@ interface ProductsState extends EntityState<Product> {
   status: 'idle' | 'loading' | 'failed' | 'success';
   error: string | undefined;
 }
+
+const PRODUCT_TABLE = 'Product';
+
 
 const productsAdapter = createEntityAdapter<Product>({
   selectId: (product) => product.id,
@@ -30,15 +35,17 @@ const initialState: ProductsState = productsAdapter.getInitialState({
 //   const data = await response.json()
 //   return data
 // })
-export const fetchProducts = createAsyncThunk<Product[] | undefined>(
+export const fetchProducts = createAsyncThunk(
   'product/fetchProducts',
-  async () => {
+  async (payload:{storeId:number}) => {
     try {
-      const response = await fetchProductsFromDatabase();
-      if (response) {
-        console.log('response:', response);
+      // const response = await fetchProductsFromDatabase(payload.storeId);
+      const response = await supabase.from(PRODUCT_TABLE).select('*').eq('storeId', payload.storeId)
+      if (response.data && response.data.length > 0) {
 
-        return response;
+        return response.data;
+      } else {
+        return [];
       }
     } catch (error) {
       console.log('error:', error);
@@ -53,7 +60,8 @@ const productSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       fetchProducts.fulfilled,
-      (state, action: PayloadAction<Product[] | undefined>) => {
+      (state, action) => {
+        console.log('action:', action)
         if (action.payload) {
           state.status = 'success';
           productsAdapter.setAll(state, action.payload);
