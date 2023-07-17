@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   updateStores,
   fetchStores,
+  deleteStore,
   storeById
 } from '@/features/store/storeSlice';
 import Modal from '@/components/ui/Modal';
@@ -75,6 +76,16 @@ const UpdateStore: React.FC<UpdateStoreProps> = ({ storeId }) => {
       console.log('error:', error);
     }
   };
+  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    await dispatch(deleteStore({ storeId }));
+    setOpenModal(false);
+    setStoreName('');
+    setAddress('');
+    setZip(0);
+    if (user) {
+      dispatch(fetchStores({ userId: user.id }));
+    }
+  };
 
   return (
     <>
@@ -117,7 +128,11 @@ const UpdateStore: React.FC<UpdateStoreProps> = ({ storeId }) => {
               <button type="submit" className="btn btn-primary mr-4">
                 Enregistrer
               </button>
-              <button type="submit" className="btn btn-warning">
+              <button
+                type="submit"
+                className="btn btn-warning"
+                onClick={handleDelete}
+              >
                 Supprimer
               </button>
             </div>

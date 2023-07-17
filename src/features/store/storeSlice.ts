@@ -90,6 +90,23 @@ let { data: Store, error } = await supabase
 
 
 })
+export const deleteStore = createAsyncThunk('store/deleteStore', async(payload:{storeId:number})=>{
+
+let {  error } = await supabase
+  .from('Store')
+  .delete()
+  .eq('id', payload.storeId)
+   
+  // if(Store){
+  //   return Store as Store[]
+  // }
+  if(error){
+    console.log('error:', error)
+    throw new Error(error.message)
+  }
+
+
+})
 
 
 const initialState = {
@@ -162,6 +179,19 @@ state.entitie = state.entities.filter((store:Store) => store.id === action.paylo
             }
         })
         .addCase(fetchOneStore.rejected, (state, action)=>{
+            state.loading="failed";
+            if(action.error.message){
+                state.error = action.error
+            }
+        })
+        .addCase(deleteStore.pending, (state, action)=>{
+            state.loading="pending"
+        })
+        .addCase(deleteStore.fulfilled, (state, action)=>{
+            state.loading="succeeded";
+            
+        })
+        .addCase(deleteStore.rejected, (state, action)=>{
             state.loading="failed";
             if(action.error.message){
                 state.error = action.error
