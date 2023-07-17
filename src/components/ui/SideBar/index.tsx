@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '@/features/auth/authSlice';
 import { BsArrowLeftCircleFill, BsChevronDoubleLeft } from 'react-icons/bs';
-import { AiOutlineSearch, AiOutlinePlusCircle } from 'react-icons/ai';
+import {
+  AiOutlineSearch,
+  AiOutlinePlusCircle,
+  AiOutlineSetting
+} from 'react-icons/ai';
 import { RiDashboardLine } from 'react-icons/ri';
 import { FaFish } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
@@ -11,84 +15,93 @@ import { MdPointOfSale } from 'react-icons/md';
 import { BiLogOut } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 
-const SideBar: React.FC = () => {
+interface SubMenuItems {
+  title: string;
+  link: string;
+  icon: any;
+}
+
+interface MenuItems {
+  title: string;
+  link: string;
+  icon?: any;
+  disconnect?: boolean;
+  spacing?: boolean | undefined;
+  subMenu?: boolean | undefined;
+  subMenuOpen?: number | undefined | unknown;
+  subMenuItems?: SubMenuItems[] | undefined;
+}
+interface data {
+  menus: MenuItems[];
+}
+
+const SideBar: React.FC<data> = ({ menus = [] }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
   const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
 
-  interface SubMenuItems {
-    title: string;
-    link: string;
-    icon: any;
-  }
+  // const menus: MenuItems[] = [
+  //   // {
+  //   //   title: 'Tableau de bord',
+  //   //   link: '/erp/dashboard',
+  //   //   icon: <RiDashboardLine />
+  //   // },
+  //   {
+  //     title: 'Produits',
+  //     link: '/erp/products-management',
+  //     icon: <FaFish />,
+  //     subMenu: true,
+  //     subMenuItems: [
+  //       // {
+  //       //   title: 'Ajouter un produit',
+  //       //   link: '/erp/products-management/add',
+  //       //   icon: <AiOutlinePlusCircle />
+  //       // },
+  //       {
+  //         title: 'Produit de base',
+  //         link: '/erp/products-management',
+  //         icon: <AiOutlinePlusCircle />
+  //       },
+  //       {
+  //         title: 'Variantes',
+  //         link: '/erp/products-management/variants',
+  //         icon: <AiOutlinePlusCircle />
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     title: 'Paramètre magasin',
 
-  interface MenuItems {
-    title: string;
-    link: string;
-    icon: any;
-    disconnect?: boolean;
-    spacing?: boolean | undefined;
-    subMenu?: boolean | undefined;
-    subMenuOpen?: number | undefined | unknown;
-    subMenuItems?: SubMenuItems[] | undefined;
-  }
-  const menus: MenuItems[] = [
-    // {
-    //   title: 'Tableau de bord',
-    //   link: '/erp/dashboard',
-    //   icon: <RiDashboardLine />
-    // },
-    {
-      title: 'Produits',
-      link: '/erp/products-management',
-      icon: <FaFish />,
-      subMenu: true,
-      subMenuItems: [
-        // {
-        //   title: 'Ajouter un produit',
-        //   link: '/erp/products-management/add',
-        //   icon: <AiOutlinePlusCircle />
-        // },
-        {
-          title: 'Produit de base',
-          link: '/erp/products-management',
-          icon: <AiOutlinePlusCircle />
-        },
-        {
-          title: 'Variantes',
-          link: '/erp/products-management/variants',
-          icon: <AiOutlinePlusCircle />
-        }
-      ]
-    },
-    {
-      title: 'Déconnexion',
+  //     link: '/store',
+  //     icon: <AiOutlineSetting />
+  //   },
+  //   {
+  //     title: 'Déconnexion',
+  //     link: '',
+  //     icon: <BiLogOut />,
+  //     disconnect: true
+  //   }
 
-      link: '',
-      icon: <BiLogOut />,
-      disconnect: true
-    }
-
-    // {
-    //   title: 'Commandes',
-    //   link: '/erp/orders',
-    //   icon: <MdPointOfSale />,
-    //   subMenu: true,
-    //   subMenuItems: [
-    //     {
-    //       title: 'Ajouter une commande',
-    //       link: '/erp',
-    //       icon: <AiOutlinePlusCircle />
-    //     }
-    //   ]
-    // },
-    // {
-    //   title: 'Options',
-    //   link: '/erp/options',
-    //   icon: <MdPointOfSale />
-    // }
-  ];
+  //   // {
+  //   //   title: 'Commandes',
+  //   //   link: '/erp/orders',
+  //   //   icon: <MdPointOfSale />,
+  //   //   subMenu: true,
+  //   //   subMenuItems: [
+  //   //     {
+  //   //       title: 'Ajouter une commande',
+  //   //       link: '/erp',
+  //   //       icon: <AiOutlinePlusCircle />
+  //   //     }
+  //   //   ]
+  //   // },
+  //   // {
+  //   //   title: 'Options',
+  //   //   link: '/erp/options',
+  //   //   icon: <MdPointOfSale />
+  //   // }
+  // ];
 
   const handleOpen = (): void => {
     setOpen(!open);
@@ -131,7 +144,7 @@ const SideBar: React.FC = () => {
         </h2>
       </Link>
 
-      <div
+      {/* <div
         className={`flex items-center rounded-md bg-white mt-6  py-2 ${
           open ? 'px-4' : 'px-2.5'
         }`}
@@ -148,7 +161,7 @@ const SideBar: React.FC = () => {
             !open && 'hidden'
           }`}
         />
-      </div>
+      </div> */}
       <ul className={`pt-2`}>
         {menus.map((menu, index) => (
           <div key={index}>

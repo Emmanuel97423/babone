@@ -5,9 +5,12 @@ import { supabase } from '@/utils/supabaseClient';
 //   email: string;
 //   password: string;
 // }
+interface User {
+  id: string;
+}
 
 interface UserState {
-  entities: {} | null;
+  entities: User | null;
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   isLogined: boolean;
   error: string | undefined;

@@ -24,13 +24,16 @@ import AddProduct from './pages/Erp/ProductManagement/Add';
 import UpdateProduct from './pages/Erp/ProductManagement/Update';
 import AddOptions from '@/pages/Erp/ProductManagement/AddOptions';
 import VariantsPage from '@/pages/Erp/ProductManagement/VariantsPage';
+import StorePage from '@/pages/Store';
+import StoreList from '@/features/store/StoresList';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/apps',
     element: <App />,
     errorElement: <ErrorPage />
   },
+
   {
     path: '/auth/login',
     element: <Login />
@@ -44,10 +47,25 @@ const router = createBrowserRouter([
     element: <SignupSuccess />
   },
   {
+    path: '/',
+    element: (
+      <PrivateRoute>
+        <StorePage />
+      </PrivateRoute>
+    ),
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: '/stores',
+        element: <StoreList />
+      }
+    ]
+  },
+  {
     path: '/erp',
     element: (
       <PrivateRoute>
-        <ErpDefaultTemplate />
+        <Erp />
       </PrivateRoute>
     ),
     errorElement: <ErrorPage />,

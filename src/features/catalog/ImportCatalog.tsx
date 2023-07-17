@@ -95,7 +95,7 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
               </div>
             </label>
           </div>
-          <div className="form-control">
+          {/* <div className="form-control">
             <label className="label cursor-pointer">
               <input
                 type="radio"
@@ -109,7 +109,7 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
                 supprimés et remplacés.
               </span>
             </label>
-          </div>
+          </div> */}
         </div>
       </>
     );
