@@ -75,7 +75,7 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
           Choisissez une méthode d’importation
         </h2>
         <div className="flex flex-col">
-          <div className="form-control w-96">
+          <div className="form-control w-full">
             <label className="flex label cursor-pointer">
               <div className="mr-4">
                 {' '}
@@ -87,11 +87,11 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
                 />
               </div>
 
-              <div className="flex items-center text-left ">
-                <span className="basis-1/3">
+              <div className="flex items-center gap-4 text-left ">
+                <span className="basis-40">
                   Modifier le catalogue d’articles
                 </span>
-                <span className="label-text ">
+                <span className="label-text basis-8/12">
                   Modifiez les articles existants et ajoutez-en de nouveaux. Les
                   articles existants seront révisés, mais ne seront pas
                   supprimés.
@@ -204,7 +204,7 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
       <ModalUI
         isOpenModal={isOpenModal}
         setIsModalOpen={setIsModalOpen}
-        className="flex flex-col w-36"
+        className="flex flex-col"
         labelModal="Modifier le catalogue d’articles"
       >
         {content}
