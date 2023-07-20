@@ -17,9 +17,9 @@ export const importCSV = createAsyncThunk(
     try {
       // Modeling csv to data
       const result = await modelingCsv(file, { rejectWithValue });
-
+              // @ts-ignore 
       for(const variant of result) {
-  const categoryName = variant.category;
+        const categoryName = variant.category;
         const productName = variant.productname;
         const variantPriceHt = parseFloat(variant.priceht);
         const variantTva = parseFloat(variant.tva);

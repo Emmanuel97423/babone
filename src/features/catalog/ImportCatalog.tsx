@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useDropzone, DropzoneInputProps } from 'react-dropzone';
 import ModalUI from '@/components/ui/Modal';
 import { HiArrowLeft } from 'react-icons/hi';
+import { BsCheck } from 'react-icons/bs';
 import { importCSV } from '@/features/catalog/import/importProductsSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import type { CSVRowProps } from '@/types/features/import/ImportType';
@@ -22,6 +23,7 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
   const [errorCsvFormat, setErrorCsvFormat] = useState<boolean>(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const [importIsLoading, setIsLoadingImport] = useState<boolean>(false);
+  const [importSuccess, setImportSuccess] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
 
   const store = useSelector((state: RootState) => state.store.entitie);
@@ -31,6 +33,8 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
     onDrop: (acceptedFiles) => {
       if (acceptedFiles && acceptedFiles[0].type === 'text/csv') {
         setActiveDownload(true);
+        setImportSuccess(false);
+
         // @ts-ignore
         setCsvFile(acceptedFiles[0]);
         setFileName(acceptedFiles[0].name);
@@ -46,13 +50,12 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
   const handleSubmit: () => void = async () => {
     setIsLoadingImport(true);
     try {
-      const importingCsv = await dispatch(
+      await dispatch(
         // @ts-ignore
         importCSV({ file: csvFile, storeId: storeId })
       );
-      if (importingCsv) {
-        setIsLoadingImport(false);
-      }
+      setIsLoadingImport(false);
+      setImportSuccess(true);
     } catch (error) {
       console.log('error:', error);
       setIsLoadingImport(false);
@@ -64,6 +67,13 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
     // if (importStatusLoading === 'pending') {
     //   setIsLoadingImport;
     // }
+  };
+
+  const handleFinishImport: () => void = () => {
+    setIsModalOpen(false);
+    setImportSuccess(false);
+    setActiveDownload(false);
+    setFileName('');
   };
 
   let content;
@@ -186,12 +196,31 @@ const ImportCatalogue: React.FC<importCatalogProps> = ({
           </div>
           <div className="flex justify-end mt-9">
             <button
-              className={`btn btn-primary ml-auto  ${
+              className={`btn btn-primary ml-auto ${
                 activeDownload ? '' : 'btn-disabled'
-              } ${importIsLoading ? 'loading loading-spinner' : ''}`}
+              } ${importIsLoading ? 'loading loading-spinner' : ''} ${
+                importSuccess ? 'hidden' : ''
+              }`}
               onClick={handleSubmit}
             >
               Télécharger
+            </button>
+            <button
+              className={`btn btn-success no-animation ml-auto text-white  ${
+                importSuccess ? '' : 'hidden'
+              } `}
+            >
+              {/* <BsCheck /> */}
+              Import termniné
+            </button>
+            <button
+              className={`btn btn-secondary  ml-4 text-white  ${
+                importSuccess ? '' : 'hidden'
+              } `}
+              onClick={handleFinishImport}
+            >
+              {/* <BsCheck /> */}
+              Fermer
             </button>
           </div>
           {/* Drag and drop prosition */}
