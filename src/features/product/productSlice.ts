@@ -63,7 +63,6 @@ const productSlice = createSlice({
     }).addCase(
       fetchProducts.fulfilled,
       (state, action) => {
-        console.log('action:', action)
         if (action.payload) {
           state.status = 'success';
           // @ts-ignore

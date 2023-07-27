@@ -13,14 +13,12 @@ export const importCSV = createAsyncThunk(
   'products/importCSV',
 
   async ({storeId, file}: {storeId:number, file: File}, thunkAPI) => {
-    console.log('file:', file)
-    console.log('storeId:', storeId)
      const { rejectWithValue } = thunkAPI;
     try {
       // Modeling csv to data
       const result = await modelingCsv(file, { rejectWithValue });
-      // @ts-ignore 
-      result.map(async (variant: ProductVariant) => {
+              // @ts-ignore 
+      for(const variant of result) {
         const categoryName = variant.category;
         const productName = variant.productname;
         const variantPriceHt = parseFloat(variant.priceht);
@@ -43,7 +41,6 @@ export const importCSV = createAsyncThunk(
                 storeId
               );
               if (getProduct) {
-                console.log('getProduct:', getProduct);
                 //Add variant with product base Id
 
                 const variantObject = {
@@ -66,7 +63,6 @@ export const importCSV = createAsyncThunk(
                 };
                 // @ts-ignore 
                 const variantCreate = await getVariant(variantObject);
-                console.log('variantCreate:', variantCreate);
               }
             }
           } catch (error) {
@@ -99,7 +95,11 @@ export const importCSV = createAsyncThunk(
         //     console.log('error:', error);
         //   }
         // }
-      });
+      }
+      // @ts-ignore 
+      // result.map(async (variant: ProductVariant) => {
+      
+      // });
     } catch (error) {
       console.log('error:', error);
     }

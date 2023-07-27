@@ -66,8 +66,6 @@ const Erp: React.FC = () => {
     // }
   ];
 
-  console.log('menus:', menus);
-
   return (
     <div className="flex ">
       <div>
