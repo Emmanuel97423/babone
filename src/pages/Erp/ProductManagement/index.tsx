@@ -35,8 +35,6 @@ const ProductListPage: React.FC = () => {
   );
 
   useEffect(() => {
-    console.log('storeId:', storeId);
-    console.log('productStatus:', productStatus);
     dispatch(fetchProducts({ storeId }));
 
     // if (productStatus === 'idle') {

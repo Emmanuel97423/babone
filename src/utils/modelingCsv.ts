@@ -17,7 +17,6 @@ export const modelingCsv = async (file: File, { rejectWithValue })=>{
                          // @ts-ignore
                         result.push(transformedRow);
                             }, []);
-                            console.log('transformedData:', transformedData)
 
 
                         resolve(transformedData)
