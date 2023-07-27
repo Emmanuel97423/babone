@@ -61,17 +61,16 @@ export const fetchVariantsFromDatabase = async () => {
 }
 
 export const getProductByName = async (name: string, categoryId: number, storeId:number) => {
-  console.log('name:', name)
   try {
     const result = await supabase
       .from(PRODUCT_TABLE)
       .select('*')
       .eq('name', name)
       .select();
-    if (Array.isArray(result.data) && result.data && result.data.length > 0) {
+    if ( result.data && result.data.length > 0) {
       console.log('Existent product', result.data[0]);
       return result.data[0];
-    } else if(Array.isArray(result.data) && result.data && result.data.length === 0) {
+    } else if( result.data && result.data.length === 0) {
       try {
         const createProducName = await supabase
           .from(PRODUCT_TABLE)
