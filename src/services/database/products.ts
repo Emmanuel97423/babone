@@ -60,7 +60,7 @@ export const fetchVariantsFromDatabase = async () => {
   }
 }
 
-export const getProductByName = async (name: string, categoryId: number, storeId:number) => {
+export const getProductByName = async (name: string, categoryId: number,subCategoryId:number, storeId:number) => {
   try {
     const result = await supabase
       .from(PRODUCT_TABLE)
@@ -69,12 +69,14 @@ export const getProductByName = async (name: string, categoryId: number, storeId
       .select();
     if ( result.data && result.data.length > 0) {
       console.log('Existent product', result.data[0]);
+      const updateProduct = await supabase.from(PRODUCT_TABLE).update({name: name, categoryId: categoryId, subCategoryId: subCategoryId, storeId: storeId}).eq("name", name).select().single()
+      console.log('updateProduct:', updateProduct)
       return result.data[0];
     } else if( result.data && result.data.length === 0) {
       try {
         const createProducName = await supabase
           .from(PRODUCT_TABLE)
-          .insert([{ name: name, categoryId: categoryId, storeId: storeId }])
+          .insert([{ name: name, categoryId: categoryId, subCategoryId: subCategoryId, storeId: storeId }])
           .select();
         if (createProducName.data) {
           return createProducName.data[0];

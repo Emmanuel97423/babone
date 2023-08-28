@@ -113,9 +113,9 @@ const ProductListPage: React.FC = () => {
               Importer le catalogue
             </a>
           </li>
-          <li>
+          {/* <li>
             <a>Exporter le catalogue</a>
-          </li>
+          </li> */}
         </DropdownUI>
         <ImportCatalogue
           isOpenModal={openModalImport}

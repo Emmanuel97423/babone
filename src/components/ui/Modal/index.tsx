@@ -42,7 +42,11 @@ const ModalUI: React.FC<Props> = ({
 
       {/* Put this part before </body> tag */}
       {/* <input type="checkbox" id="my-modal-default" className="modal-toggle" /> */}
-      <div className={`modal ${isOpenModal ? 'modal-open' : ''} z-50  `}>
+      <div
+        className={`modal ${
+          isOpenModal ? 'modal-open' : ''
+        } z-50 disabled="disabled" `}
+      >
         <div className="modal-box relative  max-h-auto  max-w-[600px] ">
           <label
             htmlFor={htmlFor}

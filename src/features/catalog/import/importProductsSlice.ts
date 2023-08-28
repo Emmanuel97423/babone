@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
+import {supabase} from '@/utils/supabaseClient';
 import {
   getVariant,
   createVariant,
@@ -20,6 +20,7 @@ export const importCSV = createAsyncThunk(
               // @ts-ignore 
       for(const variant of result) {
         const categoryName = variant.category;
+        const subcategoryName = variant.souscategory;
         const productName = variant.productname;
         const variantPriceHt = parseFloat(variant.priceht);
         const variantTva = parseFloat(variant.tva);
@@ -31,13 +32,33 @@ export const importCSV = createAsyncThunk(
           try {
             const category = await getCategory(categoryName);
             if (category) {
-              // @ts-ignore 
+            // @ts-ignore 
               const categoryId = category.id;
+              let subCategoryId = null;
+            //Check if subcategory exist
+            const checkSubCategory = await supabase.from('Subcategory').select('*').eq('name', subcategoryName).select().single()
+            console.log('checkSubCategory:', checkSubCategory);
+            if(!checkSubCategory.data ){
+            const insertSubcategory = await supabase.from('Subcategory').insert([{name:subcategoryName, categoryId: categoryId}]).select().single()
+            console.log('insertSubcategory:', insertSubcategory)
+            if(insertSubcategory.data){
+              subCategoryId = insertSubcategory.data.id
+            }
+            } else {
+              const updateSubcategory = await supabase.from('Subcategory').update({name:subcategoryName, categoryId: categoryId}).eq("id", checkSubCategory.data.id).select().single()
+            console.log('updateSubcategory:', updateSubcategory)
+            if(updateSubcategory.data){
+            subCategoryId = updateSubcategory.data.id
+
+            }
+
+            }
 
               //Check if product base exist if no exist create product base
               const getProduct = await getProductByName(
                 productName,
                 categoryId,
+                subCategoryId,
                 storeId
               );
               if (getProduct) {
@@ -63,12 +84,115 @@ export const importCSV = createAsyncThunk(
                 };
                 // @ts-ignore 
                 const variantCreate = await getVariant(variantObject);
+
+                 // Insert variant properties into properties table and variant_properties table
+              const variantProperties = [
+                { name: 'category', value: variant.category },
+                { name: 'sousCategory', value: variant.souscategory },             
+                { name: 'size', value: variant.size },
+                { name: 'color', value: variant.color },
+                { name: 'laterality', value: variant.laterality },
+                { name: 'material', value: variant.material },
+  
+              ];
+              for (const property of variantProperties) {
+                // Check if property exists
+                const existingPropertyResult = await supabase
+                  .from('Properties')
+                  .select('*')
+                  .eq('name', property.name)
+                  .eq('value', property.value)
+                  .select()
+                  // .single();
+                // console.log('existingPropertyResult:', existingPropertyResult);
+//@ts-ignore
+                let propertyId = existingPropertyResult.data[0]?.id;
+//@ts-ignore
+                let variantId = variantCreate.id;
+               
+                // Insert property if it doesn't exist
+                if (!propertyId) {
+                  const propertyInsertResult = await supabase
+                    .from('Properties')
+                    .insert([{ name: property.name, value: property.value }])
+                    .select()
+                    .single()
+
+                  propertyId = propertyInsertResult.data?.id;
+                  console.log('propertyId:', propertyId)
+                }
+                //             // Insert into variant_properties table
+                const variantPropertyData = {
+                  variantId: variantId,
+                  propertyId: propertyId
+                };
+
+
+
+                const variantPropertyInsertResult = await supabase
+                  .from('VariantProperties')
+                  .insert([variantPropertyData])
+                  .select()
+                  .single();
+                console.log(
+                  'variantPropertyInsertResult:',
+                  variantPropertyInsertResult
+                );
+
+              }
+                //           for (const property of variantProperties) {
+    //             // Check if property exists
+    //             const existingPropertyResult = await supabase
+    //               .from('properties')
+    //               .select('property_id')
+    //               .eq('name', property.name)
+    //               .eq('value', property.value)
+    //               .select()
+    //               .single();
+    //             console.log('existingPropertyResult:', existingPropertyResult);
+
+    //             let propertyId = existingPropertyResult.data?.property_id;
+
+    //             // Insert property if it doesn't exist
+    //             if (!propertyId) {
+    //               const propertyInsertResult = await supabase
+    //                 .from('properties')
+    //                 .insert([{ name: property.name, value: property.value }])
+    //                 .select()
+    //                 .single();
+    //               console.log('propertyInsertResult:', propertyInsertResult);
+
+    //               propertyId = propertyInsertResult.data?.property_id;
+    //             }
+
+    //             // Insert into variant_properties table
+    //             const variantPropertyData = {
+    //               variant_id: variantId,
+    //               property_id: propertyId
+    //             };
+
+    //             const variantPropertyInsertResult = await supabase
+    //               .from('variant_properties')
+    //               .insert([variantPropertyData])
+    //               .select()
+    //               .single();
+    //             console.log(
+    //               'variantPropertyInsertResult:',
+    //               variantPropertyInsertResult
+    //             );
+    //           }
+    //         }
+
+
               }
             }
           } catch (error) {
             console.log('error:', error);
           }
         }
+
+
+        
 
 
         // const variantExist = await getVariant(variant.name);
